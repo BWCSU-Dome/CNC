@@ -7,6 +7,10 @@ public class Test {
 		System.out.println("Hello World!");
 		
 		System.out.println("Hello Git"); //form an other pc
+		
+		System.out.println("Das wird euer How to"); // hier habe ich einen neuen Code eingefügt
+		
+		//jetzt speichern
 	}
 	
 }
