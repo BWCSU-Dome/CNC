@@ -13,6 +13,8 @@ public class Test {
 		//jetzt speichern
 		
 		// Das hier wird ein Test
+		
+		System.out.println("Hallo hier ist es schön!");
 	}
 	
 }
