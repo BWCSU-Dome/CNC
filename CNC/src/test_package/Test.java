@@ -17,6 +17,7 @@ public class Test {
 		System.out.println("Hallo hier ist es schön!");
 		
 		//Boi
+		System.out.println("Test");
 	}
 	
 }
