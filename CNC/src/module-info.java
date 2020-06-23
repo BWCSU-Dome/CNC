@@ -1,0 +1,3 @@
+module CNC {
+	exports cnc;
+}
