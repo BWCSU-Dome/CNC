@@ -1,5 +1,5 @@
 package cnc;
 
-class Main {
+public class GUI {
 
 }
