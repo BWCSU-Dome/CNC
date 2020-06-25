@@ -4,7 +4,7 @@ public class OutOfAreaException extends Exception {
 
 	   public OutOfAreaException()
 	   {
-		   System.out.println("Die Fr‰se befindet sich auﬂerhalb des zul‰sseigen Bereichs");
+		   System.out.println("Die Fr‰se befindet sich auﬂerhalb des zul‰ssigen Bereichs");
 		  
 	   }
 
