@@ -4,8 +4,7 @@ public class OutOfAreaException extends Exception {
 
 	   public OutOfAreaException()
 	   {
-		   System.out.println("Die Fräse befindet sich außerhalb des zulässigen Bereichs");
-		  
+		   System.out.println("Die Fräse befände sich während der Ausführung des Befehls außerhalb des zulässigen Bereichs");
 	   }
 
 
