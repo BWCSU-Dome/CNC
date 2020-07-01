@@ -21,7 +21,8 @@ public class RegularExpression {
 		
 		
 		public static String[] liste;
-		MCodes M = new MCodes();
+		static MCodes M = new MCodes();
+		//in MCodes Methoden static machen!
 		
 		public static void main ( String [] args )
 		{
@@ -72,7 +73,7 @@ public class RegularExpression {
 			switch(code) {
 			case "G00":
 				//Prüfencode OutofFeld -> x,y ziehen?
-				//M.fahrenEilgang
+				//M.fahrenEilgang(455, 50);
 				
 				//System.out.println("Ich bin GCode 01.");
 				//g01;
@@ -84,4 +85,5 @@ public class RegularExpression {
 					System.out.println("Fehlerhafter GCode");
 				//throws XXX
 		}
-		}	
+		}
+}
