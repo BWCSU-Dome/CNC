@@ -10,7 +10,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -137,11 +136,11 @@ public class GUI extends Application{
 					startBtn.setPrefSize(btn_width, btn_height);
 				btnVBox.getChildren().add(startBtn);
 				
-//				FileInputStream fip = new FileInputStream("/C:/Users/driepl/git/CNC/CNC/files/Notstop.png");	Wäre Nice2have, aber Problem mit Dateipfad
-//				Image notStopImage = new Image(fip);
-//				ImageView notStopView = new ImageView(notStopImage);
+				FileInputStream fip = new FileInputStream("/C:/Users/driepl/git/CNC/CNC/files/Notstop.png");	//Wäre Nice2have, aber Problem mit Dateipfad
+				Image notStopImage = new Image(fip);
+				ImageView notStopView = new ImageView(notStopImage);
 				
-				Button notStopBtn = new Button("NotStop" );
+				Button notStopBtn = new Button("",notStopView );
 					notStopBtn.setPrefSize(btn_width, btn_height);
 				btnVBox.getChildren().add(notStopBtn);
 				
