@@ -1,6 +1,5 @@
 package cnc;
 import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.lang.String;
 
 public class RegularExpression {
@@ -21,13 +20,12 @@ public class RegularExpression {
 		
 		
 		public static String[] liste;
-<<<<<<< HEAD
+
 		static int[] paramList;
-		MCodes M = new MCodes();
-=======
+
 		static MCodes M = new MCodes();
+		
 		//in MCodes Methoden static machen!
->>>>>>> branch 'master' of https://github.com/BWCSU-Dome/CNC.git
 		
 		
 		public static void main ( String [] args )
@@ -106,15 +104,13 @@ public class RegularExpression {
 		}
 		
 
-<<<<<<< HEAD
 
 		private static void doGCodes(String[] code) {
-=======
-			switch(code) {
+
+			switch(code[0]) {
 			case "G00":
 				//Prüfencode OutofFeld -> x,y ziehen?
 				//M.fahrenEilgang(455, 50);
->>>>>>> branch 'master' of https://github.com/BWCSU-Dome/CNC.git
 				
 			switch(code[0]) {
 			
@@ -139,13 +135,13 @@ public class RegularExpression {
 				break;
 				
 			default:
-					System.out.println("GCode-Fehler");
+			System.out.println("GCode-Fehler");
 				//throws XXX
 		
 		}
-<<<<<<< HEAD
+
 	}
-		
+		}		
 		
 		private static void doMCodes(String[]code) {
 			
@@ -207,9 +203,7 @@ public class RegularExpression {
 
 		public static void setParamList(int[] paramList) {
 			RegularExpression.paramList = paramList;
+			
 		}
 		
-=======
-		}
->>>>>>> branch 'master' of https://github.com/BWCSU-Dome/CNC.git
 }
