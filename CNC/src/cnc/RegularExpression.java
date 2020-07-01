@@ -19,9 +19,9 @@ public class RegularExpression {
 //		
 		
 		
-		public static String[] entryListe;
-		public static String[] liste = new String[5];
-		public static int[] paramList;
+		public static String[] entryListe;					//Array variabler Länge für Eingangsdaten
+		public static String[] liste = new String[5];		//Array fester Länge, in dem Befehl und Argumente nach festem Raster gespeichert werden sollen (0: Befehl, 1: X-Parameter, 2: Y, 3: I, 4: J)
+		public static int[] paramList;						//Array mit Datentyp int, das benutzt wird, um die Parameter in Brauchbarer Form an die Bewegungsmethoden weiterzureichen
 
 		static MCodes M = new MCodes();
 		
@@ -31,27 +31,33 @@ public class RegularExpression {
 		public static void main ( String [] args )
 		
 		{
-
+			//Unser Einganstext, der den Code (ggf mit Argumenten) enthält
+			String text = "G28 Y01 X88 X501 I88 W420";
 			
-			
-			
-			String text = "G00";
-			//Syntax Prüfung mit Regular Expressions
-			//richtiger G oder M Code
-			//Kein Unsinn, nur erlaubte Buchstaben (als Parameter)
-			System.out.println(Pattern.matches("((M00|m00|M02|m02|M03|m03|M04|m04|M05|m05|M08|m08|M13|m13|M14|m14)|(G00|g00|G01|g01|G02|g02|G03|g03|G28|g28))\\s*[XxYyJjIi0-9 ]*$",text));
-			
-			
+			//Syntax Prüfung mit Regular Expression
+			//Krit1: richtiger G oder M Code
+			//Krit2: valide Argumente vorhanden: Kein Unsinn, nur erlaubte Buchstaben (als Parameter)
+			//Wenn nicht, wird die Methode hier abgebrochen
+			if(!Pattern.matches("((M00|m00|M02|m02|M03|m03|M04|m04|M05|m05|M08|m08|M13|m13|M14|m14)|(G00|g00|G01|g01|G02|g02|G03|g03|G28|g28))\\s*[XxYyJjIi0-9 ]*$",text)) {
+				System.out.println("Befehl nicht vorhanden, oder Syntax falsch.");
+				return;
+			}
 			
 			entryListe = text.split(" ");
+			
+			if(entryListe.length > 5) {		//Check auf maximal mögliche Anzahl der Argumente. Wenn zu viele Argumente mitgegeben wurden, wird die Methode hier abgebrochen
+				System.out.println("Es wurden zu viele Argumente eingegeben.");
+				return;
+			}
+			
+			//Kopiert die Eingangsliste auf ein vollwertiges Array mit der Größe 5. Nicht angegebene Argumente werden im Array mit 00 gespeichert. 
 			System.arraycopy(entryListe, 0, liste, 0, entryListe.length);
 			
 			for(int i = 0; i < liste.length; i++) {
 				if(liste[i] == null) {
-					liste[i] = "00";
+					liste[i] = "00";				//Wenn "Schublade" leer, auffüllen mit 00
 				}
 			}
-			
 			
 			
 			
@@ -86,9 +92,10 @@ public class RegularExpression {
 				break;
 			}
 				}
-			
+				//Abspeicherung in int-Array, sodass die Werte besser in G-Methoden verwendet werden können.
+				
 				for(int i=0; i < paramList.length; i++) {
-					paramList[i] = Integer.parseInt(liste[i+1].substring(1));
+					paramList[i] = Integer.parseInt(liste[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
 					System.out.println(paramList[i]);
 			}
 				
@@ -99,7 +106,7 @@ public class RegularExpression {
 				System.out.println(a+":" + liste[a]);
 			}
 			
-				
+				//Unterscheidung, ob M- oder G-Code vorliegt (entschieden an mitgegebenem ersten Buchstaben)
 				switch(liste[0].charAt(0)) {
 				case 'M':
 					doMCodes(liste);
@@ -116,9 +123,10 @@ public class RegularExpression {
 		}
 		
 
-
+		
 		private static void doGCodes(String[] code) {
 				
+			//Aufruf des gewünschten Codes nach eingegebener, gewünschter Funktion
 			switch(code[0]) {
 			
 			case "G00":
@@ -142,8 +150,8 @@ public class RegularExpression {
 				break;
 				
 			default:
-			System.out.println("GCode-Fehler");
-				//throws XXX
+			System.out.println("GCode-Fehler"); //Fehler sollte hier gar nicht mehr auftreten können. Bitte Meldung, falls das der Fall sein sollte.
+			
 		
 		}
 
@@ -152,6 +160,7 @@ public class RegularExpression {
 		
 		private static void doMCodes(String[]code) {
 			
+			//Aufruf des gewünschten Codes nach eingegebener, gewünschter Funktion
 			switch(code[0]) {
 			
 			case "M00":
@@ -194,20 +203,10 @@ public class RegularExpression {
 				break;
 				
 			default:
-				System.out.println("MCode-Fehler");
+				System.out.println("MCode-Fehler");	//Fehler sollte hier gar nicht mehr auftreten können. Bitte Meldung, falls das der Fall sein sollte.
 			}
 			
 		}
 		
-		public static int getParamList(int position) {
-			return paramList[position];
-		}
-		
-		public static int getParamListLength() {
-			if(paramList == null) {
-				return 0;
-			}
-			return paramList.length;
-		}
 		
 }

@@ -18,10 +18,15 @@ public class GCodes extends Codes {
 		switch(e.getStelle()) {
 		
 		case 0:
+			System.out.println("X-Koordinate fehlt.");
 			System.out.println("Da ein Parameter weggelassen wurde, wird auf einer Achse horizontal/vertikal gefahren.");
+			break;
 		
-			
-			
+		case 1:
+			System.out.println("Y-Koordinate fehlt.");
+			System.out.println("Da ein Parameter weggelassen wurde, wird auf einer Achse horizontal/vertikal gefahren.");
+			break;
+
 		case -1:
 			System.out.println("Es kann keine Gerade ohne Parameter gefahren werden.");
 			return;
@@ -47,7 +52,14 @@ public class GCodes extends Codes {
 				
 				switch(e.getStelle()) {
 				
-				default:
+				case 0:
+					System.out.println("X-Koordinate fehlt.");
+					System.out.println("Da ein Parameter weggelassen wurde, wird auf einer Achse horizontal/vertikal gezeichnet.");
+					break;
+				
+				case 1:
+					System.out.println("Y-Koordinate fehlt.");
+					System.out.println("Da ein Parameter weggelassen wurde, wird auf einer Achse horizontal/vertikal gezeichnet.");
 					break;
 					
 				case -1:
@@ -104,8 +116,8 @@ public class GCodes extends Codes {
 	//Repräsentation von Code G28.
 	static public void fahrenZuHome() {
 		int[] stub = new int[2];
-		stub[0] = 0;
-		stub[1] = 0;
+		stub[0] = 27;
+		stub[1] = 3;
 		fahrenEilgang(stub);		//Rufe die fahrenEilgang-Methode auf mit den Koordinaten des Homepunkts.
 	}
 	
@@ -128,7 +140,7 @@ public class GCodes extends Codes {
 		
 	}
 	
-	
+	//Prüft, ob eine hinreichende Zahl an Eingabedaten vorhanden sind. Gibt auch aus, welche Koordinaten fehlen, um ggf trotzdem die Fahrbewegung durchzuführen.
 	static public void pruefeMissingEingabeparameter(boolean isGerade, int... stellen) throws MissingParameterException {
 		
 		if(isGerade) {
