@@ -21,8 +21,13 @@ public class RegularExpression {
 		
 		
 		public static String[] liste;
+<<<<<<< HEAD
 		static int[] paramList;
 		MCodes M = new MCodes();
+=======
+		static MCodes M = new MCodes();
+		//in MCodes Methoden static machen!
+>>>>>>> branch 'master' of https://github.com/BWCSU-Dome/CNC.git
 		
 		
 		public static void main ( String [] args )
@@ -101,8 +106,15 @@ public class RegularExpression {
 		}
 		
 
+<<<<<<< HEAD
 
 		private static void doGCodes(String[] code) {
+=======
+			switch(code) {
+			case "G00":
+				//Prüfencode OutofFeld -> x,y ziehen?
+				//M.fahrenEilgang(455, 50);
+>>>>>>> branch 'master' of https://github.com/BWCSU-Dome/CNC.git
 				
 			switch(code[0]) {
 			
@@ -131,6 +143,7 @@ public class RegularExpression {
 				//throws XXX
 		
 		}
+<<<<<<< HEAD
 	}
 		
 		
@@ -196,4 +209,7 @@ public class RegularExpression {
 			RegularExpression.paramList = paramList;
 		}
 		
+=======
+		}
+>>>>>>> branch 'master' of https://github.com/BWCSU-Dome/CNC.git
 }
