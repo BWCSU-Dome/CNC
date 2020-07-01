@@ -21,17 +21,26 @@ public class RegularExpression {
 		
 		
 		public static String[] liste;
+		MCodes M = new MCodes();
 		
 		public static void main ( String [] args )
 		{
 			
-			MCodes M = new MCodes();
 			
 			
 			
-			String text = "G01 X455 Y50";
-
+			
+			String text = "G01 X455 Y1050";
 			//Syntax Prüfung mit Regular Expressions
+			//Kein Leerzeichen und max 4 Ziffern nach Bustaben
+			//richtiger G oder M Code
+			//Kein Unsinn, nur erlaubte Buchstaben
+			System.out.println(Pattern.matches("[ GgMmXxYyJjIi0-9]",text));
+			
+			
+			
+			
+			
 			
 			liste = text.split(" ");
 
@@ -45,8 +54,8 @@ public class RegularExpression {
 				case 'M':
 					System.out.println("Hallo ich bin das H!");
 					break;
-//				case 'T':
-//					System.out.println("Hallo ich bin das T!");
+				case 'T':
+					System.out.println("Hallo ich bin das T!");
 					//break;
 				case 'G':
 					doGCodes(liste[a]);
@@ -63,7 +72,7 @@ public class RegularExpression {
 			switch(code) {
 			case "G00":
 				//Prüfencode OutofFeld -> x,y ziehen?
-				
+				//M.fahrenEilgang
 				
 				//System.out.println("Ich bin GCode 01.");
 				//g01;
@@ -71,10 +80,8 @@ public class RegularExpression {
 			case "G02":
 				System.out.println("GCode 02");
 				break;
-				default:
+			default:
 					System.out.println("Fehlerhafter GCode");
 				//throws XXX
-			}
 		}
-	}
-//	
+		}	
