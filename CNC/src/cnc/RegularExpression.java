@@ -19,8 +19,8 @@ public class RegularExpression {
 //		
 		
 		
-		public static String[] liste;
-
+		public static String[] entryListe;
+		public static String[] liste = new String[5];
 		public static int[] paramList;
 
 		static MCodes M = new MCodes();
@@ -29,9 +29,13 @@ public class RegularExpression {
 		
 		
 		public static void main ( String [] args )
+		
 		{
+
 			
-			String text = "G00 X10 Y11";
+			
+			
+			String text = "G00";
 			//Syntax Prüfung mit Regular Expressions
 			//richtiger G oder M Code
 			//Kein Unsinn, nur erlaubte Buchstaben (als Parameter)
@@ -39,7 +43,15 @@ public class RegularExpression {
 			
 			
 			
-			liste = text.split(" ");
+			entryListe = text.split(" ");
+			System.arraycopy(entryListe, 0, liste, 0, entryListe.length);
+			
+			for(int i = 0; i < liste.length; i++) {
+				if(liste[i] == null) {
+					liste[i] = "00";
+				}
+			}
+			
 			
 			
 			
@@ -114,7 +126,7 @@ public class RegularExpression {
 				break;
 				
 			case "G01":
-			GCodes.fahrenEilgang(paramList);
+			GCodes.fahrenGerade(paramList);
 				break;
 				
 			case "G02":
