@@ -21,7 +21,7 @@ public class RegularExpression {
 		
 		public static String[] liste;
 
-		static int[] paramList;
+		public static int[] paramList;
 
 		static MCodes M = new MCodes();
 		
@@ -31,11 +31,11 @@ public class RegularExpression {
 		public static void main ( String [] args )
 		{
 			
-			String text = "G00";
+			String text = "G00 X10 Y11";
 			//Syntax Prüfung mit Regular Expressions
 			//richtiger G oder M Code
 			//Kein Unsinn, nur erlaubte Buchstaben (als Parameter)
-			System.out.println(Pattern.matches("((M00|m00|M02|m02|M03|m03|M04|m04|M05|m05|M08]|m08|M13|m13|M14|m14)|(G00|g00|G01|g01|G02|g02|G03|g03|G28|g28))\\s*[XxYyJjIi0-9 ]*$",text));
+			System.out.println(Pattern.matches("((M00|m00|M02|m02|M03|m03|M04|m04|M05|m05|M08|m08|M13|m13|M14|m14)|(G00|g00|G01|g01|G02|g02|G03|g03|G28|g28))\\s*[XxYyJjIi0-9 ]*$",text));
 			
 			
 			
@@ -106,11 +106,6 @@ public class RegularExpression {
 
 
 		private static void doGCodes(String[] code) {
-
-			switch(code[0]) {
-			case "G00":
-				//Prüfencode OutofFeld -> x,y ziehen?
-				//M.fahrenEilgang(455, 50);
 				
 			switch(code[0]) {
 			
@@ -141,7 +136,7 @@ public class RegularExpression {
 		}
 
 	}
-		}		
+			
 		
 		private static void doMCodes(String[]code) {
 			
@@ -197,13 +192,10 @@ public class RegularExpression {
 		}
 		
 		public static int getParamListLength() {
+			if(paramList == null) {
+				return 0;
+			}
 			return paramList.length;
-		}
-		
-
-		public static void setParamList(int[] paramList) {
-			RegularExpression.paramList = paramList;
-			
 		}
 		
 }
