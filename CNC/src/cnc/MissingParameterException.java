@@ -1,8 +1,15 @@
 package cnc;
 
 public class MissingParameterException extends Exception {
+	int stelle;
 
-	public MissingParameterException() {
-		super("Die eingegebenen Parameter sind unvollständig. Bitte Eingabe wiederholen.");
+	public MissingParameterException(int stelle) {
+		super("Die eingegebenen Parameter sind unvollständig.");
+		this.stelle = stelle;
 	}
+
+	public int getStelle() {
+		return stelle;
+	}
+	
 }
