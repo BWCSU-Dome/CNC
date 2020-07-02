@@ -4,10 +4,10 @@ public class GCodes extends Codes {
 
 	
 	//Repräsentation von Code G00.
-	static public void fahrenEilgang(int[] param) {
+	static public void fahrenEilgang(double... param) {
 		
-		int x = param[0];
-		int y = param[1];
+		double x = param[0];
+		double y = param[1];
 		
 		try {
 			
@@ -39,9 +39,9 @@ public class GCodes extends Codes {
 		
 	
 	//Repräsentation von Code G01.
-	static public void fahrenGerade(int[] param) {
-		int x = param[0];
-		int y = param[1];
+	static public void fahrenGerade(double[] param) {
+		double x = param[0];
+		double y = param[1];
 		
 		try {
 			
@@ -75,11 +75,11 @@ public class GCodes extends Codes {
 		}
 	
 	//Repräsentation von Code G02.
-	static public void fahrenKreisImUhrzeigersinn(int[] param) {
-		int x = param[0];
-		int y = param[1];
-		int i = param[2];
-		int j = param[3];
+	static public void fahrenKreisImUhrzeigersinn(double[] param) {
+		double x = param[0];
+		double y = param[1];
+		double i = param[2];
+		double j = param[3];
 		
 		try {
 			pruefeMissingEingabeparameter(false, param[0], param[1], param[2], param[3]);
@@ -100,16 +100,14 @@ public class GCodes extends Codes {
 		
 		Animation.kreis(x, y, i, j);
 		
-		
-		
 	}
 	
 	//Repräsentation von Code G03.
-	static public void fahrenKreisGegenUhrzeigersinn(int[] param) {
-		int x = param[0];
-		int y = param[1];
-		int i = param[2];
-		int j = param[3];
+	static public void fahrenKreisGegenUhrzeigersinn(double[] param) {
+		double x = param[0];
+		double y = param[1];
+		double i = param[2];
+		double j = param[3];
 		
 		try {
 			pruefeMissingEingabeparameter(false, param[0], param[1], param[2], param[3]);
@@ -122,33 +120,30 @@ public class GCodes extends Codes {
 		
 		
 		try {
-			
-			
 			pruefeFahrbewegung();
-		
 		} catch(OutOfAreaException e) {
 		e.printStackTrace();
 		return;
 		}
 		
+		Animation.kreis(x, y, i, j);
 		
 	}
 	
 	//Repräsentation von Code G28.
 	static public void fahrenZuHome() {
-		int[] stub = new int[2];
-		stub[0] = 27;
-		stub[1] = 3;
-		fahrenEilgang(stub);		//Rufe die fahrenEilgang-Methode auf mit den Koordinaten des Homepunkts.
+		
+		fahrenEilgang(Main.getHomePosX(), Main.getHomePosY());		//Rufe die fahrenEilgang-Methode auf mit den Koordinaten des Homepunkts.
+	
 	}
 	
 	//Prüft, ob Fahrbewegungen innerhalb der vorgesehenen Arbeitsfläche stattfinden.
 	static public void pruefeFahrbewegung() throws OutOfAreaException {
-		int boundX = 1500;
-		int boundY = 1040; 
+		double boundX = 1500;
+		double boundY = 1040; 
 		
-		int[] stubX = new int[10];
-		int[] stubY = new int[10];
+		double[] stubX = new double[10];
+		double[] stubY = new double[10];
 		
 		for(int i = 0; i < stubX.length; i++) {
 				if(stubX[i] > boundX || stubY[i] > boundY) {
@@ -162,7 +157,7 @@ public class GCodes extends Codes {
 	}
 	
 	//Prüft, ob eine hinreichende Zahl an Eingabedaten vorhanden sind. Gibt auch aus, welche Koordinaten fehlen, um ggf trotzdem die Fahrbewegung durchzuführen.
-	static public void pruefeMissingEingabeparameter(boolean isGerade, int... stellen) throws MissingParameterException {
+	static public void pruefeMissingEingabeparameter(boolean isGerade, double... stellen) throws MissingParameterException {
 		
 		if(isGerade) {
 			if(stellen[0] == 0 && stellen[1] == 0)
