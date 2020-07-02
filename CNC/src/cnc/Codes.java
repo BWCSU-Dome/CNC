@@ -18,7 +18,7 @@ public class Codes {
 	
 	
 	
-	public static void doCode() {
+	public static void doBefehl() {
 		
 		if(queueIsEmpty()) {
 			System.out.println("Die Warteschlange ist leer.");
