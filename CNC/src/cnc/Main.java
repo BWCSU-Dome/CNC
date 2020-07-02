@@ -2,107 +2,87 @@ package cnc;
 
 
 public class  Main {
-	double posX = 0;
-	double posY = 0;
-	double homePosX = 0;
-	double homePosY = 0;
-	private double geschwind_schnell = 8;
-	private double geschwin_langsam = 2;
-	private double geschind_fahrt;
-	private double aktGeschwin;
-	double werkzeugDurchmesser;
-	boolean spindelAktiv;
-	boolean kuehlungAktiv;
-	boolean spindelRechtslaufAktiv;
+	static double posX = 0;
+	static double posY = 0;
+	static double homePosX = 0;
+	static double homePosY = 0;
+	final static private double geschwind_schnell = 8;
+	final static private double geschwin_langsam = 2;
+	static private double geschwind_fahrt;
+	static private double aktGeschwin;
+	final static double werkzeugDurchmesser = 15;
+	static boolean spindelAktiv;
+	static boolean kuehlungAktiv;
+	static boolean spindelRechtslaufAktiv;
 	
 	public static void main(String[]args) {
-		Main fraese = new Main();
 		GUI.main(args);
 	}
 
 
-	public double getHomePosX() {
+	public static double getHomePosX() {
 		return homePosX;
 	}
 
 
-	public void setHomePosX(double homePosX) {
-		this.homePosX = homePosX;
+	public static void setHomePosX(double new_homePosX) {
+		homePosX = new_homePosX;
 	}
 
 
-	public double getHomePosY() {
+	public static double getHomePosY() {
 		return homePosY;
 	}
 
 
-	public void setHomePosY(double homePosY) {
-		this.homePosY = homePosY;
+	public static void setHomePosY(double new_homePosY) {
+		homePosY = new_homePosY;
 	}
 
-
-	
-
-
-	public void setGeschwind_schnell(double geschwind_schnell) {
-		this.geschwind_schnell = geschwind_schnell;
-	}
-
-
-	
-
-
-	public void setGeschwin_langsam(double geschwin_langsam) {
-		this.geschwin_langsam = geschwin_langsam;
-	}
-
-	public double getAktGeschw() {
+	public static double getAktGeschw() {
 		return aktGeschwin;
 	}
 	
+	public static void setAktGeschw(double new_aktGeschwin) {
+		aktGeschwin = new_aktGeschwin;
+	}
+	
 
-	public void setGeschind_fahrt(double geschind_fahrt) {
-		this.geschind_fahrt = geschind_fahrt;
+	public static void setGeschwind_fahrt(double new_geschwind_fahrt) {
+		geschwind_fahrt = new_geschwind_fahrt;
 	}
 
-
-	public double getWerkzeugDurchmesser() {
+	public static double getWerkzeugDurchmesser() {
 		return werkzeugDurchmesser;
 	}
 
-
-	public void setWerkzeugDurchmesser(double werkzeugDurchmesser) {
-		this.werkzeugDurchmesser = werkzeugDurchmesser;
-	}
-
-
-	public boolean isSpindelAktiv() {
+	public static boolean isSpindelAktiv() {
 		return spindelAktiv;
 	}
 
 
-	public void setSpindelAktiv(boolean spindelAktiv) {
-		this.spindelAktiv = spindelAktiv;
+	public static void setSpindelAktiv(boolean new_spindelAktiv) {
+		spindelAktiv = new_spindelAktiv;
 	}
 
 
-	public boolean isKuehlungAktiv() {
+	public static boolean isKuehlungAktiv() {
 		return kuehlungAktiv;
 	}
 
 
-	public void setKuehlungAktiv(boolean kuehlungAktiv) {
-		this.kuehlungAktiv = kuehlungAktiv;
+	public static void setKuehlungAktiv(boolean new_kuehlungAktiv) {
+		kuehlungAktiv = new_kuehlungAktiv;
 	}
 
 
-	public boolean isSpindelRechtslaufAktiv() {
+	public static boolean isSpindelRechtslaufAktiv() {
 		return spindelRechtslaufAktiv;
 	}
 
 
-	public void setSpindelRechtslaufAktiv(boolean spindelRechtslaufAktiv) {
-		this.spindelRechtslaufAktiv = spindelRechtslaufAktiv;
+	public static void setSpindelRechtslaufAktiv(boolean new_spindelRechtslaufAktiv) {
+		spindelRechtslaufAktiv = new_spindelRechtslaufAktiv;
 	}
 
 }
