@@ -69,7 +69,7 @@ public class GCodes extends Codes {
 				
 			}
 		
-		System.out.println(x + " " + y);
+		Animation.line(x, y);
 		
 		
 		}
@@ -93,13 +93,12 @@ public class GCodes extends Codes {
 		
 		try {
 			pruefeFahrbewegung();
-		
 		} catch(OutOfAreaException e) {
 		e.printStackTrace();
 		return;
 		}
 		
-		
+		Animation.kreis(x, y, i, j);
 		
 		
 		

@@ -31,8 +31,8 @@ public class RegularExpression {
 		public static void main ( String [] args )
 		
 		{
-			//Unser Einganstext, der den Code (ggf mit Argumenten) enthält
-			String text = "G02";
+			//Unser Einganstext, der den Code der auzuführenden Funktion (ggf mit Argumenten) enthält
+			String text = "G00 Y10";
 			
 			//Syntax Prüfung mit Regular Expression
 			//Krit1: richtiger G oder M Code
@@ -44,7 +44,7 @@ public class RegularExpression {
 			}
 			
 			entryListe = text.split(" ");
-			
+											//Vllt 6 wegen zusätzlicher Befehlsnummerierung
 			if(entryListe.length > 5) {		//Check auf maximal mögliche Anzahl der Argumente. Wenn zu viele Argumente mitgegeben wurden, wird die Methode hier abgebrochen
 				System.out.println("Es wurden zu viele Argumente eingegeben.");
 				return;
