@@ -30,7 +30,9 @@ public class GUI extends Application{
 	public static Pane arbeitsF;
 	private static int hight = 1050;
 	public static Circle Kopf;
-	int a = 100;
+	private static Button kuehlmitBtn;
+	private static Label  kuehlmit, spindelStatus,geschwin,aktuellX,aktuellY;
+	private static TextArea console;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -89,18 +91,18 @@ public class GUI extends Application{
 					
 				VBox statsRightVBox = new VBox();
 					statsRightVBox.setSpacing(20);
-					//Hbox für die Anzeige der X und Y Position
 					
+					//Hbox für die Anzeige der X und Y Position
 					HBox posHBox = new HBox();
 						posHBox.setSpacing(20);
 						
 						Label aktuellX_static = new Label("X:");
 							aktuellX_static.setFont(font);
-						Label aktuellX = new Label("0000");
+						aktuellX = new Label("0000");
 							aktuellX.setFont(font);
 						Label aktuellY_static = new Label("Y:");
 							aktuellY_static.setFont(font);
-						Label aktuellY = new Label("0000");
+						aktuellY = new Label("0000");
 							aktuellY.setFont(font);
 
 						posHBox.getChildren().addAll(aktuellX_static,aktuellX,aktuellY_static,aktuellY);
@@ -109,7 +111,7 @@ public class GUI extends Application{
 					statsRightVBox.getChildren().add(posHBox);
 						
 						
-					Label spindelStatus = new Label("aktiv");
+					spindelStatus = new Label("aktiv");
 						spindelStatus.setFont(font);
 					statsRightVBox.getChildren().add( spindelStatus);
 					
@@ -117,14 +119,15 @@ public class GUI extends Application{
 						drehRichtung.setFont(font);
 					statsRightVBox.getChildren().addAll(drehRichtung);
 
-					Label kuehlmit= new Label("aktiv");
+					kuehlmit= new Label(Main.getKuehlungAktiv());
 						kuehlmit.setFont(font);
 					statsRightVBox.getChildren().addAll(kuehlmit);
 					
 					//HBox für Geschwindigkeit plus Einheit;
 					HBox geschHBox = new HBox();
 						geschHBox.setSpacing(5);
-						Label geschwin = new Label("7373");
+						geschwin = new Label("");
+						setGeschwindigkeit();
 							geschwin.setFont(font);
 						Label geschwinEinheit = new Label("m/min");
 							geschwinEinheit.setFont(font);
@@ -146,7 +149,7 @@ public class GUI extends Application{
 					ctrlVBox.setSpacing(13);	
 						
 						//Anzeige der Console
-							TextArea console = new TextArea("N10 M03\r\n" + 
+							console = new TextArea("N10 M03\r\n" + 
 															"N20 M08\r\n" + 
 															"N30 G01 X0 Y0\r\n" + 
 															"N40 G02 X0 Y10 I0 J5\r\n" + 
@@ -202,11 +205,11 @@ public class GUI extends Application{
 									switch(startBtn.getText()) {
 									case "Start":
 										startBtn.setText("Pause");
-										Animation.line(Math.random()*1400, Math.random()*1050);
-										
+										LineAnimation.line(200, 500);
 										break;
 									case "Pause":
 										startBtn.setText("Start");
+										CircleAnimation.kreis(0,200,0,100);
 										break;
 									}						
 								}
@@ -236,7 +239,7 @@ public class GUI extends Application{
 							
 						btnVBox.getChildren().add(notStopBtn);
 						
-						Button kuehlmitBtn = new Button("Kühlmittel\naktivieren");
+						kuehlmitBtn = new Button("Kühlmittel\naktivieren");
 							kuehlmitBtn.setPrefSize(btn_width, btn_height);
 							kuehlmitBtn.setFont(fontBold);
 							
@@ -247,14 +250,11 @@ public class GUI extends Application{
 								public void handle(ActionEvent arg0) {
 									switch(kuehlmitBtn.getText()) {
 									case "Kühlmittel\naktivieren":
-										kuehlmit.setText("aktiviert");
-										kuehlmitBtn.setText("Kühlmittel\ndeaktivieren");
-										// Hier muss noch der Boolean der Hauptklasse geändert werden.
+										Main.setKuehlungAktiv(true);						
 										break;
 									case "Kühlmittel\ndeaktivieren":
-										kuehlmit.setText(" deaktiviert");
-										kuehlmitBtn.setText("Kühlmittel\naktivieren");
-										//Hier muss noch der Boolean der Hauptklasse geändert werden.
+										Main.setKuehlungAktiv(false);
+										break;
 									}
 								}
 							});
@@ -308,7 +308,6 @@ public class GUI extends Application{
 			arbeitsF.setStyle("-fx-background-color: grey;");
 			Circle HomePos = new Circle(0,1050 - 0,7, Color.GREEN);
 			HomePos.toFront();
-			System.out.println(HomePos.getCenterY());
 			Kopf = new Circle(HomePos.getCenterX(),HomePos.getCenterY(),HomePos.getRadius(),Color.RED);
 			
 			arbeitsF.getChildren().add(HomePos);
@@ -333,5 +332,36 @@ public class GUI extends Application{
 	
 	public static int getHight() {
 		return hight;
+	}
+	
+	/**Eine Methode um die Textfelder und Buttons in der GUI zu steuern.
+	 * 
+	 * @param wert Boolean Angabe, ob die Kühlung aktiv sein soll
+	 */
+	public static void setKuehlung(boolean wert) {
+		if(wert) {
+			kuehlmitBtn.setText("Kühlmittel\ndeaktivieren");
+			kuehlmit.setText("aktiviert");
+		}else {
+			kuehlmitBtn.setText("Kühlmittel\naktivieren");
+			kuehlmit.setText("deaktiviert");
+		}
+	}
+	/** Diese Methode nimmt die aktuelle Geschwindigkeit 
+	 * 	und aktualisert die GUI 
+	 *  Es wird auch dirket in Meter / min umgerechnet
+	 */
+	public static void setGeschwindigkeit() {
+		geschwin.setText(String.valueOf(Main.getAktGeschw()*60/1000));
+	}
+	
+	public static void writeConsole(String arg) {
+		console.setText(arg);
+	}
+	public static void setYLabel(double y) {
+		aktuellY.setText(String.valueOf(y));
+	}
+	public static void setXLabel(double x) {
+		aktuellX.setText(String.valueOf(x));
 	}
 }

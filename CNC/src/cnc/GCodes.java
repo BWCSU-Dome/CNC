@@ -69,7 +69,7 @@ public class GCodes extends Codes {
 				
 			}
 		
-		Animation.line(x, y);
+		LineAnimation.line(x, y);
 		
 		
 		}
@@ -98,7 +98,7 @@ public class GCodes extends Codes {
 		return;
 		}
 		
-		Animation.kreis(x, y, i, j);
+		CircleAnimation.kreis(x, y, i, j);
 		
 	}
 	
