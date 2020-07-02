@@ -16,7 +16,8 @@ public class  Main {
 	static boolean spindelRechtslaufAktiv;
 	
 	public static void main(String[]args) {
-		GUI.main(args);
+//		GUI.main(args);
+		RegularExpression.checkCodeFormatierung("G00 X11 Y10");
 	}
 
 
