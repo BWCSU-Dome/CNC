@@ -1,14 +1,15 @@
 package cnc;
 
 
-public class Main {
+public class  Main {
 	double posX = 0;
 	double posY = 0;
 	double homePosX = 0;
 	double homePosY = 0;
-	double geschwind_schnell = 8;
-	double geschwin_langsam = 2;
-	double geschind_fahrt;
+	private double geschwind_schnell = 8;
+	private double geschwin_langsam = 2;
+	private double geschind_fahrt;
+	private double aktGeschwin;
 	double werkzeugDurchmesser;
 	boolean spindelAktiv;
 	boolean kuehlungAktiv;
@@ -16,7 +17,7 @@ public class Main {
 	
 	public static void main(String[]args) {
 		Main fraese = new Main();
-		GUI.launch(args);
+		GUI.main(args);
 	}
 
 
@@ -40,9 +41,7 @@ public class Main {
 	}
 
 
-	public double getGeschwind_schnell() {
-		return geschwind_schnell;
-	}
+	
 
 
 	public void setGeschwind_schnell(double geschwind_schnell) {
@@ -50,20 +49,17 @@ public class Main {
 	}
 
 
-	public double getGeschwin_langsam() {
-		return geschwin_langsam;
-	}
+	
 
 
 	public void setGeschwin_langsam(double geschwin_langsam) {
 		this.geschwin_langsam = geschwin_langsam;
 	}
 
-
-	public double getGeschind_fahrt() {
-		return geschind_fahrt;
+	public double getAktGeschw() {
+		return aktGeschwin;
 	}
-
+	
 
 	public void setGeschind_fahrt(double geschind_fahrt) {
 		this.geschind_fahrt = geschind_fahrt;

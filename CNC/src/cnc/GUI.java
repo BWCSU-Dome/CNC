@@ -6,6 +6,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,6 +27,10 @@ public class GUI extends Application{
 	private Stage primaryStage;
 	private Font font = new Font("Arial",17);
 	private Font fontBold = new Font("Arial BOLD" ,17);
+	public static Pane arbeitsF;
+	private static int hight = 1050;
+	public static Circle Kopf;
+	int a = 100;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -197,6 +202,8 @@ public class GUI extends Application{
 									switch(startBtn.getText()) {
 									case "Start":
 										startBtn.setText("Pause");
+										Animation.line(Math.random()*1400, Math.random()*1050);
+										
 										break;
 									case "Pause":
 										startBtn.setText("Start");
@@ -295,11 +302,14 @@ public class GUI extends Application{
 		rootHBox.getChildren().add(steuerungsVBox);
 		
 		//Das ist die Arbeitsfläche
-		Pane arbeitsF = new Pane();
+		arbeitsF = new Pane();
 			arbeitsF.setMinSize(1400, 1050);
 			arbeitsF.setMaxSize(1400, 1050);
 			arbeitsF.setStyle("-fx-background-color: grey;");
-			Circle HomePos = new Circle(0,1050,7, Color.RED);
+			Circle HomePos = new Circle(0,1050 - 0,7, Color.GREEN);
+			HomePos.toFront();
+			System.out.println(HomePos.getCenterY());
+			Kopf = new Circle(HomePos.getCenterX(),HomePos.getCenterY(),HomePos.getRadius(),Color.RED);
 			
 			arbeitsF.getChildren().add(HomePos);
 		rootHBox.getChildren().add(arbeitsF);
@@ -310,10 +320,18 @@ public class GUI extends Application{
 		primaryStage.setScene(scene);
 
 
-//		primaryStage.setFullScreen(true);
+		primaryStage.setFullScreen(true);
 		primaryStage.show();
 	}
 	public static void main(String[] args) {
 		launch(args);
+	}
+	
+	public static void addToAF(Node node) {
+		arbeitsF.getChildren().add(node);
+	}
+	
+	public static int getHight() {
+		return hight;
 	}
 }
