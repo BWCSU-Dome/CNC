@@ -126,7 +126,7 @@ public class GCodes extends Codes {
 		return;
 		}
 		
-		Animation.kreis(x, y, i, j);
+		CircleAnimation.kreis(x, y, i, j);
 		
 	}
 	

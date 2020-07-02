@@ -5,7 +5,7 @@ public class MCodes extends Codes {
 	
 	//Repräsentation von Code M00
 	public static void haltMaschine() {
-		Main.setAktGeschw(0);
+		//Main.setAktGeschw(0);
 	}
 	
 	//Repräsentation von Code M02
