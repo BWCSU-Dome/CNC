@@ -32,7 +32,7 @@ public class RegularExpression {
 		
 		{
 			//Unser Einganstext, der den Code (ggf mit Argumenten) enthält
-			String text = "G28 Y01 X88 X501 I88 W420";
+			String text = "G02";
 			
 			//Syntax Prüfung mit Regular Expression
 			//Krit1: richtiger G oder M Code

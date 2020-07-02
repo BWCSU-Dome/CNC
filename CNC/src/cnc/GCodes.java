@@ -81,13 +81,23 @@ public class GCodes extends Codes {
 		int i = param[2];
 		int j = param[3];
 		
-//		try {
-//			pruefeFahrbewegung();
-//		
-//		} catch(OutOfAreaException e) {
-//		e.printStackTrace();
-//		return;
-//		}
+		try {
+			pruefeMissingEingabeparameter(false, param[0], param[1], param[2], param[3]);
+			
+		} catch(MissingParameterException m) {
+			System.out.println("Es fehlen Parameter. Für einen Kreisbogen werden x, y, i und j benötigt.");
+			return;
+		}
+		
+		
+		
+		try {
+			pruefeFahrbewegung();
+		
+		} catch(OutOfAreaException e) {
+		e.printStackTrace();
+		return;
+		}
 		
 		
 		
@@ -102,13 +112,25 @@ public class GCodes extends Codes {
 		int i = param[2];
 		int j = param[3];
 		
-//		try {
-//			pruefeFahrbewegung();
-//		
-//		} catch(OutOfAreaException e) {
-//		e.printStackTrace();
-//		return;
-//		}
+		try {
+			pruefeMissingEingabeparameter(false, param[0], param[1], param[2], param[3]);
+			
+		} catch(MissingParameterException m) {
+			System.out.println("Es fehlen Parameter. Für einen Kreisbogen werden x, y, i und j benötigt.");
+			return;
+		}
+		
+		
+		
+		try {
+			
+			
+			pruefeFahrbewegung();
+		
+		} catch(OutOfAreaException e) {
+		e.printStackTrace();
+		return;
+		}
 		
 		
 	}
@@ -122,7 +144,7 @@ public class GCodes extends Codes {
 	}
 	
 	//Prüft, ob Fahrbewegungen innerhalb der vorgesehenen Arbeitsfläche stattfinden.
-	static public void pruefeFahrbewegung(int[] positionX, int[] positionY) throws OutOfAreaException {
+	static public void pruefeFahrbewegung() throws OutOfAreaException {
 		int boundX = 1500;
 		int boundY = 1040; 
 		
@@ -148,12 +170,12 @@ public class GCodes extends Codes {
 				throw new MissingParameterException(-1);
 		}
 		
-		if(isGerade) {
+		
 			for(int i = 0; i < stellen.length; i++) {
 				if(stellen[i] == 0) {
 					throw new MissingParameterException(i);
 				}
-			}
+			
 		}
 		
 	}
