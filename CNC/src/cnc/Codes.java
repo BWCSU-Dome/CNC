@@ -10,15 +10,10 @@ public class Codes {
 	private static double[] parameter = new double[4];
 	
 	
-	public static void testThatShit() {
-		enqueueBefehl("G00 X11");
-		doCode();
-		doCode();
-	}
-	
 	
 	public static void enqueueBefehl(String befehlEingang) {
 		queue.add(befehlEingang);
+		
 	}
 	
 	
