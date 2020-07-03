@@ -205,11 +205,11 @@ public class GUI extends Application{
 									switch(startBtn.getText()) {
 									case "Start":
 										startBtn.setText("Pause");
-										LineAnimation.line(200, 500);
+										LineAnimation.line(320, 300);
 										break;
 									case "Pause":
 										startBtn.setText("Start");
-										CircleAnimation.kreis(0,200,0,100);
+										CircleAnimation.kreis(320,500,20,100);
 										break;
 									}						
 								}
@@ -306,9 +306,11 @@ public class GUI extends Application{
 			arbeitsF.setMinSize(1400, 1050);
 			arbeitsF.setMaxSize(1400, 1050);
 			arbeitsF.setStyle("-fx-background-color: grey;");
-			Circle HomePos = new Circle(0,1050 - 0,7, Color.GREEN);
+			Circle HomePos = new Circle(0,1050 - 0,7.5, Color.GREEN);
 			HomePos.toFront();
 			Kopf = new Circle(HomePos.getCenterX(),HomePos.getCenterY(),HomePos.getRadius(),Color.RED);
+			Circle bernd = new Circle(800,1050-400,10);
+			arbeitsF.getChildren().add(bernd);
 			
 			arbeitsF.getChildren().add(HomePos);
 		rootHBox.getChildren().add(arbeitsF);
@@ -319,7 +321,7 @@ public class GUI extends Application{
 		primaryStage.setScene(scene);
 
 
-		primaryStage.setFullScreen(true);
+//		primaryStage.setFullScreen(true);
 		primaryStage.show();
 	}
 	public static void main(String[] args) {

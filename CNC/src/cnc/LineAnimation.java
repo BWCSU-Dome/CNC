@@ -19,7 +19,7 @@ public class LineAnimation extends Animation{
 		line.setStartY(yStart);
 		line.setEndX(xStart);
 		line.setEndY(yStart);
-		line.setStrokeWidth(10);
+		line.setStrokeWidth(11);
 		line.setStroke(Color.PINK);
 
 		GUI.arbeitsF.getChildren().add(line);
@@ -48,5 +48,6 @@ public class LineAnimation extends Animation{
 	
 			GUI.Kopf.setCenterX(xEnd);
 			GUI.Kopf.setCenterY(GUI.getHight() - yEnd);
+			System.out.println(GUI.getHight() - yEnd);
 	}
 }
