@@ -139,14 +139,14 @@ public class GCodes extends Codes {
 	
 	//Prüft, ob Fahrbewegungen innerhalb der vorgesehenen Arbeitsfläche stattfinden.
 	static public void pruefeFahrbewegung() throws OutOfAreaException {
-		double boundX = 1500;
-		double boundY = 1040; 
+		double boundX = 1450; //BRAUCHE METHODE ZUR BREITE-ABFRAGE DER GUI
+		double boundY = GUI.getHight(); 
 		
 		double[] stubX = new double[10];
 		double[] stubY = new double[10];
 		
 		for(int i = 0; i < stubX.length; i++) {
-				if(stubX[i] > boundX || stubY[i] > boundY) {
+				if(stubX[i] > boundX || stubX[i] < 0 ||  stubY[i] > boundY || stubY[i] < 0) {
 					throw new OutOfAreaException();
 			}
 		}
