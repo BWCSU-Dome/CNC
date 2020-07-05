@@ -33,6 +33,15 @@ public class GCodes extends Codes {
 		}
 			
 	}
+		
+		
+		try {
+			pruefeFahrbewegung();
+		} catch(OutOfAreaException e) {
+		e.printStackTrace();
+		return;
+		}
+		
 		System.out.println(x + " " + y);
 		
 }
@@ -68,6 +77,13 @@ public class GCodes extends Codes {
 				}
 				
 			}
+		
+		try {
+			pruefeFahrbewegung();
+		} catch(OutOfAreaException e) {
+		e.printStackTrace();
+		return;
+		}
 		
 		LineAnimation.line(x, y);
 		
