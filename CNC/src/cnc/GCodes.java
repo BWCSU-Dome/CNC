@@ -263,6 +263,15 @@ public class GCodes extends Codes {
 	
 	static public void getZukuenftigePos(double xKoor, double yKoor) {
 		
+		double aktuellePosX = Main.getHomePosX();
+		double aktuellePosY = Main.getHomePosY();
+		
+		for(int i = 0; i < Codes.queue.size(); i++) {
+			
+		}
+		
+		
+		
 	}
 	
 }

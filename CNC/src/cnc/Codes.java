@@ -10,7 +10,9 @@ public class Codes {
 	private static double[] parameter = new double[4];
 	
 	public static void main(String [] args) {
-		enqueueBefehl("G00");
+		
+		enqueueBefehl("M00");
+		doBefehl(false);
 	}
 	
 	public static void enqueueBefehl(String stringEingang) {
@@ -63,10 +65,10 @@ public class Codes {
 		for(int i=0; i < befehl.length; i++) {
 			switch(i) {
 			case 0:
-				if(befehl[i].startsWith("G"))
+				if(befehl[i].startsWith("G") || befehl[i].startsWith("M"))
 					continue;
 				
-				befehl[i] = "G" + befehl[i];
+				System.out.println("G oder M Befehl switch case failed.");
 				break;
 				
 			case 1:
@@ -99,29 +101,18 @@ public class Codes {
 				
 			}
 		}
-			
-
-					//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
-			
-			
 		
 		for(int i=0; i < parameter.length; i++) {
 			parameter[i] = Integer.parseInt(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
 			}
 	
-			
 	
-		
-	
-	for(int a = 0; a < befehl.length; a++) {
-		System.out.println(a+":" + befehl[a]);
-	}
-	boolean successful = false;;
+	boolean successful = false;
 			//Unterscheidung, ob M- oder G-Code vorliegt (entschieden an mitgegebenem ersten Buchstaben)
 			switch(befehl[0].charAt(0)) {
-//			case 'M':
-//				checkMCodes(befehl);
-//				break;
+			case 'M':
+				successful = true;
+				break;
 			case 'G':
 				successful = checkGCodes(befehl);
 				break;
@@ -135,86 +126,27 @@ public class Codes {
 			System.out.println("Shit worked, me boi :)");
 			
 	}
-		
-		
-		
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public static void doBefehl() {
+	public static void doBefehl(boolean simulation) {
 		
 		if(queueIsEmpty()) {
 			System.out.println("Die Warteschlange ist leer.");
 			return;
 		}
 		
+		
 		befehlEingang = queue.get(0).split(" ");
 		
 		System.arraycopy(befehlEingang, 0, befehl, 0, befehlEingang.length);
 		
-		if(queue.get(0).split(" ").length != 1) {
-		
-		
-		queue.remove(0);
-		
-		for(int i = 0; i < befehl.length; i++) {
-			if(befehl[i] == null) {
-				befehl[i] = "00";				//Wenn "Schublade" leer, auffüllen mit 00
-			}
-		}
-		
-		// Es wird vorsorglich ein Int-Array erzeugt, das zur reibungslosen Weiterverarbeitung diesen Datentyp trägt.
-			
+		// Es wird zur reibungslosen Weiterverarbeitung der Parameter ein Double-Array erzeugt
 		parameter = new double[befehl.length-1];
-			String zwischenspeicher = "";
-		
-			for(int i = 1; i < befehl.length; i++) {
 				
-		//Sortierung der Funktionsargumente in folgende Reihenfolge: X, Y, I, J (falls vorhanden)
-		switch (befehl[i].charAt(0)) {
-		case 'X':
-			zwischenspeicher = befehl[1];
-			befehl[1] = befehl[i];
-			befehl[i] = zwischenspeicher;
-			break;
-		case 'Y':
-			zwischenspeicher = befehl[2];
-			befehl[2] = befehl[i];
-			befehl[i] = zwischenspeicher;
-			break;
-		case 'I':
-			zwischenspeicher = befehl[3];
-			befehl[3] = befehl[i];
-			befehl[i] = zwischenspeicher;
-			break;
-		case 'J':
-			zwischenspeicher = befehl[4];
-			befehl[4] = befehl[i];				
-			befehl[i] = zwischenspeicher;
-			break;
-		}
-			}
-			//Abspeicherung in int-Array, sodass die Werte besser in G-Methoden verwendet werden können.
-		
 		
 		for(int i=0; i < parameter.length; i++) {
 			parameter[i] = Integer.parseInt(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
 			}
-	
-			}
-	
-		
-	
-	for(int a = 0; a < befehl.length; a++) {
-		System.out.println(a+":" + befehl[a]);
-	}
+			
 			//Unterscheidung, ob M- oder G-Code vorliegt (entschieden an mitgegebenem ersten Buchstaben)
 			switch(befehl[0].charAt(0)) {
 			case 'M':
@@ -226,13 +158,11 @@ public class Codes {
 			default:
 				System.out.println("Das lief nicht gut. Fehler im Switch-Case-Block in der Klasse RegEx");
 			}
-		
-		
+			
+		if(!simulation)
+		queue.remove(0);
 	
 	}
-	
-	
-
 	
 	
 	private static void doGCodes(String[] code) {
@@ -303,7 +233,6 @@ public class Codes {
 		MCodes.schalteKuelmittel(false);
 			break;
 		
-		//
 		case "M13":
 		MCodes.schalteSpindelAn(true);
 		MCodes.schalteKuelmittel(true);
@@ -350,7 +279,9 @@ public class Codes {
 	}
 	
 }
-	
+	/*
+	 * Methode, die lediglich dazu da ist, ein Array (insbesondere das Array "Befehl" in einen String umzuformen
+	 */
 	public static String befehlToString(String[] befehl) {
 		String befehlsString = "";
 		

@@ -6,6 +6,7 @@ public class MCodes extends Codes {
 	//Repräsentation von Code M00
 	public static void haltMaschine() {
 		//Main.setAktGeschw(0);
+		System.out.println("Fuck you");
 	}
 	
 	//Repräsentation von Code M02
