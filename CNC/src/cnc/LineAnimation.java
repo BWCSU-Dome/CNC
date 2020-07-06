@@ -40,14 +40,14 @@ public class LineAnimation extends Animation{
 		System.out.println(Main.getAktGeschw());
 		t.getKeyFrames().add(new KeyFrame(Duration.seconds(getDauer( Main.getAktGeschw() ,xStart-xEnd , yStart-1050 + yEnd)), 
 				new KeyValue(line.endXProperty(), xEnd),
-				new KeyValue(line.endYProperty(), GUI.getHight() - yEnd),
+				new KeyValue(line.endYProperty(), GUI.getHeight() - yEnd),
 				new KeyValue(cir.centerXProperty(), xEnd),
-				new KeyValue(cir.centerYProperty(), GUI.getHight()- yEnd)
+				new KeyValue(cir.centerYProperty(), GUI.getHeight()- yEnd)
 				));
 		t.play();
 	
 			GUI.Kopf.setCenterX(xEnd);
-			GUI.Kopf.setCenterY(GUI.getHight() - yEnd);
-			System.out.println(GUI.getHight() - yEnd);
+			GUI.Kopf.setCenterY(GUI.getHeight() - yEnd);
+			System.out.println(GUI.getHeight() - yEnd);
 	}
 }
