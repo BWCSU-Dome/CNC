@@ -31,8 +31,17 @@ public class CircleAnimation extends Animation{
 		System.out.println(ytempCenter);
 		
 		//Startwinkel ausrechnen mit Vektorformel
+
 		 
+		 double startWinkel = ((i)/Math.sqrt(i*i+j*j));
+		 startWinkel = Math.toDegrees(Math.acos(startWinkel));
+		System.out.println(startWinkel);
+		 double vektorEndpunktY = xEnde-xtempCenter;
+		 double vektorEndpunktX = yEnde-ytempCenter;
 		
+		 double endWinkel = (vektorEndpunktX/Math.sqrt(vektorEndpunktX*vektorEndpunktX+vektorEndpunktY+vektorEndpunktY));
+		 endWinkel = Math.toDegrees(Math.acos(endWinkel));
+		 System.out.println(endWinkel); 
 //		if(!(checkKreisBogen(xEnde, yEnde, xtempCenter, ytempCenter,radius))) {
 //			//Falscher Kreiseingabe
 //			System.out.println("Falsche kreiseingabe Exception");
@@ -42,14 +51,15 @@ public class CircleAnimation extends Animation{
 		yEnd = yEnde;
 		xEnd = xEnde;
 		
-		for(double a = 90 ; a <= 360; a += 0.5) {
-			addCir(a,radius );
+		for(double a = startWinkel ; a <= endWinkel; a += 0.5) {
+			addCir(a,radius);
+			System.out.println(a+ " hinzugefügt");
 			if(xtemp == xEnd && ytemp == yEnd) {
-				update();
+				update(endWinkel-startWinkel);
 				return;
 			}
 		}
-		update();
+		update(endWinkel-startWinkel);
 		System.out.println("update ausgeführt");
 	}
 	
@@ -60,14 +70,13 @@ public class CircleAnimation extends Animation{
     	Circle cir = new Circle(xtemp,ytemp,7.5);     
         cir.setFill(Color.RED);
         cir.setVisible(false);
-    
-        
+
         circles.add(cir);
         GUI.arbeitsF.getChildren().add(cir);
     }
 	
 	private static int stueck = 0 ;
-	private static int intervalle = 360;
+	private static double intervalle = 360;
 	
 	private static void updateCirs() {
 		
@@ -81,13 +90,15 @@ public class CircleAnimation extends Animation{
 		tempColor = temp;
 		stueck++;
 	}
-
-	private static void update() {
-
+	private static double winkelDiff ; 
+	
+	private static void update(double winkelDifferenz) {
+		intervalle = winkelDifferenz*2; 
         PauseTransition pause = new PauseTransition(Duration.seconds(0.02));
         pause.setOnFinished(event ->{
         	if(stueck < intervalle) {
         		stueck++;
+        		winkelDiff--;
         		updateCirs();
                 pause.play();
         	}  
