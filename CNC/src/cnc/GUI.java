@@ -28,7 +28,8 @@ public class GUI extends Application{
 	private Font font = new Font("Arial",17);
 	private Font fontBold = new Font("Arial BOLD" ,17);
 	public static Pane arbeitsF;
-	private static int hight = 1050;
+	private static int height = 1050;
+	private static int width = 1950;
 	public static Circle Kopf;
 	private static Button kuehlmitBtn;
 	private static Label  kuehlmit, spindelStatus,geschwin,aktuellX,aktuellY;
@@ -37,8 +38,8 @@ public class GUI extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
-			primaryStage.setHeight(1050);
-			primaryStage.setWidth(1950);
+			primaryStage.setHeight(height);
+			primaryStage.setWidth(width);
 			primaryStage.setTitle("Computerized Numerical Control");
 		
 		//Das ist die WurzelGruppe
@@ -332,8 +333,11 @@ public class GUI extends Application{
 		arbeitsF.getChildren().add(node);
 	}
 	
-	public static int getHight() {
-		return hight;
+	public static int getHeight() {
+		return height;
+	}
+	public static int getWidth() {
+		return width;
 	}
 	
 	/**Eine Methode um die Textfelder und Buttons in der GUI zu steuern.
