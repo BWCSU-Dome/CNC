@@ -3,9 +3,7 @@ package cnc;
 public class GCodes extends Codes {
 
 	
-	//Repräsentation von Code G00.
-	static public void fahrenEilgang(double... param) {
-		
+	static public boolean checkFahrenEilgang(double... param) {
 		double x = param[0];
 		double y = param[1];
 		
@@ -30,26 +28,37 @@ public class GCodes extends Codes {
 			//Kein Parameter wurde mitgegeben --> Keine Fahrt möglich
 		case -1:
 			System.out.println("Es kann keine Gerade ohne Parameter gefahren werden.");
-			return;
+			return false;
 		}
 			
 	}
-		
-		
 		try {
 			pruefeFahrbewegung(param[0], param[1]);
 		} catch(OutOfAreaException e) {
 		e.printStackTrace();
-		return;
+		return false;
 		}
 		
-		System.out.println(x + " " + y);
+		return true;
+		
+	
+}
+	
+	
+	
+	//Repräsentation von Code G00.
+	static public void fahrenEilgang(double... param) {
+		
+		double x = param[0];
+		double y = param[1];
+		
+		System.out.println("Fahren Eilgang: " + x + " " + y);
 		
 }
 		
 	
-	//Repräsentation von Code G01.
-	static public void fahrenGerade(double[] param) {
+	static public boolean checkFahrenGerade(double[] param) {
+		
 		double x = param[0];
 		double y = param[1];
 		
@@ -75,7 +84,7 @@ public class GCodes extends Codes {
 					//Kein Parameter wurde mitgegeben --> Keine Fahrt möglich
 				case -1:
 					System.out.println("Es kann keine Gerade ohne Parameter gezeichnet werden.");
-					return;
+					return false;
 				}
 				
 			}
@@ -84,13 +93,50 @@ public class GCodes extends Codes {
 			pruefeFahrbewegung(param[0], param[1]);
 		} catch(OutOfAreaException e) {
 		e.printStackTrace();
-		return;
+		return false;
 		}
+		return true;
+		
+	}
+	
+	
+	
+	//Repräsentation von Code G01.
+	static public void fahrenGerade(double[] param) {
+		double x = param[0];
+		double y = param[1];
 		
 		LineAnimation.line(x, y);
 		
-		
 		}
+	
+	
+	
+	
+	static public boolean checkFahrenKreisImUhrzeigersinn(double[] param) {
+		double x = param[0];
+		double y = param[1];
+		double i = param[2];
+		double j = param[3];
+		
+		try {
+			pruefeMissingEingabeparameter(false, param[0], param[1], param[2], param[3]);
+			
+		} catch(MissingParameterException m) {
+			System.out.println("Es fehlen Parameter. Für einen Kreisbogen werden x, y, i und j benötigt.");
+			return false;
+		}
+		
+		
+		
+		try {
+			pruefeFahrbewegung(false);
+		} catch(OutOfAreaException e) {
+		e.printStackTrace();
+		return false;
+		}
+		return true;
+	}
 	
 	/* Repräsentation von Code G02.
 	 * Methode zur Kreisbogenfahrt (im Uhrzeigersinn)
@@ -102,12 +148,23 @@ public class GCodes extends Codes {
 		double i = param[2];
 		double j = param[3];
 		
+		CircleAnimation.kreis(x, y, i, j);
+		
+		
+	}
+	
+	static public boolean checkFahrenKreisGegenUhrzeigersinn(double[] param) {
+		double x = param[0];
+		double y = param[1];
+		double i = param[2];
+		double j = param[3];
+		
 		try {
-			pruefeMissingEingabeparameter(false, param[0], param[1], param[2], param[3]);
+			pruefeMissingEingabeparameter(false, x, y, i, j);
 			
 		} catch(MissingParameterException m) {
 			System.out.println("Es fehlen Parameter. Für einen Kreisbogen werden x, y, i und j benötigt.");
-			return;
+			return false;
 		}
 		
 		
@@ -116,12 +173,13 @@ public class GCodes extends Codes {
 			pruefeFahrbewegung(false);
 		} catch(OutOfAreaException e) {
 		e.printStackTrace();
-		return;
+		return false;
 		}
 		
-		CircleAnimation.kreis(x, y, i, j);
+		return true;
 		
 	}
+	
 	
 	/** Repräsentation von Code G03.
 	 *  Methode zur Kreisbogenfahrt (gegen Uhrzeigersinn)
@@ -133,23 +191,6 @@ public class GCodes extends Codes {
 		double i = param[2];
 		double j = param[3];
 		
-		try {
-			pruefeMissingEingabeparameter(false, param[0], param[1], param[2], param[3]);
-			
-		} catch(MissingParameterException m) {
-			System.out.println("Es fehlen Parameter. Für einen Kreisbogen werden x, y, i und j benötigt.");
-			return;
-		}
-		
-		
-		
-		try {
-			pruefeFahrbewegung(false);
-		} catch(OutOfAreaException e) {
-		e.printStackTrace();
-		return;
-		}
-		
 		CircleAnimation.kreis(x, y, i, j);
 		
 	}
@@ -158,7 +199,7 @@ public class GCodes extends Codes {
 	static public void fahrenZuHome() {
 		
 		fahrenEilgang(Main.getHomePosX(), Main.getHomePosY());		//Rufe die fahrenEilgang-Methode auf mit den Koordinaten des Homepunkts.
-	
+																	//Check von Machbarkeit erfolgt in der Methode zum Fahren im Eilgang
 	}
 	
 	
