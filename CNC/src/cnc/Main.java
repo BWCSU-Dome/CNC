@@ -17,7 +17,6 @@ public class  Main {
 
 	public static void main(String[]args) {
 	GUI.main(args);
-	
 		
 	}
 
@@ -89,6 +88,7 @@ public class  Main {
 	 * @return "aktiviert" oder "deaktiviert"
 	 */
 	public static String getKuehlungAktiv() {
+		
 		if(kuehlungAktiv) {
 			return "aktiviert";
 		}else {
@@ -106,7 +106,7 @@ public class  Main {
 		GUI.setKuehlung(kuehlungAktiv);
 		if(new_kuehlungAktiv) {
 			setAktGeschwind_schnell();
-		}else {
+		} else {
 			setAktGeschwind_langsam();
 		}
 	}
