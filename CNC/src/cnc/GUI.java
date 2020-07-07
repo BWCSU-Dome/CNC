@@ -34,6 +34,7 @@ public class GUI extends Application{
 	private static Button kuehlmitBtn;
 	private static Label  kuehlmit, spindelStatus,geschwin,aktuellX,aktuellY;
 	private static TextArea console;
+
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -307,7 +308,7 @@ public class GUI extends Application{
 			arbeitsF.setMinSize(1400, 1050);
 			arbeitsF.setMaxSize(1400, 1050);
 			arbeitsF.setStyle("-fx-background-color: grey;");
-			Circle HomePos = new Circle(0,1050 - 0,7.5, Color.GREEN);
+			Circle HomePos = new Circle(Main.getHomePosX(),1050 - Main.getHomePosY(),7.5, Color.GREEN);
 			HomePos.toFront();
 			Kopf = new Circle(HomePos.getCenterX(),HomePos.getCenterY(),HomePos.getRadius(),Color.RED);
 			Circle bernd = new Circle(800,1050-400,10);

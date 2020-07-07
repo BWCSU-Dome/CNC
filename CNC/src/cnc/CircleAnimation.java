@@ -24,6 +24,7 @@ public class CircleAnimation extends Animation{
 	public static void kreis(double xEnde, double yEnde, double i, double j) {
 		yEnde = 1050 - yEnde;
 		
+		
 		double radius = Math.sqrt(i*i+j*j);
 		
 		xtempCenter = GUI.Kopf.getCenterX()-i;
@@ -31,8 +32,6 @@ public class CircleAnimation extends Animation{
 		System.out.println(ytempCenter);
 		
 		//Startwinkel ausrechnen mit Vektorformel
-
-		 
 		 double startWinkel = ((i)/Math.sqrt(i*i+j*j));
 		 startWinkel = Math.toDegrees(Math.acos(startWinkel));
 		System.out.println(startWinkel);
@@ -92,6 +91,10 @@ public class CircleAnimation extends Animation{
 	}
 	private static double winkelDiff ; 
 	
+	/**
+	 * 
+	 * @param winkelDifferenz
+	 */
 	private static void update(double winkelDifferenz) {
 		intervalle = winkelDifferenz*2; 
         PauseTransition pause = new PauseTransition(Duration.seconds(0.02));
@@ -106,7 +109,7 @@ public class CircleAnimation extends Animation{
         pause.play();
     }
 	
-	/**
+	/** Diese Überprüfung ob die Koordinate auf dem Kreis liegt
 	 * 
 	 * @param x Zielkoordinate der Kreisbewegung
 	 * @param y Zielkoordinate der Kreisbewegung
@@ -114,7 +117,6 @@ public class CircleAnimation extends Animation{
 	 * @param CenterY Mittelpunkt des Kreises
 	 * @return
 	 */
-	
 	public static boolean checkKreisBogen(double x, double y, double CenterX, double CenterY, double radius) {
 		System.out.println(CenterX);
 		boolean wert;
