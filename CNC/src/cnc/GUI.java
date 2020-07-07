@@ -321,11 +321,11 @@ public class GUI extends Application{
 			arbeitsF.getChildren().add(HomePos);
 		rootHBox.getChildren().add(arbeitsF);
 		
-		FileInputStream fip = new FileInputStream("HalloMerkel/files/ressources/cnc.png");
-		Image keks= new Image(fip);
+		FileInputStream fip = new FileInputStream("files/ressources/CnC_klein.png");
+		Image zahnrad= new Image(fip);
 
 		
-		primaryStage.getIcons().add(keks);
+		primaryStage.getIcons().add(zahnrad);
 		
 		Scene scene = new Scene(rootHBox);
 		primaryStage.setScene(scene);
