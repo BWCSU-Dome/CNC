@@ -4,8 +4,8 @@ package cnc;
 public class  Main {
 	private static double posX = 0;
 	private static double posY = 0;
-	private static double homePosX = 10;
-	private static double homePosY = 10;
+	private static double homePosX = 0;
+	private static double homePosY = 0;
 	private static double geschwind_schnell = 3000/60; //3
 	private static double geschwind_langsam = 2000/60 *5; //2
 	private static double geschwind_fahrt = 4000/60;   //4
@@ -121,4 +121,21 @@ public class  Main {
 		spindelRechtslaufAktiv = new_spindelRechtslaufAktiv;
 	}
 
+	public static double getPosX() {
+		return posX;
+	}
+
+	public static void setPosX(double posX) {
+		Main.posX = posX;
+	}
+
+	public static double getPosY() {
+		return posY;
+	}
+
+	public static void setPosY(double posY) {
+		Main.posY = posY;
+	}
+	
+	
 }
