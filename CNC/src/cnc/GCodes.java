@@ -47,12 +47,14 @@ public class GCodes extends Codes {
 	
 	
 	//Repräsentation von Code G00.
-	static public void fahrenEilgang(double... param) {
+	static public void fahrenEilgang(boolean simulation, double... param) {
 		
 		double x = param[0];
 		double y = param[1];
 		
+		if(!simulation) {
 		System.out.println("Fahren Eilgang: " + x + " " + y);
+		}
 		
 }
 		
@@ -102,11 +104,14 @@ public class GCodes extends Codes {
 	
 	
 	//Repräsentation von Code G01.
-	static public void fahrenGerade(double[] param) {
+	static public void fahrenGerade(boolean simulation, double[] param) {
 		double x = param[0];
 		double y = param[1];
 		
+		if(!simulation) {
 		LineAnimation.line(x, y);
+		}
+		
 		
 		}
 	
@@ -142,14 +147,15 @@ public class GCodes extends Codes {
 	 * Methode zur Kreisbogenfahrt (im Uhrzeigersinn)
 	 * @param param Array, das die jeweiligen Parameter für die Kreisbogenberechnung mit gibt (X, Y: Zielpunkt, I, J: Mittelpunkt)
 	 */
-	static public void fahrenKreisImUhrzeigersinn(double[] param) {
+	static public void fahrenKreisImUhrzeigersinn(boolean simulation, double[] param) {
 		double x = param[0];
 		double y = param[1];
 		double i = param[2];
 		double j = param[3];
 		
-		CircleAnimation.kreis(x, y, i, j);
-		
+		if(!simulation) {
+			CircleAnimation.kreis(x, y, i, j);  //Hier wird die Methode zur Kreisfahrt gerufen
+			}
 		
 	}
 	
@@ -185,24 +191,24 @@ public class GCodes extends Codes {
 	 *  Methode zur Kreisbogenfahrt (gegen Uhrzeigersinn)
 	 * @param param Array, das die jeweiligen Parameter für die Kreisbogenberechnung mit gibt (X, Y: Zielpunkt, I, J: Mittelpunkt)
 	 */
-	static public void fahrenKreisGegenUhrzeigersinn(double[] param) {
+	static public void fahrenKreisGegenUhrzeigersinn(boolean simulation, double[] param) {
 		double x = param[0];
 		double y = param[1];
 		double i = param[2];
 		double j = param[3];
 		
-		CircleAnimation.kreis(x, y, i, j);
+		if(!simulation) {
+			CircleAnimation.kreis(x, y, i, j);  //Hier wird die Methode zur Kreisfahrt gerufen
+			}
 		
 	}
 	
 	//Repräsentation von Code G28.
 	static public void fahrenZuHome() {
 		
-		fahrenEilgang(Main.getHomePosX(), Main.getHomePosY());		//Rufe die fahrenEilgang-Methode auf mit den Koordinaten des Homepunkts.
+		fahrenEilgang(false, Main.getHomePosX(), Main.getHomePosY());		//Rufe die fahrenEilgang-Methode auf mit den Koordinaten des Homepunkts.
 																	//Check von Machbarkeit erfolgt in der Methode zum Fahren im Eilgang
 	}
-	
-	
 	
 	/**Prüft, ob Fahrbewegungen innerhalb der vorgesehenen Arbeitsfläche stattfinden. Diese Methode richtet sich ausschließlich an Geradenfahrbewegungen.
 	 * 
@@ -246,13 +252,13 @@ public class GCodes extends Codes {
 	static public void pruefeMissingEingabeparameter(boolean isGerade, double... stellen) throws MissingParameterException {
 		
 		if(isGerade) {
-			if(stellen[0] == 0 && stellen[1] == 0)
+			if(stellen[0] == -10001 && stellen[1] == -10001)
 				throw new MissingParameterException(-1);		//Wenn eine Gerade gefahren werden soll und beide Parameter (X, Y) fehlen, wird Exception mit Parameter -1 geworfen --> teilt aufrufender Methode mit, dass kein Kreis ohne Parameter gezeichnet werden kann
 		}
 		
 		
 			for(int i = 0; i < stellen.length; i++) {
-				if(stellen[i] == 0) {
+				if(stellen[i] == -10001) {
 					throw new MissingParameterException(i);		//Wenn einer von den benötigten Parametern fehlt, wird direkt eine Exception unter Angabe der fehlenden Stelle geworfen. Kann von den Catch-Blöcken der aufrufenden Methoden trotzdem zu einem validen Fahrbefehl umgeformt werden.
 				}
 			
@@ -261,13 +267,29 @@ public class GCodes extends Codes {
 	}
 	
 	
-	static public void getZukuenftigePos(double xKoor, double yKoor) {
+	static public void getZukuenftigePos(int stelleInArray) {
 		
-		double aktuellePosX = Main.getHomePosX();
-		double aktuellePosY = Main.getHomePosY();
+		int verarbeiteteCodes = Codes.getAusgefuehrteCodes();
 		
-		for(int i = 0; i < Codes.queue.size(); i++) {
-			
+		double aktuellePosX;
+		double aktuellePosY;
+		
+		if(verarbeiteteCodes == 0) {
+		aktuellePosX = Main.getHomePosX();
+		aktuellePosY = Main.getHomePosY();
+		} else {
+			while(true) {
+				if(!IsDoRunning()) {
+					aktuellePosX = Main.getPosX();
+					aktuellePosY = Main.getPosY();
+					break;
+				}
+			}
+		}
+		
+		for(int i = 0; i < stelleInArray - 1; i++) {
+		 Codes.doBefehl(true, i);
+		 
 		}
 		
 		

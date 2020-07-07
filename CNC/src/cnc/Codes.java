@@ -8,15 +8,19 @@ public class Codes {
 	private static String[] befehlEingang;
 	private static String[] befehl = new String[5];
 	private static double[] parameter = new double[4];
+	protected static int ausgefuehrteCodes = 0;
+	private static boolean doRunning = false;
+	
 	
 	public static void main(String [] args) {
+		enqueueBefehl("G00 X11 Y11");
+		enqueueBefehl("G00 X12 Y11");
+		enqueueBefehl("G00 X13 Y11");
 		
-		enqueueBefehl("M00");
-		doBefehl(false);
 	}
 	
+	
 	public static void enqueueBefehl(String stringEingang) {
-		
 		
 		befehlEingang = stringEingang.split(" ");
 		
@@ -25,7 +29,7 @@ public class Codes {
 		
 		for(int i = 0; i < befehl.length; i++) {
 			if(befehl[i] == null) {
-				befehl[i] = "00";				//Wenn "Schublade" leer, auffüllen mit 00
+				befehl[i] = "-10001";				//Wenn "Schublade" leer, auffüllen mit 00
 			}
 		}
 		
@@ -61,7 +65,7 @@ public class Codes {
 		}
 			}
 			//Abspeicherung in int-Array, sodass die Werte besser in G-Methoden verwendet werden können.
-		
+			
 		for(int i=0; i < befehl.length; i++) {
 			switch(i) {
 			case 0:
@@ -105,8 +109,11 @@ public class Codes {
 		for(int i=0; i < parameter.length; i++) {
 			parameter[i] = Integer.parseInt(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
 			}
-	
-	
+		
+		for(int i = 0; i < befehl.length; i++) {
+			System.out.println(befehl[i]);				//Testweise Ausgabe des Array-Inhalts
+			}
+		
 	boolean successful = false;
 			//Unterscheidung, ob M- oder G-Code vorliegt (entschieden an mitgegebenem ersten Buchstaben)
 			switch(befehl[0].charAt(0)) {
@@ -127,7 +134,7 @@ public class Codes {
 			
 	}
 	
-	public static void doBefehl(boolean simulation) {
+	public static void doBefehl(boolean simulation, int befehlNr) {
 		
 		if(queueIsEmpty()) {
 			System.out.println("Die Warteschlange ist leer.");
@@ -135,7 +142,7 @@ public class Codes {
 		}
 		
 		
-		befehlEingang = queue.get(0).split(" ");
+		befehlEingang = queue.get(befehlNr).split(" ");
 		
 		System.arraycopy(befehlEingang, 0, befehl, 0, befehlEingang.length);
 		
@@ -153,37 +160,39 @@ public class Codes {
 				doMCodes(befehl);
 				break;
 			case 'G':
-				doGCodes(befehl);
+				doGCodes(simulation, befehl);		
 				break;
 			default:
 				System.out.println("Das lief nicht gut. Fehler im Switch-Case-Block in der Klasse RegEx");
 			}
 			
-		if(!simulation)
+		if(!simulation) {
+		ausgefuehrteCodes++;
 		queue.remove(0);
-	
+		}
 	}
 	
 	
-	private static void doGCodes(String[] code) {
+	protected static void doGCodes(boolean simulation, String[] code) {
 		
+		doRunning = true;
 		//Aufruf des gewünschten Codes nach eingegebener, gewünschter Funktion
 		switch(code[0]) {
 		
 		case "G00":
-		GCodes.fahrenEilgang(parameter);
+		GCodes.fahrenEilgang(simulation, parameter);
 			break;
 			
 		case "G01":
-		GCodes.fahrenGerade(parameter);
+		GCodes.fahrenGerade(simulation, parameter);
 			break;
 			
 		case "G02":
-		GCodes.fahrenKreisImUhrzeigersinn(parameter);
+		GCodes.fahrenKreisImUhrzeigersinn(simulation, parameter);
 			break;
 		
 		case "G03":
-		GCodes.fahrenKreisGegenUhrzeigersinn(parameter);
+		GCodes.fahrenKreisGegenUhrzeigersinn(simulation, parameter);
 			break;
 			
 		case "G28":
@@ -195,6 +204,7 @@ public class Codes {
 		
 	
 	}
+		doRunning = false;
 		return;
 
 }
@@ -257,6 +267,7 @@ public class Codes {
 		switch(code[0]) {
 		case "G00":
 		return(GCodes.checkFahrenEilgang(parameter));
+		
 			
 		case "G01":
 		return(GCodes.checkFahrenGerade(parameter));
@@ -273,6 +284,7 @@ public class Codes {
 		case "G28":
 		return(GCodes.checkFahrenEilgang(Main.getHomePosX(), Main.getHomePosY()));
 			
+		
 		default:
 		System.out.println("GCode-Fehler");
 		return false;
@@ -293,7 +305,18 @@ public class Codes {
 			}
 			
 		}
-		
 		return befehlsString;
+	}
+	
+	public static void emptyQueue() {
+		queue = new ArrayList<String>();
+	}
+	
+	public static int getAusgefuehrteCodes() {
+		return ausgefuehrteCodes;
+	}
+	
+	public static boolean IsDoRunning() {
+		return doRunning;
 	}
 }
