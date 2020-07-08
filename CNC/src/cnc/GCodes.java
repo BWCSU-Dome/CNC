@@ -1,6 +1,15 @@
 package cnc;
 
+import java.util.ArrayList;
+
 public class GCodes extends Codes {
+	
+	private static double aenderungKoorX;
+	private static double aenderungKoorY;
+	private static ArrayList<String> zukuenftigePosNachSchritt = new ArrayList<String>();
+	static double aktuellePosX;
+	static double aktuellePosY;
+	private static int alreadyCheckedCodes = 0;
 
 	
 	static public boolean checkFahrenEilgang(double... param) {
@@ -54,6 +63,9 @@ public class GCodes extends Codes {
 		
 		if(!simulation) {
 		System.out.println("Fahren Eilgang: " + x + " " + y);
+		} else {
+			aenderungKoorX = x;
+			aenderungKoorY = y;
 		}
 		
 }
@@ -110,6 +122,9 @@ public class GCodes extends Codes {
 		
 		if(!simulation) {
 		LineAnimation.line(x, y);
+		} else {
+			aenderungKoorX = x;
+			aenderungKoorY = y;
 		}
 		
 		
@@ -132,8 +147,6 @@ public class GCodes extends Codes {
 			return false;
 		}
 		
-		
-		
 		try {
 			pruefeFahrbewegung(false);
 		} catch(OutOfAreaException e) {
@@ -155,6 +168,9 @@ public class GCodes extends Codes {
 		
 		if(!simulation) {
 			CircleAnimation.kreis(x, y, i, j);  //Hier wird die Methode zur Kreisfahrt gerufen
+			} else {
+				aenderungKoorX = x;
+				aenderungKoorY = y;
 			}
 		
 	}
@@ -199,6 +215,9 @@ public class GCodes extends Codes {
 		
 		if(!simulation) {
 			CircleAnimation.kreis(x, y, i, j);  //Hier wird die Methode zur Kreisfahrt gerufen
+			} else {
+				aenderungKoorX = x;
+				aenderungKoorY = y;
 			}
 		
 	}
@@ -218,14 +237,29 @@ public class GCodes extends Codes {
 	 */
 	
 	static public void pruefeFahrbewegung(double xKoor, double yKoor) throws OutOfAreaException {
+
+		String[] koordinaten;
 		
 		double boundX = GUI.getWidth();
 		double boundY = GUI.getHeight();
 		
-		double newXKoor = Main.getHomePosX();
-		double newYKoor = Main.getHomePosY();
+		getZukuenftigePos(Codes.getQueueSize());
+		
+		if(Codes.getQueueSize() == 0 && Codes.getEnqueuedCodes() == 0) {
+			koordinaten = new String[2];
+			koordinaten[0] = Double.toString(Main.getHomePosX());
+			koordinaten[1] = Double.toString(Main.getHomePosX());
+		} else {
+			koordinaten = zukuenftigePosNachSchritt.get(Codes.getQueueSize()).split(" ");
+		}
+		
+		double newXKoor = Double.parseDouble(koordinaten[0]) + xKoor;
+		double newYKoor = Double.parseDouble(koordinaten[1]) + yKoor;
+		
 		
 				if(newXKoor > boundX || boundX+newXKoor < 0 ||  newYKoor > boundY || boundY+newYKoor < 0) {
+					alreadyCheckedCodes--;
+					zukuenftigePosNachSchritt.remove(zukuenftigePosNachSchritt.size()-1);
 					throw new OutOfAreaException();
 			}
 		
@@ -269,31 +303,39 @@ public class GCodes extends Codes {
 	
 	static public void getZukuenftigePos(int stelleInArray) {
 		
-		int verarbeiteteCodes = Codes.getAusgefuehrteCodes();
+		if(Codes.getEnqueuedCodes() == 0 && stelleInArray == 0) {
+			aktuellePosX = Main.getPosX();
+			aktuellePosY = Main.getPosY();
+			zukuenftigePosNachSchritt.add(String.valueOf(Main.getPosX()) + " " + String.valueOf(Main.getPosY()));
+					return;
+		}
 		
-		double aktuellePosX;
-		double aktuellePosY;
-		
-		if(verarbeiteteCodes == 0) {
-		aktuellePosX = Main.getHomePosX();
-		aktuellePosY = Main.getHomePosY();
-		} else {
+		if(Codes.getEnqueuedCodes() != 0 && stelleInArray == 0) {
+			
 			while(true) {
-				if(!IsDoRunning()) {
+				if(!Codes.IsDoRunning()) {
 					aktuellePosX = Main.getPosX();
 					aktuellePosY = Main.getPosY();
+					zukuenftigePosNachSchritt.add(String.valueOf(Main.getPosX()) + " " + String.valueOf(Main.getPosY()));
 					break;
 				}
+							
 			}
+			
 		}
 		
-		for(int i = 0; i < stelleInArray - 1; i++) {
-		 Codes.doBefehl(true, i);
+		
+		String[] koordinaten = zukuenftigePosNachSchritt.get(alreadyCheckedCodes).split(" ");
+		alreadyCheckedCodes++;
+		
+		aktuellePosX = Double.parseDouble(koordinaten[0]);
+		aktuellePosY = Double.parseDouble(koordinaten[1]);
+		
+		 Codes.doBefehl(true, stelleInArray - 1);
+		 aktuellePosX += aenderungKoorX;
+		 aktuellePosY += aenderungKoorY;
+		 zukuenftigePosNachSchritt.add(aktuellePosX + " " + aktuellePosY);
 		 
-		}
-		
-		
-		
 	}
 	
 }

@@ -5,10 +5,12 @@ import java.util.ArrayList;
 public class Codes {
 	
 	public static ArrayList<String> queue = new ArrayList<String>();
-	private static String[] befehlEingang;
+	private static String[] befehlEingangEnqueue;
+	private static String[] befehlEingangDo;
 	private static String[] befehl = new String[5];
 	private static double[] parameter = new double[4];
 	protected static int ausgefuehrteCodes = 0;
+	protected static int enqueuedCodes = 0;
 	private static boolean doRunning = false;
 	
 	
@@ -16,15 +18,20 @@ public class Codes {
 		enqueueBefehl("G00 X11 Y11");
 		enqueueBefehl("G00 X12 Y11");
 		enqueueBefehl("G00 X13 Y11");
-		
+		doBefehl(false, 0);
+		doBefehl(false, 0);
+		doBefehl(false, 0);
+		enqueueBefehl("G00 X13 Y11");
+		doBefehl(false, 0);
+		doBefehl(false, 0);
 	}
 	
 	
 	public static void enqueueBefehl(String stringEingang) {
 		
-		befehlEingang = stringEingang.split(" ");
+		befehlEingangEnqueue = stringEingang.split(" ");
 		
-		System.arraycopy(befehlEingang, 0, befehl, 0, befehlEingang.length);
+		System.arraycopy(befehlEingangEnqueue, 0, befehl, 0, befehlEingangEnqueue.length);
 		
 		
 		for(int i = 0; i < befehl.length; i++) {
@@ -127,8 +134,11 @@ public class Codes {
 				System.out.println("Das lief nicht gut. Fehler im Switch-Case-Block in der Klasse RegEx");
 			}
 		
-			if(successful)
-			queue.add(befehlToString(befehl));
+			if(successful) {
+				queue.add(befehlToString(befehl));
+				enqueuedCodes++;
+			}
+			
 			
 			System.out.println("Shit worked, me boi :)");
 			
@@ -136,15 +146,18 @@ public class Codes {
 	
 	public static void doBefehl(boolean simulation, int befehlNr) {
 		
-		if(queueIsEmpty()) {
-			System.out.println("Die Warteschlange ist leer.");
-			return;
+		
+		if(simulation) {
+		befehlEingangDo = befehlEingangEnqueue;
+		} else {
+			if(queueIsEmpty()) {
+				System.out.println("Die Warteschlange ist leer.");
+				return;
+			}
+		befehlEingangDo = queue.get(befehlNr).split(" ");
 		}
 		
-		
-		befehlEingang = queue.get(befehlNr).split(" ");
-		
-		System.arraycopy(befehlEingang, 0, befehl, 0, befehlEingang.length);
+		System.arraycopy(befehlEingangDo, 0, befehl, 0, befehlEingangDo.length);
 		
 		// Es wird zur reibungslosen Weiterverarbeitung der Parameter ein Double-Array erzeugt
 		parameter = new double[befehl.length-1];
@@ -282,7 +295,7 @@ public class Codes {
 			
 			
 		case "G28":
-		return(GCodes.checkFahrenEilgang(Main.getHomePosX(), Main.getHomePosY()));
+		return true;
 			
 		
 		default:
@@ -308,6 +321,11 @@ public class Codes {
 		return befehlsString;
 	}
 	
+	public static int getQueueSize() {
+		return queue.size();
+	}
+	
+	
 	public static void emptyQueue() {
 		queue = new ArrayList<String>();
 	}
@@ -319,4 +337,9 @@ public class Codes {
 	public static boolean IsDoRunning() {
 		return doRunning;
 	}
+	
+	public static int getEnqueuedCodes() {
+		return enqueuedCodes;
+	}
+	
 }
