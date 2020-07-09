@@ -17,11 +17,8 @@ public class Codes {
 	public static void main(String [] args) {
 		enqueueBefehl("G00 X11 Y11");
 		enqueueBefehl("G00 X12 Y11");
-		enqueueBefehl("G00 X13 Y11");
+		enqueueBefehl("G00 Y13");
 		doBefehl(false, 0);
-		doBefehl(false, 0);
-		doBefehl(false, 0);
-		enqueueBefehl("G00 X13 Y11");
 		doBefehl(false, 0);
 		doBefehl(false, 0);
 	}
@@ -30,6 +27,8 @@ public class Codes {
 	public static void enqueueBefehl(String stringEingang) {
 		
 		befehlEingangEnqueue = stringEingang.split(" ");
+		
+		befehl = new String[5];
 		
 		System.arraycopy(befehlEingangEnqueue, 0, befehl, 0, befehlEingangEnqueue.length);
 		
@@ -114,7 +113,7 @@ public class Codes {
 		}
 		
 		for(int i=0; i < parameter.length; i++) {
-			parameter[i] = Integer.parseInt(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
+			parameter[i] = Double.parseDouble(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
 			}
 		
 		for(int i = 0; i < befehl.length; i++) {
@@ -137,6 +136,8 @@ public class Codes {
 			if(successful) {
 				queue.add(befehlToString(befehl));
 				enqueuedCodes++;
+			} else {
+				System.out.println("fehlerhafter Befehl: " + stringEingang);
 			}
 			
 			
@@ -164,7 +165,7 @@ public class Codes {
 				
 		
 		for(int i=0; i < parameter.length; i++) {
-			parameter[i] = Integer.parseInt(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
+			parameter[i] = Double.parseDouble(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
 			}
 			
 			//Unterscheidung, ob M- oder G-Code vorliegt (entschieden an mitgegebenem ersten Buchstaben)
@@ -217,6 +218,9 @@ public class Codes {
 		
 	
 	}
+		if(!simulation)
+		System.out.println(code[0] + " " + code[1] + " " + code[2] + " " + code[3] + " " + code[4] + " " + "ausgeführt");
+		
 		doRunning = false;
 		return;
 
@@ -341,5 +345,33 @@ public class Codes {
 	public static int getEnqueuedCodes() {
 		return enqueuedCodes;
 	}
+	
+	public static String getQueue() {
+		for(int i = 0; i < queue.size(); i++) {
+			return queue.get(i);
+		}
+		return null;
+	}
+	
+	public static void correctBefehlEingangEnqueue(String valueToBeAdded, String argArt) {
+		
+		String[] temp = new String[3];
+		
+		System.arraycopy(befehlEingangEnqueue, 0, temp, 0, befehlEingangEnqueue.length);
+		
+		if(argArt == "X") {
+			temp[2] = temp[1];
+			temp[1] = argArt + valueToBeAdded;
+		}
+		if(argArt == "Y") {
+			temp[2] = argArt + valueToBeAdded;
+		}
+		befehlEingangEnqueue = new String[3];
+		
+		System.arraycopy(temp, 0, befehlEingangEnqueue, 0, temp.length);
+	}
+	
+	
+	
 	
 }

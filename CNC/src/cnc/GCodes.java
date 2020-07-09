@@ -27,11 +27,15 @@ public class GCodes extends Codes {
 		case 0:
 			System.out.println("X-Koordinate fehlt.");
 			System.out.println("Da ein Parameter weggelassen wurde, wird auf einer Achse horizontal/vertikal gefahren.");
+			x = 0;
+			correctBefehlEingangEnqueue(Double.toString(x), "X");
 			break;
 		
 		case 1:
 			System.out.println("Y-Koordinate fehlt.");
 			System.out.println("Da ein Parameter weggelassen wurde, wird auf einer Achse horizontal/vertikal gefahren.");
+			y = 0;
+			correctBefehlEingangEnqueue(Double.toString(y), "Y");
 			break;
 
 			//Kein Parameter wurde mitgegeben --> Keine Fahrt möglich
@@ -42,7 +46,7 @@ public class GCodes extends Codes {
 			
 	}
 		try {
-			pruefeFahrbewegung(param[0], param[1]);
+			pruefeFahrbewegung(x, y);
 		} catch(OutOfAreaException e) {
 		e.printStackTrace();
 		return false;
@@ -88,11 +92,13 @@ public class GCodes extends Codes {
 				case 0:
 					System.out.println("X-Koordinate fehlt.");
 					System.out.println("Da ein Parameter weggelassen wurde, wird auf einer Achse horizontal/vertikal gezeichnet.");
+					x = 0;
 					break;
 				
 				case 1:
 					System.out.println("Y-Koordinate fehlt.");
 					System.out.println("Da ein Parameter weggelassen wurde, wird auf einer Achse horizontal/vertikal gezeichnet.");
+					y = 0;
 					break;
 					
 					//Kein Parameter wurde mitgegeben --> Keine Fahrt möglich
@@ -104,7 +110,7 @@ public class GCodes extends Codes {
 			}
 		
 		try {
-			pruefeFahrbewegung(param[0], param[1]);
+			pruefeFahrbewegung(x, y);
 		} catch(OutOfAreaException e) {
 		e.printStackTrace();
 		return false;
@@ -323,7 +329,6 @@ public class GCodes extends Codes {
 			}
 			
 		}
-		
 		
 		String[] koordinaten = zukuenftigePosNachSchritt.get(alreadyCheckedCodes).split(" ");
 		alreadyCheckedCodes++;
