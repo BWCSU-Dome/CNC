@@ -343,4 +343,10 @@ public class GCodes extends Codes {
 		 
 	}
 	
+	static public void clearZukuenftigePosNachSchritt() {
+		for(int i = 0; i < zukuenftigePosNachSchritt.size(); i++) {
+			zukuenftigePosNachSchritt.remove(0);
+		}
+	}
+	
 }

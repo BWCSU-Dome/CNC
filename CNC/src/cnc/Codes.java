@@ -17,10 +17,21 @@ public class Codes {
 	public static void main(String [] args) {
 		enqueueBefehl("G00 X11 Y11");
 		enqueueBefehl("G00 X12 Y11");
-		enqueueBefehl("G00 Y13");
+		enqueueBefehl("G00 Y400");
 		doBefehl(false, 0);
 		doBefehl(false, 0);
 		doBefehl(false, 0);
+	}
+	
+	
+	public static void neubildenQueue(String[] neueBefehle) {
+		for(int i = 0; i < queue.size(); i++)
+		queue.remove(0);
+		
+		GCodes.clearZukuenftigePosNachSchritt();
+		
+		for(int i = 0; i < neueBefehle.length; i++)
+			enqueueBefehl(neueBefehle[i]);
 	}
 	
 	
@@ -140,8 +151,6 @@ public class Codes {
 				System.out.println("fehlerhafter Befehl: " + stringEingang);
 			}
 			
-			
-			System.out.println("Shit worked, me boi :)");
 			
 	}
 	
