@@ -9,7 +9,7 @@ public class GCodes extends Codes {
 	private static ArrayList<String> zukuenftigePosNachSchritt = new ArrayList<String>();
 	static double aktuellePosX;
 	static double aktuellePosY;
-	private static int alreadyCheckedCodes = 0;
+	private static int alreadyCheckedGCodes = 0;
 
 	
 	static public boolean checkFahrenEilgang(double... param) {
@@ -251,12 +251,12 @@ public class GCodes extends Codes {
 		
 		getZukuenftigePos(Codes.getQueueSize());
 		
-		if(Codes.getQueueSize() == 0 && Codes.getEnqueuedCodes() == 0) {
+		if(Codes.getQueueSize() == 0 && Codes.getEnqueuedGCodes() == 0) {
 			koordinaten = new String[2];
 			koordinaten[0] = Double.toString(Main.getHomePosX());
 			koordinaten[1] = Double.toString(Main.getHomePosX());
 		} else {
-			koordinaten = zukuenftigePosNachSchritt.get(Codes.getQueueSize()).split(" ");
+			koordinaten = zukuenftigePosNachSchritt.get(Codes.getEnqueuedGCodes()).split(" ");
 		}
 		
 		double newXKoor = Double.parseDouble(koordinaten[0]) + xKoor;
@@ -264,7 +264,7 @@ public class GCodes extends Codes {
 		
 		
 				if(newXKoor > boundX || boundX+newXKoor < 0 ||  newYKoor > boundY || boundY+newYKoor < 0) {
-					alreadyCheckedCodes--;
+					alreadyCheckedGCodes--;
 					zukuenftigePosNachSchritt.remove(zukuenftigePosNachSchritt.size()-1);
 					throw new OutOfAreaException();
 			}
@@ -309,14 +309,13 @@ public class GCodes extends Codes {
 	
 	static public void getZukuenftigePos(int stelleInArray) {
 		
-		if(Codes.getEnqueuedCodes() == 0 && stelleInArray == 0) {
+		if(Codes.getEnqueuedGCodes() == 0 && stelleInArray == 0) {
 			aktuellePosX = Main.getPosX();
 			aktuellePosY = Main.getPosY();
 			zukuenftigePosNachSchritt.add(String.valueOf(Main.getPosX()) + " " + String.valueOf(Main.getPosY()));
-					return;
 		}
 		
-		if(Codes.getEnqueuedCodes() != 0 && stelleInArray == 0) {
+		if((Codes.getEnqueuedGCodes() != 0 && stelleInArray == 0) || zukuenftigePosNachSchritt.size() == 0) {
 			
 			while(true) {
 				if(!Codes.IsDoRunning()) {
@@ -330,8 +329,8 @@ public class GCodes extends Codes {
 			
 		}
 		
-		String[] koordinaten = zukuenftigePosNachSchritt.get(alreadyCheckedCodes).split(" ");
-		alreadyCheckedCodes++;
+		String[] koordinaten = zukuenftigePosNachSchritt.get(alreadyCheckedGCodes).split(" ");
+		alreadyCheckedGCodes++;
 		
 		aktuellePosX = Double.parseDouble(koordinaten[0]);
 		aktuellePosY = Double.parseDouble(koordinaten[1]);
@@ -340,6 +339,7 @@ public class GCodes extends Codes {
 		 aktuellePosX += aenderungKoorX;
 		 aktuellePosY += aenderungKoorY;
 		 zukuenftigePosNachSchritt.add(aktuellePosX + " " + aktuellePosY);
+		 System.out.println("Aktuelle Pos X:" + aktuellePosX + " Y:" + aktuellePosY);
 		 
 	}
 	
@@ -347,6 +347,10 @@ public class GCodes extends Codes {
 		for(int i = 0; i < zukuenftigePosNachSchritt.size(); i++) {
 			zukuenftigePosNachSchritt.remove(0);
 		}
+	}
+	
+	static public void resetAlreadyCheckedCodes() {
+		alreadyCheckedGCodes = 0;
 	}
 	
 }

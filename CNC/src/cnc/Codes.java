@@ -10,14 +10,26 @@ public class Codes {
 	private static String[] befehl = new String[5];
 	private static double[] parameter = new double[4];
 	protected static int ausgefuehrteCodes = 0;
-	protected static int enqueuedCodes = 0;
+	protected static int enqueuedGCodes = 0;
 	private static boolean doRunning = false;
 	
 	
 	public static void main(String [] args) {
-		enqueueBefehl("G00 X11 Y11");
-		enqueueBefehl("G00 X12 Y11");
-		enqueueBefehl("G00 Y400");
+		
+		String[]testBefehlInput = new String[5];
+		
+		testBefehlInput[0] = "G00 X11 Y11";
+		testBefehlInput[1] = "G00 X12 Y11";
+		testBefehlInput[2] = "G00 Y400";
+		testBefehlInput[3] = "M03";
+		testBefehlInput[4] = "G00 Y629";
+		
+		neubildenQueue(testBefehlInput);
+		
+//		enqueueBefehl("G00 X11 Y11");
+//		enqueueBefehl("G00 X12 Y11");
+//		enqueueBefehl("G00 Y400");
+//		enqueueBefehl("M03");
 		doBefehl(false, 0);
 		doBefehl(false, 0);
 		doBefehl(false, 0);
@@ -25,13 +37,23 @@ public class Codes {
 	
 	
 	public static void neubildenQueue(String[] neueBefehle) {
-		for(int i = 0; i < queue.size(); i++)
-		queue.remove(0);
+	
+		while(true) {
+			if(!IsDoRunning()) {
+				for(int i = 0; i < queue.size(); i++)
+					queue = new ArrayList<String>();
+					
+					GCodes.resetAlreadyCheckedCodes();
+					
+					GCodes.clearZukuenftigePosNachSchritt();
+					
+					enqueuedGCodes = 0;
+					
+					RegularExpression.checkCodeFormatierung(neueBefehle);
+					break;
+			}
+		}
 		
-		GCodes.clearZukuenftigePosNachSchritt();
-		
-		for(int i = 0; i < neueBefehle.length; i++)
-			enqueueBefehl(neueBefehle[i]);
 	}
 	
 	
@@ -127,6 +149,7 @@ public class Codes {
 			parameter[i] = Double.parseDouble(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
 			}
 		
+		
 		for(int i = 0; i < befehl.length; i++) {
 			System.out.println(befehl[i]);				//Testweise Ausgabe des Array-Inhalts
 			}
@@ -139,6 +162,9 @@ public class Codes {
 				break;
 			case 'G':
 				successful = checkGCodes(befehl);
+				if(successful)
+					enqueuedGCodes++;
+					
 				break;
 			default:
 				System.out.println("Das lief nicht gut. Fehler im Switch-Case-Block in der Klasse RegEx");
@@ -146,7 +172,6 @@ public class Codes {
 		
 			if(successful) {
 				queue.add(befehlToString(befehl));
-				enqueuedCodes++;
 			} else {
 				System.out.println("fehlerhafter Befehl: " + stringEingang);
 			}
@@ -238,6 +263,7 @@ public class Codes {
 	
 	private static void doMCodes(String[]code) {
 		
+		doRunning = true;
 		//Aufruf des gewünschten Codes nach eingegebener, gewünschter Funktion
 		switch(code[0]) {
 		
@@ -282,6 +308,8 @@ public class Codes {
 		default:
 			System.out.println("MCode-Fehler");	//Fehler sollte hier gar nicht mehr auftreten können. Bitte Meldung, falls das der Fall sein sollte.
 		}
+		
+		doRunning = false;
 }
 	
 	public static boolean queueIsEmpty() {
@@ -351,8 +379,8 @@ public class Codes {
 		return doRunning;
 	}
 	
-	public static int getEnqueuedCodes() {
-		return enqueuedCodes;
+	public static int getEnqueuedGCodes() {
+		return enqueuedGCodes;
 	}
 	
 	public static String getQueue() {
