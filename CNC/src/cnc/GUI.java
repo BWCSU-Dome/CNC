@@ -149,46 +149,24 @@ public class GUI extends Application{
 			HBox ctrlBtnHBox = new HBox();
 				ctrlBtnHBox.setPrefSize(550, 750);
 				
-				//Das ist die Gruppe der Console
-				VBox ctrlVBox = new VBox();
-					ctrlVBox.setPrefSize(350, ctrlBtnHBox.getPrefHeight());
-					ctrlVBox.setSpacing(13);	
 						
 						//Anzeige der Console
-							console = new TextArea("N10 M03\r\n" + 
-															"N20 M08\r\n" + 
-															"N30 G01 X0 Y0\r\n" + 
-															"N40 G02 X0 Y10 I0 J5\r\n" + 
-															"N50 G01 X10 Y10\r\n" + 
-															"N60 G02 X10 Y0 I0 J-5\r\n" + 
-															"N70 G28\r\n" + 
-															"N80 M00");
-							console.setPrefSize(ctrlVBox.getPrefWidth(), ctrlVBox.getPrefHeight());
-							console.setFont(new Font("Arial", 17));
-							console.setEditable(false);
-		
-						ctrlVBox.getChildren().add(console);
-						
-						//Eingabefeld
-						
-						TextField eingabe_TF = new TextField("Geben Sie hier Ihre Codes ein");
-							eingabe_TF.setPrefWidth(ctrlVBox.getPrefWidth());
-							
-							//Diese Methode dient dazu, dass das EingabeFeld beim ersten aktivieren geleert wird. 
-							eingabe_TF.setOnMousePressed((EventHandler<Event>) new EventHandler<>() {
-								@Override
-								public void handle(Event arg0) {
-									if(eingabe_TF.getText().equals("Geben Sie hier Ihre Codes ein") ) {
-										eingabe_TF.setText("");
-									}
-								}
-							});
-							eingabe_TF.setFont(new Font("Arial", 17));
-		
-						ctrlVBox.getChildren().add(eingabe_TF);
-						VBox.setMargin(eingabe_TF, new Insets(10,2,15,2));
-						
-				ctrlBtnHBox.getChildren().add(ctrlVBox);
+						console = new TextArea("M03\r\n" + 
+														"M08\r\n" + 
+														"G01 X0 Y0\r\n" + 
+														"G02 X0 Y10 I0 J5\r\n" + 
+														"G01 X10 Y10\r\n" + 
+														"G02 X10 Y0 I0 J-5\r\n" + 
+														"G28\r\n"  
+														);
+						console.setPrefSize(350, ctrlBtnHBox.getPrefHeight());
+						console.setFont(new Font("Arial", 17));
+
+
+						HBox.setMargin(console, new Insets(0,0,10,0));
+
+	
+				ctrlBtnHBox.getChildren().add(console);
 			
 				//Das ist die Gruppe der Buttons
 				VBox btnVBox = new VBox();
@@ -205,7 +183,6 @@ public class GUI extends Application{
 							
 							//Dieser Button startet/pausiert die bereits eingebenen Codes
 							startBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
-								
 								@Override
 								public void handle(ActionEvent arg0) {
 									switch(startBtn.getText()) {
@@ -277,8 +254,18 @@ public class GUI extends Application{
 							addCodeBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 								@Override
 								public void handle(ActionEvent arg0) {
-									System.out.println(eingabe_TF.getText());
-									eingabe_TF.setText("");	
+									
+									
+									
+									String[] test = console.getText().split("\n");
+									for(int a = 0; a < test.length; a++) {
+										System.out.print(test[a] + " ");
+									}
+									
+									Codes.neubildenQueue(console.getText().split("\n"));
+									
+									String temp = console.getText() +"\n *** Codes hinzugefügt ***";
+									console.setText(temp);
 								}
 							});
 							
@@ -321,10 +308,9 @@ public class GUI extends Application{
 			arbeitsF.getChildren().add(HomePos);
 		rootHBox.getChildren().add(arbeitsF);
 		
+		//Dieser Teil dient dazu, dass ein kleines Icon angezeigt wird.
 		FileInputStream fip = new FileInputStream("files/ressources/CnC_klein.png");
 		Image zahnrad= new Image(fip);
-
-		
 		primaryStage.getIcons().add(zahnrad);
 		
 		Scene scene = new Scene(rootHBox);
