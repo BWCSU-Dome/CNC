@@ -151,14 +151,14 @@ public class GUI extends Application{
 				
 						
 						//Anzeige der Console
-						console = new TextArea("M03\r\n" + 
-														"M08\r\n" + 
-														"G01 X0 Y0\r\n" + 
-														"G02 X0 Y10 I0 J5\r\n" + 
-														"G01 X10 Y10\r\n" + 
-														"G02 X10 Y0 I0 J-5\r\n" + 
-														"G28\r\n"  
-														);
+						console = new TextArea( "M03\r\n" + 
+												"M08\r\n" + 
+												"G01 X0 Y0\r\n" + 
+												"G02 X0 Y10 I0 J5\r\n" + 
+												"G01 X10 Y10\r\n" + 
+												"G02 X10 Y0 I0 J-5\r\n" + 
+												"G28\r\n" 
+												);
 						console.setPrefSize(350, ctrlBtnHBox.getPrefHeight());
 						console.setFont(new Font("Arial", 17));
 
