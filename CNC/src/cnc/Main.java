@@ -14,9 +14,14 @@ public class  Main {
 	private static boolean spindelAktiv;
 	private static boolean kuehlungAktiv;
 	private static boolean spindelRechtslaufAktiv;
+	public static Thread codeRun = new Thread(new CodeVerarbeitung());
 
 	public static void main(String[]args) {
-	GUI.main(args);
+		
+		
+		
+		GUI.main(args);
+	
 		
 	}
 
@@ -137,5 +142,19 @@ public class  Main {
 		Main.posY = posY;
 	}
 	
+	public static void launchCodeRun() {
+		codeRun.start();
+	}
+	
+	public static void stopCodeRun() {
+
+			try {
+				codeRun.sleep((long) 5000.00);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+	}
 	
 }

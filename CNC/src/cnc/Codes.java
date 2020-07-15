@@ -16,24 +16,33 @@ public class Codes {
 	
 	public static void main(String [] args) {
 		
-		String[]testBefehlInput = new String[5];
+		String[]testBefehlInput = new String[4];
 		
 		testBefehlInput[0] = "G00 X11 Y11";
 		testBefehlInput[1] = "G00 X12 Y11";
 		testBefehlInput[2] = "G00 Y400";
 		testBefehlInput[3] = "M03";
-		testBefehlInput[4] = "G00 Y629";
 		
 		neubildenQueue(testBefehlInput);
 		
-//		enqueueBefehl("G00 X11 Y11");
-//		enqueueBefehl("G00 X12 Y11");
-//		enqueueBefehl("G00 Y400");
-//		enqueueBefehl("M03");
-		doBefehl(false, 0);
-		doBefehl(false, 0);
-		doBefehl(false, 0);
+		enqueueBefehl("G00 X11 Y11");
+		enqueueBefehl("G00 X12 Y11");
+		enqueueBefehl("G00 Y400");
+		enqueueBefehl("M03");
+		
+		startVerarbeitung();
+		stopVerarbeitung();
 	}
+	
+	public static void startVerarbeitung() {
+		Main.launchCodeRun();
+	}
+	
+	public static void stopVerarbeitung() {
+		Main.stopCodeRun();
+	}
+	
+	
 	
 	
 	public static void neubildenQueue(String[] neueBefehle) {
@@ -261,7 +270,7 @@ public class Codes {
 }
 		
 	
-	private static void doMCodes(String[]code) {
+	protected static void doMCodes(String[]code) {
 		
 		doRunning = true;
 		//Aufruf des gewünschten Codes nach eingegebener, gewünschter Funktion
