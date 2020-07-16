@@ -6,7 +6,7 @@ public class  Main {
 	private static double posY = 0;
 	private static double homePosX = 0;
 	private static double homePosY = 0;
-	private static double geschwind_schnell = 3000/60; //3
+	private static double geschwind_schnell = 3000/60 *5; //3
 	private static double geschwind_langsam = 2000/60 *5; //2
 	private static double geschwind_fahrt = 4000/60;   //4
 	private static double aktGeschwin = geschwind_langsam;

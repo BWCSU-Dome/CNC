@@ -3,6 +3,7 @@ package cnc;
 import java.util.ArrayList;
 
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -22,9 +23,10 @@ public class CircleAnimation extends Animation{
      * @param j Y-Wert bis zum Mittelpunkt
      */
 	public static void kreis(double xEnde, double yEnde, double i, double j) {
-		yEnde = 1050 - yEnde;
+		Platform.runLater(()->{
 		
-		
+//		yEnde = 1050 - yEnde;
+
 		double radius = Math.sqrt(i*i+j*j);
 		
 		xtempCenter = GUI.getKopfX()-i;
@@ -65,6 +67,7 @@ public class CircleAnimation extends Animation{
 		}
 		update(endWinkel-startWinkel);
 		System.out.println("update ausgeführt");
+		});
 	}
 	
     private static void addCir(double winkel,double radius) {

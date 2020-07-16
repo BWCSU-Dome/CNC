@@ -6,6 +6,7 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 	private static String[] befehlEingangDo;
 	private static String[] befehl = new String[5];
 	private static double[] parameter = new double[4];
+	private static boolean weiter;
 	
 	public void run() {
 		
@@ -23,6 +24,7 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 			parameter = new double[befehl.length-1];
 			
 			for(int i=0; i < parameter.length; i++) {
+				weiter = false;
 				parameter[i] = Double.parseDouble(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
 				}
 				
@@ -38,11 +40,29 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 				default:
 					System.out.println("Das lief nicht gut. Fehler im Switch-Case-Block in der Klasse RegEx");
 				}
+			
+				ausgefuehrteCodes++;
 				
-			ausgefuehrteCodes++;
+			while(!weiter) {
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(ausgefuehrteCodes == parameter.length) {
+					return;
+				}
+			}
+			
+			
 			Codes.exportCode(queue.get(0));
 			queue.remove(0);
 		}
 	}
-
+	
+	
+	public static void setBoolWeiter(Boolean wert) {
+		weiter = wert;
+	}
 }

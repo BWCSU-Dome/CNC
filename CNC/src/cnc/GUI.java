@@ -3,6 +3,7 @@ package cnc;
 import java.io.FileInputStream;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -153,12 +154,14 @@ public class GUI extends Application{
 				
 						
 						//Anzeige der Console
-						console = new TextArea( "M03\r\n" + 
-												"M08\r\n" + 
-												"G01 X0 Y0\r\n" + 
-												"G02 X0 Y10 I0 J5\r\n" + 
-												"G01 X10 Y10\r\n" + 
-												"G02 X10 Y0 I0 J-5\r\n" + 
+						console = new TextArea( 
+//												"M03\r\n" + 
+//												"M08\r\n" + 
+												"G01 X100 Y200\r\n"  +
+//												"G02 X700 Y500 I500 J0\r\n" + 
+												"G01 X300 Y10\r\n" +
+												"G01 X500 Y100\r\n" +
+												"G01 X50 Y50\r\n" + 	
 												"G28\r\n" 
 												);
 						console.setPrefSize(350, ctrlBtnHBox.getPrefHeight());
@@ -195,7 +198,9 @@ public class GUI extends Application{
 										break;
 									case "Pause":
 										startBtn.setText("Start");
-										CircleAnimation.kreis(320,401,20,100);
+										Main.codeRun.interrupt();
+										Main.codeRun.stop();
+//										CircleAnimation.kreis(320,401,20,100);
 										break;
 									}						
 								}
@@ -333,6 +338,7 @@ public class GUI extends Application{
 	 * @param wert Boolean Angabe, ob die Kühlung aktiv sein soll
 	 */
 	public static void setKuehlung(boolean wert) {
+		Platform.runLater(()->{
 		if(wert) {
 			kuehlmitBtn.setText("Kühlmittel\ndeaktivieren");
 			kuehlmit.setText("aktiviert");
@@ -340,13 +346,17 @@ public class GUI extends Application{
 			kuehlmitBtn.setText("Kühlmittel\naktivieren");
 			kuehlmit.setText("deaktiviert");
 		}
+		});
+		
 	}
 	/** Diese Methode nimmt die aktuelle Geschwindigkeit 
 	 * 	und aktualisert die GUI 
 	 *  Es wird auch dirket in Meter / min umgerechnet
 	 */
 	public static void setGeschwindigkeit() {
-		geschwin.setText(String.valueOf(Main.getAktGeschw()*60/1000));
+		Platform.runLater(()->{
+			geschwin.setText(String.valueOf(Main.getAktGeschw()*60/1000));
+		});
 	}
 	
 	/**Fügt ein Node der Arbeitsfläche hinzu
@@ -354,7 +364,9 @@ public class GUI extends Application{
 	 * @param node Node
 	 */
 	public static void addToAF(Node node) {
+		Platform.runLater(()->{
 		arbeitsF.getChildren().add(node);
+		});
 	}
 	
 	//Ab hier folgen nur noch Standard getter und setter
