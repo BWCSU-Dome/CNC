@@ -17,8 +17,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -40,7 +44,7 @@ public class GUI extends Application{
 	private static Button kuehlmitBtn;
 	private static Label  kuehlmit, spindelStatus,geschwin;
 	public static Label aktuellX,aktuellY;
-	private static TextArea console;
+	private static TextArea InputConsole, OutputConsole;
 	
 	
 	@Override
@@ -152,26 +156,34 @@ public class GUI extends Application{
 			HBox ctrlBtnHBox = new HBox();
 				ctrlBtnHBox.setPrefSize(550, 750);
 				
-						
-						//Anzeige der Console
-						console = new TextArea( 
-//												"M03\r\n" + 
-//												"M08\r\n" + 
-												"G01 X100 Y200\r\n"  +
-//												"G02 X700 Y500 I500 J0\r\n" + 
-												"G01 X300 Y10\r\n" +
-												"G01 X500 Y100\r\n" +
-												"G01 X50 Y50\r\n" + 	
-												"G28\r\n" 
-												);
-						console.setPrefSize(350, ctrlBtnHBox.getPrefHeight());
-						console.setFont(new Font("Arial", 17));
-
-
-						HBox.setMargin(console, new Insets(0,0,10,0));
-
-	
-				ctrlBtnHBox.getChildren().add(console);
+				VBox txtVBox = new VBox();
+					 txtVBox.setPrefSize(350, ctrlBtnHBox.getPrefHeight());
+					 txtVBox.setSpacing(20);
+					 		//Anzeige der Ausgabe Console
+					 
+					 		OutputConsole = new TextArea("Hier steht der Output");
+					 		OutputConsole.setFont(new Font("Arial", 17));
+					 		OutputConsole.setBackground(new Background( new BackgroundFill( Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY ) ));					 	
+					 		OutputConsole.setEditable(false);
+					 		OutputConsole.setMouseTransparent(true);
+					 		txtVBox.getChildren().add(OutputConsole);
+					 		
+							//Anzeige der EingabeConsole
+							InputConsole = new TextArea( 
+	//												"M03\r\n" + 
+	//												"M08\r\n" + 
+													"G01 X100 Y200\r\n"  +
+	//												"G02 X700 Y500 I500 J0\r\n" + 
+													"G01 X300 Y10\r\n" +
+													"G01 X500 Y100\r\n" +
+													"G01 X50 Y50\r\n" + 	
+													"G28\r\n" 
+													);
+							InputConsole.setFont(new Font("Arial", 17));
+							HBox.setMargin(InputConsole, new Insets(0,0,10,0));
+					txtVBox.getChildren().add(InputConsole);
+					
+				ctrlBtnHBox.getChildren().add(txtVBox);
 			
 				//Das ist die Gruppe der Buttons
 				VBox btnVBox = new VBox();
@@ -199,7 +211,6 @@ public class GUI extends Application{
 									case "Pause":
 										startBtn.setText("Start");
 										Main.codeRun.interrupt();
-										Main.codeRun.stop();
 //										CircleAnimation.kreis(320,401,20,100);
 										break;
 									}						
@@ -263,17 +274,12 @@ public class GUI extends Application{
 								@Override
 								public void handle(ActionEvent arg0) {
 									
-									
-									
-									String[] test = console.getText().split("\n");
-									for(int a = 0; a < test.length; a++) {
-										System.out.print(test[a] + " ");
+									try {
+									Codes.neubildenQueue(InputConsole.getText().split("\n"));
+									}catch(Exception e) {
+
 									}
 									
-									Codes.neubildenQueue(console.getText().split("\n"));
-									
-									String temp = console.getText() +"\n *** Codes hinzugefügt ***";
-									console.setText(temp);
 								}
 							});
 							
@@ -379,7 +385,7 @@ public class GUI extends Application{
 	}
 	
 	public static void writeConsole(String arg) {
-		console.setText(arg);
+		InputConsole.setText(arg);
 	}
 	public static void setYLabel(double y) {
 		aktuellY.setText(String.valueOf(y));
@@ -408,4 +414,17 @@ public class GUI extends Application{
 	public static Paint getKopfFill() {
 		return Kopf.getFill();
 	}
+	public static String getOutputConsole() {
+		return OutputConsole.getText();
+	}
+	public static void setTXTOutputConsole(String outputConsole) {
+		OutputConsole.setText(outputConsole);
+	}
+	public static String getInputConsole() {
+		return InputConsole.getText();
+	}
+	public static void setInputConsole(String inputConsole) {
+		InputConsole.setText(inputConsole);
+	}
+	
 }

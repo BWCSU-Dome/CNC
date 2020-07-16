@@ -14,11 +14,17 @@ import javafx.util.Duration;
 
 public class LineAnimation extends Animation{
 
+	/** Die line Methode erzeugt eine Animierte Line, die bei der aktuellen Position des Kopfes startet und bis zu den 
+	 * übergebenen Koordinaten fährt. 
+	 *  
+	 * @param xEnd X Endposition nach der Animation
+	 * @param yEnd Y Endposition nach der Animation
+	 */
+	
 	public static void line( double xEnd, double yEnd) {
 		Platform.runLater(()->{
 		double xStart = GUI.getKopfX();
 		double yStart = GUI.getKopfY();
-		
 		
 		Line line = new Line();
 		line.setStartX(xStart);
@@ -40,10 +46,10 @@ public class LineAnimation extends Animation{
 		GUI.arbeitsF.getChildren().add(cir);
 		temp = cir;
 		
-			
 		System.out.println(xStart-xEnd + "  "+ (yStart-1050 + yEnd) +" Dauer: " +getDauer(Main.getAktGeschw(),xStart-xEnd,yStart-1050 + yEnd));
 		System.out.println("aktuelle Geschwindigkeit der Main " + Main.getAktGeschw());
 		
+		// Diese Timeline sorgt dafür, dass die Gerade und der Kopf animiert wird.
 		Timeline t = new Timeline();
 		t.getKeyFrames().add(new KeyFrame(Duration.seconds(getDauer( Main.getAktGeschw() ,xStart-xEnd , yStart-1050 + yEnd)), 
 				new KeyValue(line.endXProperty(), xEnd),
@@ -51,13 +57,15 @@ public class LineAnimation extends Animation{
 				new KeyValue(cir.centerXProperty(), xEnd),
 				new KeyValue(cir.centerYProperty(), GUI.getHeight()- yEnd)
 				
-//				new KeyValue(GUI.aktuellY.textProperty(), String.valueOf(yEnd))
 				));
+		
+		// Diese Timeline sorgt dafür, dass die X und Y Koordinaten in der GUI aktualisiert werden.
 		Timeline t2 = new Timeline();
-		for(int a = 1; a <= 100 ; a++) {
-		t2.getKeyFrames().add(new KeyFrame(Duration.seconds(((getDauer( Main.getAktGeschw() ,xStart-xEnd , yStart-1050 + yEnd))/100)*a),
-				new KeyValue(GUI.aktuellX.textProperty(), String.valueOf(Math.round(xStart+((xEnd-xStart)/100)*a))),
-				new KeyValue(GUI.aktuellY.textProperty(), String.valueOf(Math.round(yStart+((yEnd-yStart)/100)*a)))
+		int intervalle = 200;
+		for(int a = 1; a <= intervalle ; a++) {
+		t2.getKeyFrames().add(new KeyFrame(Duration.seconds(((getDauer( Main.getAktGeschw() ,xStart-xEnd , yStart-1050 + yEnd))/intervalle)*a),
+				new KeyValue(GUI.aktuellX.textProperty(), String.valueOf(Math.round(xStart+((xEnd-xStart)/intervalle)*a))),
+				new KeyValue(GUI.aktuellY.textProperty(), String.valueOf(Math.round(1050-yStart+((yEnd-yStart+1050)/intervalle)*a)))
 				));
 		}
 		TranslateTransition trans = new TranslateTransition();
@@ -67,31 +75,12 @@ public class LineAnimation extends Animation{
 		
 		t.setOnFinished(ActionEvent ->{
 			CodeVerarbeitung.setBoolWeiter(true);
-			System.out.println("Weiter = true");
 		});
 		
-//		updateXLabel(xStart,xEnd,getDauer( Main.getAktGeschw() ,xStart-xEnd , yStart-1050 + yEnd));
 		GUI.setKopfX(xEnd);
 		GUI.setKopfY(GUI.getHeight() - yEnd);
 		System.out.println(GUI.getHeight() - yEnd);
 	
 		});
-		
 	}
-	
-	public static double a = 0;
-	public static double b = 0;
-	
-	private static void updateXLabel(double xStart, double xEnd, double time ) {
-		b = (xEnd - xStart)/100;
-        PauseTransition pause = new PauseTransition(Duration.seconds(time/100));
-        pause.setOnFinished(event ->{
-        	
-        	GUI.setXLabel(GUI.Kopf.getCenterX());
-        	a+=b;
-            pause.play();
-        	 
-        });
-        pause.play();
-    }
 }
