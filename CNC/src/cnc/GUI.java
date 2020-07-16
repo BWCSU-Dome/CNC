@@ -20,6 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -36,9 +37,10 @@ public class GUI extends Application{
 	private static int width = 1950;
 	public static Circle Kopf;
 	private static Button kuehlmitBtn;
-	private static Label  kuehlmit, spindelStatus,geschwin,aktuellX,aktuellY;
+	private static Label  kuehlmit, spindelStatus,geschwin;
+	public static Label aktuellX,aktuellY;
 	private static TextArea console;
-
+	
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -192,7 +194,7 @@ public class GUI extends Application{
 										break;
 									case "Pause":
 										startBtn.setText("Start");
-										CircleAnimation.kreis(320,500,20,100);
+										CircleAnimation.kreis(320,401,20,100);
 										break;
 									}						
 								}
@@ -299,11 +301,11 @@ public class GUI extends Application{
 			arbeitsF.setMinSize(1400, 1050);
 			arbeitsF.setMaxSize(1400, 1050);
 			arbeitsF.setStyle("-fx-background-color: grey;");
+			
 			Circle HomePos = new Circle(Main.getHomePosX(),1050 - Main.getHomePosY(),7.5, Color.GREEN);
 			HomePos.toFront();
 			Kopf = new Circle(HomePos.getCenterX(),HomePos.getCenterY(),HomePos.getRadius(),Color.RED);
-			Circle bernd = new Circle(800,1050-400,10);
-			arbeitsF.getChildren().add(bernd);
+			
 			
 			arbeitsF.getChildren().add(HomePos);
 		rootHBox.getChildren().add(arbeitsF);
@@ -324,16 +326,6 @@ public class GUI extends Application{
 		launch(args);
 	}
 	
-	public static void addToAF(Node node) {
-		arbeitsF.getChildren().add(node);
-	}
-	
-	public static int getHeight() {
-		return height;
-	}
-	public static int getWidth() {
-		return width;
-	}
 	
 	/**Eine Methode um die Textfelder und Buttons in der GUI zu steuern.
 	 * 
@@ -356,6 +348,23 @@ public class GUI extends Application{
 		geschwin.setText(String.valueOf(Main.getAktGeschw()*60/1000));
 	}
 	
+	/**Fügt ein Node der Arbeitsfläche hinzu
+	 * 
+	 * @param node Node
+	 */
+	public static void addToAF(Node node) {
+		arbeitsF.getChildren().add(node);
+	}
+	
+	//Ab hier folgen nur noch Standard getter und setter
+	
+	public static int getHeight() {
+		return height;
+	}
+	public static int getWidth() {
+		return width;
+	}
+	
 	public static void writeConsole(String arg) {
 		console.setText(arg);
 	}
@@ -364,5 +373,26 @@ public class GUI extends Application{
 	}
 	public static void setXLabel(double x) {
 		aktuellX.setText(String.valueOf(x));
+	}
+	public static void setKopfX(double newX) {
+		Kopf.setCenterX(newX);
+	}
+	public static void setKopfY(double newY) {
+		Kopf.setCenterY(newY);
+	}
+	public static double getKopfX() {
+		return Kopf.getCenterX();
+	}
+	public static double getKopfY() {
+		return Kopf.getCenterY();
+	}
+	public static void KopfsetVisible(boolean wert) {
+		Kopf.setVisible(wert);
+	}
+	public static double getKopfRadius() {
+		return Kopf.getRadius();
+	}
+	public static Paint getKopfFill() {
+		return Kopf.getFill();
 	}
 }

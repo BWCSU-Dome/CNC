@@ -12,14 +12,14 @@ public class CircleAnimation extends Animation{
 	
     private static ArrayList<Circle> circles = new ArrayList<>();
     private static Circle tempColor;
-    private static double xtemp, ytemp,xEnd, yEnd, xtempCenter, ytempCenter;
+    private static double xtemp, ytemp, xtempCenter, ytempCenter;
 	
     /**
      * 
      * @param x X-Wert bis zu der Stelle, wo gefräst werden soll.
      * @param y	Y-Wert bis zu der Stelle, wo gefräst werden soll.
-     * @param i	X-Wert des Mittelpunktes
-     * @param j Y-Wert des Mittelpunktes
+     * @param i	X-Wert bis zum Mittelpunkt
+     * @param j Y-Wert bis zum Mittelpunkt
      */
 	public static void kreis(double xEnde, double yEnde, double i, double j) {
 		yEnde = 1050 - yEnde;
@@ -27,36 +27,41 @@ public class CircleAnimation extends Animation{
 		
 		double radius = Math.sqrt(i*i+j*j);
 		
-		xtempCenter = GUI.Kopf.getCenterX()-i;
-		ytempCenter = GUI.Kopf.getCenterY()-j;
-		System.out.println(ytempCenter);
+		xtempCenter = GUI.getKopfX()-i;
+		ytempCenter = GUI.getKopfY()-j;
+		
+		System.out.println("XtempCenter: " + xtempCenter);
+		System.out.println("YtempCenter: " + ytempCenter);
+		System.out.println("1050 - Ytemp: " + (1050-ytempCenter));
+		
+		Circle test = new Circle();
+		test.setCenterX(xtempCenter);
+		test.setCenterY(ytempCenter);
+		test.setRadius(10);
+		GUI.arbeitsF.getChildren().add(test);
+
 		
 		//Startwinkel ausrechnen mit Vektorformel
-		 double startWinkel = ((i)/Math.sqrt(i*i+j*j));
-		 startWinkel = Math.toDegrees(Math.acos(startWinkel));
-		System.out.println(startWinkel);
-		 double vektorEndpunktY = xEnde-xtempCenter;
-		 double vektorEndpunktX = yEnde-ytempCenter;
+		double startWinkel = ((i)/Math.sqrt(i*i+j*j));
+		startWinkel = Math.toDegrees(Math.acos(startWinkel));
+		System.out.println("Startwinkel: " + startWinkel);
 		
-		 double endWinkel = (vektorEndpunktX/Math.sqrt(vektorEndpunktX*vektorEndpunktX+vektorEndpunktY+vektorEndpunktY));
-		 endWinkel = Math.toDegrees(Math.acos(endWinkel));
-		 System.out.println(endWinkel); 
-//		if(!(checkKreisBogen(xEnde, yEnde, xtempCenter, ytempCenter,radius))) {
-//			//Falscher Kreiseingabe
-//			System.out.println("Falsche kreiseingabe Exception");
-//			return;
-//		}
 		
-		yEnd = yEnde;
-		xEnd = xEnde;
+		 double vektorEndpunktY = yEnde-(1050+ytempCenter);
+		 double vektorEndpunktX = xEnde-xtempCenter;
+		 
+		 System.out.println("Vektor Ende X: " + vektorEndpunktX);
+		 System.out.println("Vektor Ende Y: " + vektorEndpunktY);
+		
+		 double endWinkel = (vektorEndpunktX/(Math.sqrt(vektorEndpunktX*vektorEndpunktX)+Math.sqrt(vektorEndpunktY*vektorEndpunktY)));
+		 endWinkel = Math.toDegrees(Math.acos(endWinkel))+startWinkel;
+		 System.out.println("Endwinkel: "+endWinkel); 		
 		
 		for(double a = startWinkel ; a <= endWinkel; a += 0.5) {
 			addCir(a,radius);
+			
 			System.out.println(a+ " hinzugefügt");
-			if(xtemp == xEnd && ytemp == yEnd) {
-				update(endWinkel-startWinkel);
-				return;
-			}
+			
 		}
 		update(endWinkel-startWinkel);
 		System.out.println("update ausgeführt");
@@ -89,19 +94,18 @@ public class CircleAnimation extends Animation{
 		tempColor = temp;
 		stueck++;
 	}
-	private static double winkelDiff ; 
 	
 	/**
 	 * 
 	 * @param winkelDifferenz
 	 */
 	private static void update(double winkelDifferenz) {
-		intervalle = winkelDifferenz*2; 
+		intervalle = winkelDifferenz*2-1; 
         PauseTransition pause = new PauseTransition(Duration.seconds(0.02));
         pause.setOnFinished(event ->{
         	if(stueck < intervalle) {
         		stueck++;
-        		winkelDiff--;
+        	
         		updateCirs();
                 pause.play();
         	}  
@@ -109,31 +113,31 @@ public class CircleAnimation extends Animation{
         pause.play();
     }
 	
-	/** Diese Überprüfung ob die Koordinate auf dem Kreis liegt
-	 * 
-	 * @param x Zielkoordinate der Kreisbewegung
-	 * @param y Zielkoordinate der Kreisbewegung
-	 * @param CenterX Mittelpunkt des Kreises
-	 * @param CenterY Mittelpunkt des Kreises
-	 * @return
-	 */
-	public static boolean checkKreisBogen(double x, double y, double CenterX, double CenterY, double radius) {
-		System.out.println(CenterX);
-		boolean wert;
-		for(double a = 90; a <= 270; a+= 0.5) {
-			xtemp = (CenterX + radius*Math.cos(Math.toRadians(a)));
-			ytemp = (CenterY + radius*Math.sin(Math.toRadians(a)));
-			xtemp = Math.round(xtemp);
-			ytemp = Math.round(ytemp);
-			
-			if(xtemp == x && ytemp == y) {
-				
-				wert = true;
-				return wert;
-			}
-		}
-		return false;
-		
-		
-	}
+//	/** Diese Überprüfung ob die Koordinate auf dem Kreis liegt
+//	 * 
+//	 * @param x Zielkoordinate der Kreisbewegung
+//	 * @param y Zielkoordinate der Kreisbewegung
+//	 * @param CenterX Mittelpunkt des Kreises
+//	 * @param CenterY Mittelpunkt des Kreises
+//	 * @return
+//	 */
+//	public static boolean checkKreisBogen(double x, double y, double CenterX, double CenterY, double radius) {
+//		System.out.println(CenterX);
+//		boolean wert;
+//		for(double a = 90; a <= 270; a+= 0.5) {
+//			xtemp = (CenterX + radius*Math.cos(Math.toRadians(a)));
+//			ytemp = (CenterY + radius*Math.sin(Math.toRadians(a)));
+//			xtemp = Math.round(xtemp);
+//			ytemp = Math.round(ytemp);
+//			
+//			if(xtemp == x && ytemp == y) {
+//				
+//				wert = true;
+//				return wert;
+//			}
+//		}
+//		return false;
+//		
+//		
+//	}
 }
