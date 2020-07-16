@@ -33,13 +33,14 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 					doMCodes(befehl);
 					break;
 				case 'G':
-					doGCodes(false, befehl);		
+					doGCodes(false, befehl, parameter);		
 					break;
 				default:
 					System.out.println("Das lief nicht gut. Fehler im Switch-Case-Block in der Klasse RegEx");
 				}
 				
 			ausgefuehrteCodes++;
+			Codes.exportCode(queue.get(0));
 			queue.remove(0);
 		}
 	}

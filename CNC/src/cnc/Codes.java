@@ -1,6 +1,7 @@
 package cnc;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class Codes {
 	
@@ -8,7 +9,6 @@ public class Codes {
 	private static String[] befehlEingangEnqueue;
 	private static String[] befehlEingangDo;
 	private static String[] befehl = new String[5];
-	private static double[] parameter = new double[4];
 	protected static int ausgefuehrteCodes = 0;
 	protected static int enqueuedGCodes = 0;
 	private static boolean doRunning = false;
@@ -16,22 +16,21 @@ public class Codes {
 	
 	public static void main(String [] args) {
 		
-		String[]testBefehlInput = new String[4];
+		String[]testBefehlInput = new String[5];
 		
 		testBefehlInput[0] = "G00 X11 Y11";
 		testBefehlInput[1] = "G00 X12 Y11";
 		testBefehlInput[2] = "G00 Y400";
 		testBefehlInput[3] = "M03";
+		testBefehlInput[4] = "G01 X12 Y11";
 		
 		neubildenQueue(testBefehlInput);
-		
-		enqueueBefehl("G00 X11 Y11");
-		enqueueBefehl("G00 X12 Y11");
-		enqueueBefehl("G00 Y400");
-		enqueueBefehl("M03");
-		
+		neubildenQueue(testBefehlInput);
 		startVerarbeitung();
+		neubildenQueue(testBefehlInput);
 		stopVerarbeitung();
+		
+		
 	}
 	
 	public static void startVerarbeitung() {
@@ -42,14 +41,37 @@ public class Codes {
 		Main.stopCodeRun();
 	}
 	
+	public static void exportCode(String befehl) {
+		String[] doneBefehl;
+		String befehlOut = "";
+		
+		doneBefehl = befehl.split(" ");
+		
+		for(int i = 0; i < doneBefehl.length; i++) {
+			if(Pattern.matches("[A-Z]-10001", doneBefehl[i])) {
+				doneBefehl[i] = null;
+				continue;
+			}
+			if(befehlOut == "") {
+				befehlOut = doneBefehl[i];
+				continue;
+			}
+			
+			befehlOut += " " + doneBefehl[i];
+		}
+		
+		System.out.println("Ausgeführt: " + befehlOut); //Hier erfolgt die Ausgabe von abgearbeiteten Codes in die GUI/XML.
+	}
+	
 	
 	
 	
 	public static void neubildenQueue(String[] neueBefehle) {
 	
 		while(true) {
+			
 			if(!IsDoRunning()) {
-				for(int i = 0; i < queue.size(); i++)
+				
 					queue = new ArrayList<String>();
 					
 					GCodes.resetAlreadyCheckedCodes();
@@ -59,6 +81,7 @@ public class Codes {
 					enqueuedGCodes = 0;
 					
 					RegularExpression.checkCodeFormatierung(neueBefehle);
+					
 					break;
 			}
 		}
@@ -67,6 +90,8 @@ public class Codes {
 	
 	
 	public static void enqueueBefehl(String stringEingang) {
+		
+		double[] parameter = new double[4];
 		
 		befehlEingangEnqueue = stringEingang.split(" ");
 		
@@ -170,7 +195,7 @@ public class Codes {
 				successful = true;
 				break;
 			case 'G':
-				successful = checkGCodes(befehl);
+				successful = checkGCodes(befehl, parameter);
 				if(successful)
 					enqueuedGCodes++;
 					
@@ -188,18 +213,11 @@ public class Codes {
 			
 	}
 	
-	public static void doBefehl(boolean simulation, int befehlNr) {
+	public static void simuliereBefehl(int befehlNr) {
 		
+		double[] parameter = new double[4];
 		
-		if(simulation) {
 		befehlEingangDo = befehlEingangEnqueue;
-		} else {
-			if(queueIsEmpty()) {
-				System.out.println("Die Warteschlange ist leer.");
-				return;
-			}
-		befehlEingangDo = queue.get(befehlNr).split(" ");
-		}
 		
 		System.arraycopy(befehlEingangDo, 0, befehl, 0, befehlEingangDo.length);
 		
@@ -217,20 +235,16 @@ public class Codes {
 				doMCodes(befehl);
 				break;
 			case 'G':
-				doGCodes(simulation, befehl);		
+				doGCodes(true, befehl, parameter);		
 				break;
 			default:
 				System.out.println("Das lief nicht gut. Fehler im Switch-Case-Block in der Klasse RegEx");
 			}
 			
-		if(!simulation) {
-		ausgefuehrteCodes++;
-		queue.remove(0);
-		}
 	}
 	
 	
-	protected static void doGCodes(boolean simulation, String[] code) {
+	protected static void doGCodes(boolean simulation, String[] code, double[] parameter) {
 		
 		doRunning = true;
 		//Aufruf des gewünschten Codes nach eingegebener, gewünschter Funktion
@@ -325,7 +339,7 @@ public class Codes {
 		return queue.isEmpty();
 	}
 	
-	public static boolean checkGCodes(String[] code) {
+	public static boolean checkGCodes(String[] code, double[] parameter) {
 	
 		switch(code[0]) {
 		case "G00":
@@ -392,11 +406,8 @@ public class Codes {
 		return enqueuedGCodes;
 	}
 	
-	public static String getQueue() {
-		for(int i = 0; i < queue.size(); i++) {
-			return queue.get(i);
-		}
-		return null;
+	public static ArrayList<String> getQueue() {
+		return queue;
 	}
 	
 	public static void correctBefehlEingangEnqueue(String valueToBeAdded, String argArt) {

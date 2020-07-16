@@ -17,9 +17,6 @@ public class  Main {
 	public static Thread codeRun = new Thread(new CodeVerarbeitung());
 
 	public static void main(String[]args) {
-		
-		
-		
 		GUI.main(args);
 	
 		
@@ -149,7 +146,7 @@ public class  Main {
 	public static void stopCodeRun() {
 
 			try {
-				codeRun.sleep((long) 5000.00);
+				codeRun.sleep((long) 500000.00);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

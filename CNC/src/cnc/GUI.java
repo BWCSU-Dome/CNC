@@ -190,7 +190,8 @@ public class GUI extends Application{
 									switch(startBtn.getText()) {
 									case "Start":
 										startBtn.setText("Pause");
-										LineAnimation.line(320, 300);
+										Main.launchCodeRun(); //testweise drin
+//										LineAnimation.line(320, 300);
 										break;
 									case "Pause":
 										startBtn.setText("Start");

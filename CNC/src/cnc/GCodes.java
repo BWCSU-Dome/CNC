@@ -146,7 +146,7 @@ public class GCodes extends Codes {
 		double j = param[3];
 		
 		try {
-			pruefeMissingEingabeparameter(false, param[0], param[1], param[2], param[3]);
+			pruefeMissingEingabeparameter(false, x, y, i, j);
 			
 		} catch(MissingParameterException m) {
 			System.out.println("Es fehlen Parameter. Für einen Kreisbogen werden x, y, i und j benötigt.");
@@ -335,18 +335,18 @@ public class GCodes extends Codes {
 		aktuellePosX = Double.parseDouble(koordinaten[0]);
 		aktuellePosY = Double.parseDouble(koordinaten[1]);
 		
-		 Codes.doBefehl(true, stelleInArray - 1);
+		 Codes.simuliereBefehl( stelleInArray - 1);
 		 aktuellePosX += aenderungKoorX;
 		 aktuellePosY += aenderungKoorY;
 		 zukuenftigePosNachSchritt.add(aktuellePosX + " " + aktuellePosY);
-		 System.out.println("Aktuelle Pos X:" + aktuellePosX + " Y:" + aktuellePosY);
+		 System.out.println("Predicted Pos X:" + aktuellePosX + " Y:" + aktuellePosY);
 		 
 	}
 	
 	static public void clearZukuenftigePosNachSchritt() {
-		for(int i = 0; i < zukuenftigePosNachSchritt.size(); i++) {
-			zukuenftigePosNachSchritt.remove(0);
-		}
+		
+			zukuenftigePosNachSchritt = new ArrayList<String>();
+		
 	}
 	
 	static public void resetAlreadyCheckedCodes() {
