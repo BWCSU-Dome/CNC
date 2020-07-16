@@ -65,7 +65,7 @@ public class LineAnimation extends Animation{
 		for(int a = 1; a <= intervalle ; a++) {
 		t2.getKeyFrames().add(new KeyFrame(Duration.seconds(((getDauer( Main.getAktGeschw() ,xStart-xEnd , yStart-1050 + yEnd))/intervalle)*a),
 				new KeyValue(GUI.aktuellX.textProperty(), String.valueOf(Math.round(xStart+((xEnd-xStart)/intervalle)*a))),
-				new KeyValue(GUI.aktuellY.textProperty(), String.valueOf(Math.round(1050-yStart+((yEnd-yStart+1050)/intervalle)*a)))
+				new KeyValue(GUI.aktuellY.textProperty(), String.valueOf(Math.round(1050-yStart+((-1050+yEnd+yStart)/intervalle)*a)))
 				));
 		}
 		TranslateTransition trans = new TranslateTransition();

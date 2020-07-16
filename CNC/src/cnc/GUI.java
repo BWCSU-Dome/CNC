@@ -158,7 +158,7 @@ public class GUI extends Application{
 				
 				VBox txtVBox = new VBox();
 					 txtVBox.setPrefSize(350, ctrlBtnHBox.getPrefHeight());
-					 txtVBox.setSpacing(20);
+					 txtVBox.setSpacing(15);
 					 		//Anzeige der Ausgabe Console
 					 
 					 		OutputConsole = new TextArea("Hier steht der Output");
@@ -166,6 +166,7 @@ public class GUI extends Application{
 					 		OutputConsole.setBackground(new Background( new BackgroundFill( Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY ) ));					 	
 					 		OutputConsole.setEditable(false);
 					 		OutputConsole.setMouseTransparent(true);
+					 		OutputConsole.setPrefSize(txtVBox.getPrefWidth(), 300);
 					 		txtVBox.getChildren().add(OutputConsole);
 					 		
 							//Anzeige der EingabeConsole
@@ -180,7 +181,8 @@ public class GUI extends Application{
 													"G28\r\n" 
 													);
 							InputConsole.setFont(new Font("Arial", 17));
-							HBox.setMargin(InputConsole, new Insets(0,0,10,0));
+							InputConsole.setPrefSize(txtVBox.getPrefWidth(), ctrlBtnHBox.getPrefHeight()-OutputConsole.getPrefHeight()-10);
+							VBox.setMargin(InputConsole, new Insets(0,0,13,0));
 					txtVBox.getChildren().add(InputConsole);
 					
 				ctrlBtnHBox.getChildren().add(txtVBox);
@@ -241,26 +243,10 @@ public class GUI extends Application{
 							
 						btnVBox.getChildren().add(notStopBtn);
 						
-						kuehlmitBtn = new Button("Kühlmittel\naktivieren");
+						kuehlmitBtn = new Button("Dummy Button");
 							kuehlmitBtn.setPrefSize(btn_width, btn_height);
 							kuehlmitBtn.setFont(fontBold);
-							
-							//Das dient dazu, dass das Kühlmittel de/aktivert werden kann
-							kuehlmitBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
-
-								@Override
-								public void handle(ActionEvent arg0) {
-									switch(kuehlmitBtn.getText()) {
-									case "Kühlmittel\naktivieren":
-										Main.setKuehlungAktiv(true);						
-										break;
-									case "Kühlmittel\ndeaktivieren":
-										Main.setKuehlungAktiv(false);
-										break;
-									}
-								}
-							});
-							
+	
 						btnVBox.getChildren().add(kuehlmitBtn);
 						
 						
@@ -276,6 +262,7 @@ public class GUI extends Application{
 									
 									try {
 									Codes.neubildenQueue(InputConsole.getText().split("\n"));
+									OutputConsole.setText("*Codes erfolgreich hinzugefügt*");
 									}catch(Exception e) {
 
 									}

@@ -13,6 +13,7 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 		while(true) {
 			if(queueIsEmpty()) {
 				System.out.println("Die Warteschlange ist leer.");
+				Thread.currentThread().interrupt();
 				return;
 				}
 			
