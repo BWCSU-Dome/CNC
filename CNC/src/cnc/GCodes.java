@@ -18,7 +18,7 @@ public class GCodes extends Codes {
 		
 		try {
 			
-			pruefeMissingEingabeparameter(true, param[0], param[1]);
+			pruefeMissingEingabeparameter(true, x, y);
 			
 		} catch (MissingParameterException e) {
 			
@@ -82,7 +82,7 @@ public class GCodes extends Codes {
 		
 		try {
 			
-			pruefeMissingEingabeparameter(true, param[0], param[1]);
+			pruefeMissingEingabeparameter(true, x, y);
 			
 		}
 			catch (MissingParameterException e) {
@@ -132,9 +132,7 @@ public class GCodes extends Codes {
 			aenderungKoorX = x;
 			aenderungKoorY = y;
 		}
-		
-		
-		}
+	}
 	
 	
 	
