@@ -19,7 +19,6 @@ public class  Main {
 	public static void main(String[]args) {
 		GUI.main(args);
 	
-		
 	}
 
 	public static double getHomePosX() {
@@ -152,6 +151,10 @@ public class  Main {
 				e.printStackTrace();
 			}
 
+	}
+	
+	public static void initializeThreadVerarbeitung() {
+		codeRun = new Thread(new CodeVerarbeitung());
 	}
 	
 }

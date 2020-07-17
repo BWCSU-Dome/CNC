@@ -1,5 +1,6 @@
 package cnc;
 
+import java.util.regex.Pattern;
 
 public class CodeVerarbeitung extends Codes implements Runnable {
 	
@@ -9,12 +10,11 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 	private static boolean weiter;
 	
 	public void run() {
-		
+			
 		while(true) {
 			if(queueIsEmpty()) {
-				System.out.println("Die Warteschlange ist leer.");
-				Thread.currentThread().interrupt();
-				return;
+				Codes.addStringToOutput("Die Warteschlange ist leer");
+				break;
 				}
 			
 			befehlEingangDo = queue.get(0).split(" ");
@@ -51,19 +51,43 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if(ausgefuehrteCodes == parameter.length) {
-					return;
+				
+				if(ausgefuehrteCodes == Codes.getInitialQueueSize()) {
+					break;
 				}
 			}
 			
+//			Codes.exportCode(queue.get(0));
 			
-			Codes.exportCode(queue.get(0));
+			String doneBefehl="";
+
+			for(int i = 0; i < befehl.length; i++) {
+				if(Pattern.matches("[A-Z]-10001", befehl[i])) {
+					befehl[i] = null;
+					continue;
+				}
+				if(doneBefehl == "") {
+					doneBefehl = befehl[i];
+					continue;
+				}
+				
+				 doneBefehl += " " + befehl[i];
+			}
+			Codes.addStringToOutput("Done: " + doneBefehl);
+			Codes.addToDoneCodes(doneBefehl);
 			queue.remove(0);
+			
 		}
+		
+		Main.initializeThreadVerarbeitung();
 	}
+		
+	
+	
 	
 	
 	public static void setBoolWeiter(Boolean wert) {
 		weiter = wert;
 	}
+	
 }

@@ -12,26 +12,12 @@ public class Codes {
 	protected static int ausgefuehrteCodes = 0;
 	protected static int enqueuedGCodes = 0;
 	private static boolean doRunning = false;
+	private static ArrayList<String> doneCodes = new ArrayList<String>();
+	private static int initialQueueSize = 0;
+	private static boolean enqueueingSuccessful = false;
 	
 	
-	public static void main(String [] args) {
-		
-		String[]testBefehlInput = new String[5];
-		
-		testBefehlInput[0] = "G00 X11 Y11";
-		testBefehlInput[1] = "G00 X12 Y11";
-		testBefehlInput[2] = "G00 Y400";
-		testBefehlInput[3] = "M03";
-		testBefehlInput[4] = "G01 X12 Y11";
-		
-		neubildenQueue(testBefehlInput);
-		neubildenQueue(testBefehlInput);
-		startVerarbeitung();
-		neubildenQueue(testBefehlInput);
-		stopVerarbeitung();
-		
-		
-	}
+	
 	
 	public static void startVerarbeitung() {
 		Main.launchCodeRun();
@@ -41,27 +27,33 @@ public class Codes {
 		Main.stopCodeRun();
 	}
 	
-	public static void exportCode(String befehl) {
-		String[] doneBefehl;
-		String befehlOut = "";
-		
-		doneBefehl = befehl.split(" ");
-		
-		for(int i = 0; i < doneBefehl.length; i++) {
-			if(Pattern.matches("[A-Z]-10001", doneBefehl[i])) {
-				doneBefehl[i] = null;
-				continue;
-			}
-			if(befehlOut == "") {
-				befehlOut = doneBefehl[i];
-				continue;
-			}
-			
-			befehlOut += " " + doneBefehl[i];
-		}
-		
-		System.out.println("Ausgeführt: " + befehlOut); //Hier erfolgt die Ausgabe von abgearbeiteten Codes in die GUI/XML.
-	}
+//	public static void exportCode(String befehl) {
+//		String[] doneBefehl;
+//		
+//		doneBefehl = befehl.split(" ");
+//		
+//		befehl = "";
+//		
+//		for(int i = 0; i < doneBefehl.length; i++) {
+//			if(Pattern.matches("[A-Z]-10001", doneBefehl[i])) {
+//				doneBefehl[i] = null;
+//				continue;
+//			}
+//			if(befehl == "") {
+//				befehl = doneBefehl[i];
+//				continue;
+//			}
+//			
+//			befehl += " " + doneBefehl[i];
+//		}
+//		
+//		doneCodes.add(befehl);
+//		
+//		String temp = GUI.getOutputConsole();
+//		
+//		GUI.setTXTOutputConsole(temp + "\n" + befehl); //Hier erfolgt die Ausgabe von abgearbeiteten Codes in die GUI/XML.
+//	
+//	}
 	
 	
 	
@@ -71,6 +63,8 @@ public class Codes {
 		while(true) {
 			
 			if(!IsDoRunning()) {
+				
+					enqueueingSuccessful = true;
 				
 					queue = new ArrayList<String>();
 					
@@ -82,10 +76,25 @@ public class Codes {
 					
 					RegularExpression.checkCodeFormatierung(neueBefehle);
 					
+					if(!enqueueingSuccessful)
+						return;
+					
+					initialQueueSize = queue.size();
+					
+					ausgefuehrteCodes = 0;
+					
+					Codes.addStringToOutput("Codes erfolgreich hinzugefügt.");
+					
 					break;
 			}
 		}
 		
+	}
+	
+	public static void abbrechenEnqueueing() {
+		queue = new ArrayList<String>();
+		enqueueingSuccessful = false;
+		return;
 	}
 	
 	
@@ -203,11 +212,13 @@ public class Codes {
 			default:
 				System.out.println("Das lief nicht gut. Fehler im Switch-Case-Block in der Klasse RegEx");
 			}
+			
 		
 			if(successful) {
 				queue.add(befehlToString(befehl));
 			} else {
-				System.out.println("fehlerhafter Befehl: " + stringEingang);
+				addStringToOutput("Fehlerhafter Code: " + stringEingang);
+				abbrechenEnqueueing();
 			}
 			
 			
@@ -426,6 +437,27 @@ public class Codes {
 		befehlEingangEnqueue = new String[3];
 		
 		System.arraycopy(temp, 0, befehlEingangEnqueue, 0, temp.length);
+	}
+	
+	public static int getInitialQueueSize() {
+		return initialQueueSize;
+	}
+	
+	
+	public static void addStringToOutput(String text) {
+		String temp = GUI.getOutputConsole();
+		
+		GUI.setTXTOutputConsole(temp + "\n" + text);
+		
+	}
+	
+	
+	public static boolean getLastCodeSuccessful() {
+		return enqueueingSuccessful;
+	}
+
+	public static void addToDoneCodes(String code) {
+		doneCodes.add(code);
 	}
 	
 	

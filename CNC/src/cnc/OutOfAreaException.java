@@ -5,7 +5,7 @@ public class OutOfAreaException extends Exception {
 	   public OutOfAreaException()
 	   {
 		   super("Die Fräse befände sich während der Ausführung des Befehls außerhalb des zulässigen Bereichs");
-		   GUI.setTXTOutputConsole("*Fehlerhafter Code eingegeben*");
+		   Codes.addStringToOutput("*Out Of Area für Code*");
 	   }
 
 

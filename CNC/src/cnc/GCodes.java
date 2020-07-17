@@ -10,6 +10,7 @@ public class GCodes extends Codes {
 	static double aktuellePosX;
 	static double aktuellePosY;
 	private static int alreadyCheckedGCodes = 0;
+	private static boolean erfolgreich = false;
 
 	
 	static public boolean checkFahrenEilgang(double... param) {
@@ -21,41 +22,24 @@ public class GCodes extends Codes {
 			pruefeMissingEingabeparameter(true, x, y);
 			
 		} catch (MissingParameterException e) {
-			
-		switch(e.getStelle()) {
-		
-		case 0:
-			System.out.println("X-Koordinate fehlt.");
-			System.out.println("Da ein Parameter weggelassen wurde, wird auf einer Achse horizontal/vertikal gefahren.");
-			x = 0;
-			correctBefehlEingangEnqueue(Double.toString(x), "X");
-			break;
-		
-		case 1:
-			System.out.println("Y-Koordinate fehlt.");
-			System.out.println("Da ein Parameter weggelassen wurde, wird auf einer Achse horizontal/vertikal gefahren.");
-			y = 0;
-			correctBefehlEingangEnqueue(Double.toString(y), "Y");
-			break;
 
 			//Kein Parameter wurde mitgegeben --> Keine Fahrt möglich
-		case -1:
-			System.out.println("Es kann keine Gerade ohne Parameter gefahren werden.");
-			return false;
+			
+			erfolgreich = false;
+			return erfolgreich;
 		}
 			
-	}
+	
 		try {
 			pruefeFahrbewegung(x, y);
 		} catch(OutOfAreaException e) {
-		e.printStackTrace();
-		return false;
+		erfolgreich = false;
+		return erfolgreich;
 		}
+		erfolgreich = true;
+		return erfolgreich;
 		
-		return true;
-		
-	
-}
+	}
 	
 	
 	
@@ -66,7 +50,7 @@ public class GCodes extends Codes {
 		double y = param[1];
 		
 		if(!simulation) {
-		System.out.println("Fahren Eilgang: " + x + " " + y);
+			//LineAnimation.LineFahrt(x, y);
 		} else {
 			aenderungKoorX = x;
 			aenderungKoorY = y;
@@ -86,36 +70,21 @@ public class GCodes extends Codes {
 			
 		}
 			catch (MissingParameterException e) {
-				
-				switch(e.getStelle()) {
-				
-				case 0:
-					System.out.println("X-Koordinate fehlt.");
-					System.out.println("Da ein Parameter weggelassen wurde, wird auf einer Achse horizontal/vertikal gezeichnet.");
-					x = 0;
-					break;
-				
-				case 1:
-					System.out.println("Y-Koordinate fehlt.");
-					System.out.println("Da ein Parameter weggelassen wurde, wird auf einer Achse horizontal/vertikal gezeichnet.");
-					y = 0;
-					break;
-					
-					//Kein Parameter wurde mitgegeben --> Keine Fahrt möglich
-				case -1:
-					System.out.println("Es kann keine Gerade ohne Parameter gezeichnet werden.");
-					return false;
-				}
-				
+			
+				Codes.addStringToOutput("Es kann keine Gerade ohne Parameter gezeichnet werden.");
+				erfolgreich = false;
+				return erfolgreich;
 			}
+	
 		
 		try {
 			pruefeFahrbewegung(x, y);
 		} catch(OutOfAreaException e) {
-		e.printStackTrace();
-		return false;
+		erfolgreich = false;
+		return erfolgreich;
 		}
-		return true;
+		erfolgreich = true;
+		return erfolgreich;
 		
 	}
 	
@@ -154,10 +123,11 @@ public class GCodes extends Codes {
 		try {
 			pruefeFahrbewegung(false);
 		} catch(OutOfAreaException e) {
-		e.printStackTrace();
-		return false;
+		erfolgreich = false;
+		return erfolgreich;
 		}
-		return true;
+		erfolgreich = true;
+		return erfolgreich;
 	}
 	
 	/* Repräsentation von Code G02.
@@ -190,19 +160,19 @@ public class GCodes extends Codes {
 			
 		} catch(MissingParameterException m) {
 			System.out.println("Es fehlen Parameter. Für einen Kreisbogen werden x, y, i und j benötigt.");
-			return false;
+			erfolgreich = false;
+			return erfolgreich;
 		}
-		
-		
 		
 		try {
 			pruefeFahrbewegung(false);
 		} catch(OutOfAreaException e) {
 		e.printStackTrace();
-		return false;
+		erfolgreich = false;
+		return erfolgreich;
 		}
-		
-		return true;
+		erfolgreich = true;
+		return erfolgreich;
 		
 	}
 	
@@ -242,30 +212,25 @@ public class GCodes extends Codes {
 	
 	static public void pruefeFahrbewegung(double xKoor, double yKoor) throws OutOfAreaException {
 
-		String[] koordinaten;
 		
 		double boundX = GUI.getWidth();
 		double boundY = GUI.getHeight();
 		
 		getZukuenftigePos(Codes.getQueueSize());
 		
-		if(Codes.getQueueSize() == 0 && Codes.getEnqueuedGCodes() == 0) {
-			koordinaten = new String[2];
-			koordinaten[0] = Double.toString(Main.getHomePosX());
-			koordinaten[1] = Double.toString(Main.getHomePosX());
-		} else {
-			koordinaten = zukuenftigePosNachSchritt.get(Codes.getEnqueuedGCodes()).split(" ");
-		}
-		
-		double newXKoor = Double.parseDouble(koordinaten[0]) + xKoor;
-		double newYKoor = Double.parseDouble(koordinaten[1]) + yKoor;
+		double newXKoor = xKoor;
+		double newYKoor = yKoor;
 		
 		
-				if(newXKoor > boundX || boundX+newXKoor < 0 ||  newYKoor > boundY || boundY+newYKoor < 0) {
+				if(newXKoor > boundX || newXKoor < 0 ||  newYKoor > boundY || newYKoor < 0) {
 					alreadyCheckedGCodes--;
 					zukuenftigePosNachSchritt.remove(zukuenftigePosNachSchritt.size()-1);
+					erfolgreich = false;
 					throw new OutOfAreaException();
 			}
+				
+				erfolgreich = true;
+				
 		
 		
 	}
@@ -289,15 +254,9 @@ public class GCodes extends Codes {
 	 */
 	static public void pruefeMissingEingabeparameter(boolean isGerade, double... stellen) throws MissingParameterException {
 		
-		if(isGerade) {
-			if(stellen[0] == -10001 && stellen[1] == -10001)
-				throw new MissingParameterException(-1);		//Wenn eine Gerade gefahren werden soll und beide Parameter (X, Y) fehlen, wird Exception mit Parameter -1 geworfen --> teilt aufrufender Methode mit, dass kein Kreis ohne Parameter gezeichnet werden kann
-		}
-		
-		
 			for(int i = 0; i < stellen.length; i++) {
 				if(stellen[i] == -10001) {
-					throw new MissingParameterException(i);		//Wenn einer von den benötigten Parametern fehlt, wird direkt eine Exception unter Angabe der fehlenden Stelle geworfen. Kann von den Catch-Blöcken der aufrufenden Methoden trotzdem zu einem validen Fahrbefehl umgeformt werden.
+					throw new MissingParameterException();		//Wenn einer von den benötigten Parametern fehlt, wird direkt eine Exception unter Angabe der fehlenden Stelle geworfen. Kann von den Catch-Blöcken der aufrufenden Methoden trotzdem zu einem validen Fahrbefehl umgeformt werden.
 				}
 			
 		}
@@ -322,9 +281,7 @@ public class GCodes extends Codes {
 					zukuenftigePosNachSchritt.add(String.valueOf(Main.getPosX()) + " " + String.valueOf(Main.getPosY()));
 					break;
 				}
-							
 			}
-			
 		}
 		
 		String[] koordinaten = zukuenftigePosNachSchritt.get(alreadyCheckedGCodes).split(" ");
@@ -334,10 +291,10 @@ public class GCodes extends Codes {
 		aktuellePosY = Double.parseDouble(koordinaten[1]);
 		
 		 Codes.simuliereBefehl( stelleInArray - 1);
-		 aktuellePosX += aenderungKoorX;
-		 aktuellePosY += aenderungKoorY;
-		 zukuenftigePosNachSchritt.add(aktuellePosX + " " + aktuellePosY);
-		 System.out.println("Predicted Pos X:" + aktuellePosX + " Y:" + aktuellePosY);
+		 double neuePosX = aenderungKoorX;
+		 double neuePosY = aenderungKoorY;
+		 zukuenftigePosNachSchritt.add(neuePosX + " " + neuePosY);
+		 System.out.println("Predicted Pos X:" + neuePosX + " Y:" + neuePosY);
 		 
 	}
 	
