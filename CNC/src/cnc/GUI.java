@@ -262,7 +262,7 @@ public class GUI extends Application{
 									
 									try {
 									Codes.neubildenQueue(InputConsole.getText().split("\n"));
-									OutputConsole.setText("*Codes erfolgreich hinzugefügt*");
+									
 									}catch(Exception e) {
 
 									}
