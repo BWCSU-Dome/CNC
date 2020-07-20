@@ -2,6 +2,14 @@ package cnc;
 
 import java.util.regex.Pattern;
 
+
+/**
+ * Enthält Thread, der zur Ausführung der Codes verwendet wird
+ * @author Jonas Heckerodt
+ *
+ */
+
+
 public class CodeVerarbeitung extends Codes implements Runnable {
 	
 	private static String[] befehlEingangDo;
@@ -13,7 +21,7 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 			
 		while(true) {
 			if(queueIsEmpty()) {
-				Codes.addStringToOutput("Die Warteschlange ist leer");
+				Codes.addStringToOutput("Warteschlange erfolgreich abgearbeitet"); //Wenn die Queue leer ist (entweder kein Code eingegeben, oder alle ausgeführt) kommt eine kurze Meldung.
 				break;
 				}
 			
@@ -24,13 +32,16 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 			// Es wird zur reibungslosen Weiterverarbeitung der Parameter ein Double-Array erzeugt
 			parameter = new double[befehl.length-1];
 			
+			
+			
+			
 			for(int i=0; i < parameter.length; i++) {
 				weiter = false;
 				parameter[i] = Double.parseDouble(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
 				}
 				
 				//Unterscheidung, ob M- oder G-Code vorliegt (entschieden an mitgegebenem ersten Buchstaben)
-				switch(befehl[0].charAt(0)) {
+			switch(befehl[0].charAt(0)) {
 				
 				case 'M':
 					doMCodes(befehl);
@@ -38,11 +49,9 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 				case 'G':
 					doGCodes(false, befehl, parameter);		
 					break;
-				default:
-					System.out.println("Das lief nicht gut. Fehler im Switch-Case-Block in der Klasse RegEx");
 				}
 			
-				ausgefuehrteCodes++;
+			incAusgefuehrteCodes();
 				
 			while(!weiter) {
 				try {
@@ -61,6 +70,7 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 			
 			String doneBefehl="";
 
+//			Wenn ein Parameter leer war (-10001) dann umformen in leer
 			for(int i = 0; i < befehl.length; i++) {
 				if(Pattern.matches("[A-Z]-10001", befehl[i])) {
 					befehl[i] = null;
@@ -71,15 +81,15 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 					continue;
 				}
 				
-				 doneBefehl += " " + befehl[i];
+				 doneBefehl += " " + befehl[i];	//verketten von Befehl mit nicht leeren Parametern
 			}
-			Codes.addStringToOutput("Done: " + doneBefehl);
-			Codes.addToDoneCodes(doneBefehl);
-			queue.remove(0);
+			Codes.addStringToOutput("Done: " + doneBefehl); //Ausgabe, dass Befehl erfolgreich durchgeführt werde
+			Codes.addToDoneCodes(doneBefehl);				//Speicherung in Array für spätere Ausgabe in XML
+			queue.remove(0);								//Entfernung des eben bearbeiteten Befehls
 			
 		}
 		
-		Main.initializeThreadVerarbeitung();
+		Main.initializeThreadVerarbeitung();		//Setzt den Thread auf seinen Ursprungszustand zurück, sodass er wieder über die jeweilige Methode gestartet werden kann
 	}
 		
 	

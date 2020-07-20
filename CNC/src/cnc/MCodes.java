@@ -1,5 +1,11 @@
 package cnc;
 
+/**
+ * 
+ * @author Jonas Heckerodt
+ *
+ */
+
 public class MCodes extends Codes {
 
 	

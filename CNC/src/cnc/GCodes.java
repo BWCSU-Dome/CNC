@@ -2,6 +2,12 @@ package cnc;
 
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author Jonas Heckerodt
+ *
+ */
+
 public class GCodes extends Codes {
 	
 	private static double aenderungKoorX;
