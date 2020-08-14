@@ -70,9 +70,7 @@ public class LineAnimation extends Animation{
 		}
 		TranslateTransition trans = new TranslateTransition();
 		trans.setNode(GUI.aktuellX);
-		t.play();
-		t2.play();
-		
+		GUI.setAndPlayTimeline(t, t2);
 		t.setOnFinished(ActionEvent ->{
 			CodeVerarbeitung.setBoolWeiter(true);
 		});

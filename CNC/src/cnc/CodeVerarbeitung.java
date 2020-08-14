@@ -1,15 +1,11 @@
 package cnc;
 
 import java.util.regex.Pattern;
-
-
 /**
  * Enthält Thread, der zur Ausführung der Codes verwendet wird
  * @author Jonas Heckerodt
  *
  */
-
-
 public class CodeVerarbeitung extends Codes implements Runnable {
 	
 	private static String[] befehlEingangDo;
@@ -22,6 +18,7 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 		while(true) {
 			if(queueIsEmpty()) {
 				Codes.addStringToOutput("Warteschlange erfolgreich abgearbeitet"); //Wenn die Queue leer ist (entweder kein Code eingegeben, oder alle ausgeführt) kommt eine kurze Meldung.
+				GUI.clearTimelines();
 				break;
 				}
 			
@@ -57,8 +54,9 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 				try {
 					Thread.sleep(50);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					
+					System.out.println("Der Thread CodeVerarbeitung wurde unterbrochen");
+
 				}
 				
 				if(ausgefuehrteCodes == Codes.getInitialQueueSize()) {
@@ -91,11 +89,7 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 		
 		Main.initializeThreadVerarbeitung();		//Setzt den Thread auf seinen Ursprungszustand zurück, sodass er wieder über die jeweilige Methode gestartet werden kann
 	}
-		
-	
-	
-	
-	
+
 	public static void setBoolWeiter(Boolean wert) {
 		weiter = wert;
 	}

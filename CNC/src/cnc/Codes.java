@@ -60,11 +60,9 @@ public class Codes {
 						return;					//Falls Verarbeitung nicht erfolgreich, findet hier der Rücksprung in die GUI statt
 					
 					initialQueueSize = queue.size();
-					
 					ausgefuehrteCodes = 0;
-					
 					Codes.addStringToOutput("Codes erfolgreich hinzugefügt.");
-					
+					GUI.setCodeVerarbeitungStartenTrue();
 					break;
 			}
 		}

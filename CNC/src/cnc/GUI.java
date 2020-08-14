@@ -2,6 +2,8 @@ package cnc;
 
 import java.io.FileInputStream;
 
+import javafx.animation.Animation.Status;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -45,7 +47,8 @@ public class GUI extends Application{
 	private static Label  kuehlmit, spindelStatus,geschwin;
 	public static Label aktuellX,aktuellY;
 	private static TextArea InputConsole, OutputConsole;
-	
+	private static Timeline timelineGrafik, timelineKoordinaten;	
+	private static Boolean CodeVerarbeitungStarten = true;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -207,12 +210,25 @@ public class GUI extends Application{
 									switch(startBtn.getText()) {
 									case "Start":
 										startBtn.setText("Pause");
-									
-										Main.launchCodeRun(); //testweise drin
-//										LineAnimation.line(320, 300);
+										if(CodeVerarbeitungStarten) {
+										Main.launchCodeRun(); 
+										}
+										CodeVerarbeitungStarten = false;
+										
+										if(timelineGrafik != null && timelineKoordinaten != null) {
+											if(timelineGrafik.getCurrentRate() == 0) {
+												System.out.println("hallo");
+												timelineGrafik.play();
+												timelineKoordinaten.play();
+											}
+										}
 										break;
 									case "Pause":
 										startBtn.setText("Start");
+										if(timelineGrafik != null && timelineKoordinaten != null) {
+											timelineGrafik.pause();
+											timelineKoordinaten.pause();
+										}
 										Main.codeRun.interrupt();
 //										CircleAnimation.kreis(320,401,20,100);
 										break;
@@ -426,4 +442,17 @@ public class GUI extends Application{
 		arbeitsF.getChildren().clear();
 	}
 	
+	public static void setAndPlayTimeline(Timeline tGrafik, Timeline tKoordinaten) {
+		timelineGrafik = tGrafik;
+		timelineKoordinaten = tKoordinaten;
+		timelineGrafik.play();
+		timelineKoordinaten.play();
+	}
+	public static void setCodeVerarbeitungStartenTrue() {
+		CodeVerarbeitungStarten = true;
+	}
+	public static void clearTimelines() {
+		timelineGrafik = null;
+		timelineKoordinaten = null;
+	}
 }
