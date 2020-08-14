@@ -207,6 +207,7 @@ public class GUI extends Application{
 									switch(startBtn.getText()) {
 									case "Start":
 										startBtn.setText("Pause");
+									
 										Main.launchCodeRun(); //testweise drin
 //										LineAnimation.line(320, 300);
 										break;
@@ -246,6 +247,14 @@ public class GUI extends Application{
 						kuehlmitBtn = new Button("Dummy Button");
 							kuehlmitBtn.setPrefSize(btn_width, btn_height);
 							kuehlmitBtn.setFont(fontBold);
+							kuehlmitBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+								@Override
+								public void handle(ActionEvent arg0) {
+								
+									clearAF();
+															
+								}
+							});
 	
 						btnVBox.getChildren().add(kuehlmitBtn);
 						
@@ -412,6 +421,9 @@ public class GUI extends Application{
 	}
 	public static void setInputConsole(String inputConsole) {
 		InputConsole.setText(inputConsole);
+	}
+	public static void clearAF() {
+		arbeitsF.getChildren().clear();
 	}
 	
 }
