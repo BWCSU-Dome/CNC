@@ -70,7 +70,7 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 
 //			Wenn ein Parameter leer war (-10001) dann umformen in leer
 			for(int i = 0; i < befehl.length; i++) {
-				if(Pattern.matches("[A-Z]-10001", befehl[i])) {
+				if(Pattern.matches(".?-10001", befehl[i])) {
 					befehl[i] = null;
 					continue;
 				}
