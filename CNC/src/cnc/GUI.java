@@ -49,7 +49,7 @@ public class GUI extends Application{
 	private static TextArea InputConsole, OutputConsole;
 	private static Timeline timelineGrafik, timelineKoordinaten;	
 	private static Boolean CodeVerarbeitungStarten = true;
-	
+	public static Button startBtn;
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
@@ -199,7 +199,7 @@ public class GUI extends Application{
 					int btn_width = 170;
 					int btn_height = Integer.MAX_VALUE;
 					
-						Button startBtn = new Button("Start");
+						startBtn = new Button("Start");
 							startBtn.setPrefSize(btn_width, btn_height);
 							startBtn.setFont(fontBold);
 							
@@ -217,7 +217,6 @@ public class GUI extends Application{
 										
 										if(timelineGrafik != null && timelineKoordinaten != null) {
 											if(timelineGrafik.getCurrentRate() == 0) {
-												System.out.println("hallo");
 												timelineGrafik.play();
 												timelineKoordinaten.play();
 											}
@@ -455,4 +454,5 @@ public class GUI extends Application{
 		timelineGrafik = null;
 		timelineKoordinaten = null;
 	}
+	
 }
