@@ -265,7 +265,7 @@ public class GUI extends Application{
 							kuehlmitBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 								@Override
 								public void handle(ActionEvent arg0) {
-								
+									XML.readCodes();
 									clearAF();
 															
 								}

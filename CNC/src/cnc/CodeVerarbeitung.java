@@ -1,6 +1,8 @@
 package cnc;
 
 import java.util.regex.Pattern;
+
+import javafx.application.Platform;
 /**
  * Enthält Thread, der zur Ausführung der Codes verwendet wird
  * @author Jonas Heckerodt
@@ -19,7 +21,9 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 			if(queueIsEmpty()) {
 				Codes.addStringToOutput("Warteschlange erfolgreich abgearbeitet"); //Wenn die Queue leer ist (entweder kein Code eingegeben, oder alle ausgeführt) kommt eine kurze Meldung.
 				GUI.clearTimelines();
+				Platform.runLater(()->{
 				GUI.startBtn.setText("Start");
+				});
 				break;
 				}
 			
@@ -87,7 +91,7 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 			queue.remove(0);								//Entfernung des eben bearbeiteten Befehls
 			
 		}
-		
+		XML.save(Codes.getDoneCodes());
 		Main.initializeThreadVerarbeitung();		//Setzt den Thread auf seinen Ursprungszustand zurück, sodass er wieder über die jeweilige Methode gestartet werden kann
 	}
 

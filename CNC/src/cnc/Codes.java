@@ -462,7 +462,9 @@ public class Codes {
 	protected static void incAusgefuehrteCodes() {
 		ausgefuehrteCodes++;
 	}
-	
+	public static ArrayList<String> getDoneCodes(){
+		return doneCodes;
+	}
 	
 	
 	

@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Befehl><N0>G01 X100 Y200</N0><N1>G01 X300 Y10</N1><N2>G01 X500 Y100</N2><N3>G01 X50 Y50</N3><N4>G28</N4></Befehl>
