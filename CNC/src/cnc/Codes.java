@@ -323,11 +323,13 @@ public class Codes {
 		
 		case "M13":
 		MCodes.schalteSpindelAn(true);
+		Main.setSpindelRechtslaufAktiv(true);
 		MCodes.schalteKuelmittel(true);
 			break;
 			
 		case "M14":
-		MCodes.schalteSpindelAn(false);
+		MCodes.schalteSpindelAn(true);
+		Main.setSpindelRechtslaufAktiv(false);
 		MCodes.schalteKuelmittel(true);
 			break;
 			

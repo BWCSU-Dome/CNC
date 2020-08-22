@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -41,13 +42,11 @@ public class XML {
 		}
 	}
 
-	public static void readCodes() {
-
-		try {
+	public static String readCodes(File file) throws Exception {
 
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(new File("files/ressources/XMLtestCNC.xml"));
+			Document doc = builder.parse(file);
 			int index = 0;
 
 			NodeList befehleNL = doc.getElementsByTagName("Befehl");
@@ -58,10 +57,34 @@ public class XML {
 				befehlEingabe = befehlEingabe + befehl.getElementsByTagName("N" + index).item(0).getTextContent()+"\n";
 				index++;
 			}
-			System.out.println(befehlEingabe);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			return befehlEingabe;
 	}
+	
+	public static void readSettings() throws Exception {
+		
+		double new_homePosX, new_homePosY, geschwindschnell, geschwindlangsam, geschwindfahrt; 
+		String farbeBohrer, farbeHomePos, farbeArbeitsflaeche;
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document doc = builder.parse(new File("files/ressources/CnCsettings.xml"));
+		int index = 0;
+
+		NodeList settingsNodelist = doc.getElementsByTagName("CnC-Fraese");
+		Element settings = (Element) settingsNodelist.item(index);
+		
+		new_homePosX = Double.parseDouble(settings.getElementsByTagName("HomePosX").item(0).getTextContent());
+		new_homePosY = Double.parseDouble(settings.getElementsByTagName("HomePosY").item(0).getTextContent());
+		geschwindschnell = Double.parseDouble(settings.getElementsByTagName("geschwind_schnell").item(0).getTextContent())*1000/60;
+		geschwindlangsam = Double.parseDouble(settings.getElementsByTagName("geschwind_langsam").item(0).getTextContent())*1000/60;
+		geschwindfahrt = Double.parseDouble(settings.getElementsByTagName("geschwind_fahrt").item(0).getTextContent())*1000/60;
+		farbeBohrer = settings.getElementsByTagName("FarbeBohrer").item(0).getTextContent();
+		farbeHomePos = settings.getElementsByTagName("FarbeHomePos").item(0).getTextContent();
+		farbeArbeitsflaeche = settings.getElementsByTagName("FarbeArbeitsflaeche").item(0).getTextContent();
+	
+		Main.assignSettings(new_homePosX, new_homePosY, geschwindschnell, geschwindlangsam, 
+							geschwindfahrt, farbeBohrer, farbeHomePos, farbeArbeitsflaeche);
+	}
+	
+	
 }

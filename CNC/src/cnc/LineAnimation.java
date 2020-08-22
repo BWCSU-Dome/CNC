@@ -32,7 +32,7 @@ public class LineAnimation extends Animation{
 		line.setEndX(xStart);
 		line.setEndY(yStart);
 		line.setStrokeWidth(11);
-		line.setStroke(Color.PINK);
+		line.setStroke(Color.BLACK);
 	
 		GUI.arbeitsF.getChildren().add(line);
 		line.toBack();

@@ -1,23 +1,32 @@
 package cnc;
 
+import java.io.File;
 
 public class  Main {
 	private static double posX = 0;
 	private static double posY = 0;
 	private static double homePosX = 0;
-	private static double homePosY = 0;
-	private static double geschwind_schnell = 3000/60 *5; //3
-	private static double geschwind_langsam = 2000/60 *5; //2
+	private static double homePosY = 1050;
+	private static double geschwind_schnell = 3000/60; //3000 cm pro 60 sek
+	private static double geschwind_langsam = 2000/60; //2
 	private static double geschwind_fahrt = 4000/60;   //4
 	private static double aktGeschwin = geschwind_langsam;
 	private static double werkzeugDurchmesser = 15;
-	private static boolean spindelAktiv;
+	private static boolean spindelAktiv = false;
 	private static boolean kuehlungAktiv;
 	private static boolean spindelRechtslaufAktiv;
 	public static Thread codeRun = new Thread(new CodeVerarbeitung());
+	private static String colorHomePos = "green"; 
+	private static String colorBohrer = "red";
+	private static String colorArbeitsflaeche = "grey";
+	
 
 	public static void main(String[]args) {
 		GUI.main(args);
+	}
+	
+	public static double getRadius() {
+		return werkzeugDurchmesser/2;
 	}
 
 	public static double getHomePosX() {
@@ -40,8 +49,7 @@ public class  Main {
 		return aktGeschwin;
 	}
 	public static void setGeschwind_fahrt(double geschwindfahrt) {
-		geschwind_fahrt = geschwindfahrt;
-		
+		geschwind_fahrt = geschwindfahrt;		
 	}
 	
 	public static void setGeschwind_langsam(double geschwindlangsam) {
@@ -77,6 +85,7 @@ public class  Main {
 
 	public static void setSpindelAktiv(boolean new_spindelAktiv) {
 		spindelAktiv = new_spindelAktiv;
+		GUI.refreshSpindel();
 	}
 
 
@@ -119,6 +128,7 @@ public class  Main {
 
 	public static void setSpindelRechtslaufAktiv(boolean new_spindelRechtslaufAktiv) {
 		spindelRechtslaufAktiv = new_spindelRechtslaufAktiv;
+		GUI.refreshDrehung();
 	}
 
 	public static double getPosX() {
@@ -156,4 +166,59 @@ public class  Main {
 		codeRun = new Thread(new CodeVerarbeitung());
 	}
 	
+	
+	
+	public static double getGeschwind_schnell() {
+		return geschwind_schnell;
+	}
+
+	public static double getGeschwind_langsam() {
+		return geschwind_langsam;
+	}
+
+	public static double getGeschwind_fahrt() {
+		return geschwind_fahrt;
+	}
+
+	public static double getAktGeschwin() {
+		return aktGeschwin;
+	}
+
+	public static Thread getCodeRun() {
+		return codeRun;
+	}
+
+	public static String getColorHomePos() {
+		return colorHomePos;
+	}
+
+	public static String getColorBohrer() {
+		return colorBohrer;
+	}
+
+	public static String getColorArbeitsflaeche() {
+		return colorArbeitsflaeche;
+	}
+
+	public static void assignSettings(double new_homePosX,double new_homePosY, double geschwindschnell, 
+									  double geschwindlangsam, double geschwindfahrt, String farbeBohrer, 
+									  String farbeHomePos, String farbeArbeitsflaeche) {
+		
+		colorArbeitsflaeche = farbeArbeitsflaeche;
+		colorBohrer = farbeBohrer;
+		colorHomePos = farbeHomePos;
+
+		setHomePosX(new_homePosX);
+		setHomePosY(1050-new_homePosY);
+		GUI.loadHomePos();
+		
+		setGeschwind_schnell(geschwindschnell);
+		setGeschwind_langsam(geschwindlangsam);
+		setGeschwind_fahrt(geschwindfahrt);
+		  setAktGeschwind_langsam();
+		GUI.setColorBohrer(farbeBohrer);
+		GUI.setColorHomePos(farbeHomePos);
+		GUI.setColorArbeitsflaeche(farbeArbeitsflaeche);
+	}
+
 }

@@ -1,5 +1,6 @@
 package cnc;
 
+import java.io.File;
 import java.io.FileInputStream;
 
 import javafx.animation.Animation.Status;
@@ -30,9 +31,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-
 
 public class GUI extends Application{
 
@@ -43,13 +43,15 @@ public class GUI extends Application{
 	private static int height = 1050;
 	private static int width = 1950;
 	public static Circle Kopf;
-	private static Button kuehlmitBtn;
-	private static Label  kuehlmit, spindelStatus,geschwin;
+	private static Button codeXMLBtn, settingsXMLBtn;
+	private static Label  kuehlmit, spindelStatus,geschwin,drehRichtung;
 	public static Label aktuellX,aktuellY;
 	private static TextArea InputConsole, OutputConsole;
 	private static Timeline timelineGrafik, timelineKoordinaten;	
 	private static Boolean CodeVerarbeitungStarten = true;
 	public static Button startBtn;
+	private static File choosenFile;
+	private static Circle HomePos;
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
@@ -77,8 +79,7 @@ public class GUI extends Application{
 						statusInfos.setFont(new Font("Arial BOLD",30));
 						statusInfos.setUnderline(true);
 					statsLeftVBox.getChildren().add(statusInfos);
-				
-					
+									
 					Label aktuellePos = new Label("aktuelle Postion: ");
 						aktuellePos.setFont(fontBold);
 					statsLeftVBox.getChildren().add(aktuellePos);
@@ -124,14 +125,13 @@ public class GUI extends Application{
 						posHBox.getChildren().addAll(aktuellX_static,aktuellX,aktuellY_static,aktuellY);
 						VBox.setMargin(posHBox, new Insets(58,0,0,0));
 						
-					statsRightVBox.getChildren().add(posHBox);
+					statsRightVBox.getChildren().add(posHBox);						
 						
-						
-					spindelStatus = new Label("aktiv");
+					spindelStatus = new Label("init");
 						spindelStatus.setFont(font);
 					statsRightVBox.getChildren().add( spindelStatus);
 					
-					Label drehRichtung = new Label("Rechtsdrehung");
+					drehRichtung = new Label("init");
 						drehRichtung.setFont(font);
 					statsRightVBox.getChildren().addAll(drehRichtung);
 
@@ -161,17 +161,22 @@ public class GUI extends Application{
 				
 				VBox txtVBox = new VBox();
 					 txtVBox.setPrefSize(350, ctrlBtnHBox.getPrefHeight());
-					 txtVBox.setSpacing(15);
+					 txtVBox.setSpacing(5);
+					 		
+					 		Label OutputConLabel = new Label("Ausgabefeld:");
+					 		OutputConLabel.setFont(font);
+					 		txtVBox.getChildren().add(OutputConLabel);
 					 		//Anzeige der Ausgabe Console
-					 
-					 		OutputConsole = new TextArea("Hier steht der Output");
-					 		OutputConsole.setFont(new Font("Arial", 17));
-					 		OutputConsole.setBackground(new Background( new BackgroundFill( Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY ) ));					 	
+					 		OutputConsole = new TextArea("");
+					 		OutputConsole.setFont(new Font("Arial", 17));					 	
 					 		OutputConsole.setEditable(false);
 					 		OutputConsole.setMouseTransparent(true);
 					 		OutputConsole.setPrefSize(txtVBox.getPrefWidth(), 300);
 					 		txtVBox.getChildren().add(OutputConsole);
 					 		
+					 		Label InputConLabel = new Label("Eingabefeld:");
+					 		InputConLabel.setFont(font);
+					 		txtVBox.getChildren().add(InputConLabel);
 							//Anzeige der EingabeConsole
 							InputConsole = new TextArea( 
 	//												"M03\r\n" + 
@@ -213,8 +218,7 @@ public class GUI extends Application{
 										if(CodeVerarbeitungStarten) {
 										Main.launchCodeRun(); 
 										}
-										CodeVerarbeitungStarten = false;
-										
+										CodeVerarbeitungStarten = false;										
 										if(timelineGrafik != null && timelineKoordinaten != null) {
 											if(timelineGrafik.getCurrentRate() == 0) {
 												timelineGrafik.play();
@@ -259,21 +263,47 @@ public class GUI extends Application{
 							
 						btnVBox.getChildren().add(notStopBtn);
 						
-						kuehlmitBtn = new Button("Dummy Button");
-							kuehlmitBtn.setPrefSize(btn_width, btn_height);
-							kuehlmitBtn.setFont(fontBold);
-							kuehlmitBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+						FileChooser fileChooser = new FileChooser();
+						
+						codeXMLBtn = new Button("XML Codes\nhinzufügen");
+							codeXMLBtn.setPrefSize(btn_width, btn_height);
+							codeXMLBtn.setFont(fontBold);
+							codeXMLBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 								@Override
 								public void handle(ActionEvent arg0) {
-									XML.readCodes();
-									clearAF();
-															
+									
+									try {
+									InputConsole.setText(XML.readCodes(fileChooser.showOpenDialog(primaryStage)));
+									OutputConsole.setText("XML-Datei erfolgreich geladen");
+									Codes.neubildenQueue(InputConsole.getText().split("\n"));
+									
+									}catch(Exception e) {
+									OutputConsole.setText("XML-Datei konnte nicht geladen werden\n-Bitte lesen Sie die Dokumentation");	
+									}
 								}
 							});
 	
-						btnVBox.getChildren().add(kuehlmitBtn);
+						btnVBox.getChildren().add(codeXMLBtn);
 						
-						
+						settingsXMLBtn = new Button("XML Settings\nhochladen");
+						settingsXMLBtn.setPrefSize(btn_width, btn_height);
+						settingsXMLBtn.setFont(fontBold);
+						settingsXMLBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent arg0) {
+								
+								setKuehlung(false);
+							
+//								try {
+//									XML.readSettings();							
+//								}catch(Exception e) {
+//									e.printStackTrace();
+//								OutputConsole.setText("XML-Datei konnte nicht geladen werden\n");	
+//								}
+							}
+						});
+
+					btnVBox.getChildren().add(settingsXMLBtn);
 						
 						// Dieser Button dient dazu, dass der eingegebne String in einen Code zerlegt wird.
 						Button addCodeBtn = new Button("Code\nhinzufügen");
@@ -283,17 +313,11 @@ public class GUI extends Application{
 							addCodeBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 								@Override
 								public void handle(ActionEvent arg0) {
-									
-									try {
+									OutputConsole.setText("");							
 									Codes.neubildenQueue(InputConsole.getText().split("\n"));
-									
-									}catch(Exception e) {
-
-									}
-									
+									InputConsole.setText("");
 								}
 							});
-							
 							
 						btnVBox.getChildren().add(addCodeBtn);
 						
@@ -302,7 +326,6 @@ public class GUI extends Application{
 							clearBtn.setFont(fontBold);
 							
 							clearBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
-	
 								@Override
 								public void handle(ActionEvent arg0) {
 									primaryStage.close();
@@ -311,8 +334,7 @@ public class GUI extends Application{
 							
 						btnVBox.getChildren().add(clearBtn);
 						VBox.setMargin(clearBtn, new Insets(0,0,15,0));
-						
-						
+												
 				ctrlBtnHBox.getChildren().add(btnVBox);
 			
 			steuerungsVBox.getChildren().add(ctrlBtnHBox);
@@ -323,12 +345,12 @@ public class GUI extends Application{
 		arbeitsF = new Pane();
 			arbeitsF.setMinSize(1400, 1050);
 			arbeitsF.setMaxSize(1400, 1050);
-			arbeitsF.setStyle("-fx-background-color: grey;");
-			
-			Circle HomePos = new Circle(Main.getHomePosX(),1050 - Main.getHomePosY(),7.5, Color.GREEN);
-			HomePos.toFront();
-			Kopf = new Circle(HomePos.getCenterX(),HomePos.getCenterY(),HomePos.getRadius(),Color.RED);
-			
+			arbeitsF.setStyle("-fx-background-color:" + Main.getColorArbeitsflaeche());
+		
+			HomePos = new Circle(Main.getHomePosX(),Main.getHomePosY(), Main.getRadius());
+			setCircleColor(Main.getColorHomePos(), HomePos);
+			Kopf = new Circle(HomePos.getCenterX(),HomePos.getCenterY(),HomePos.getRadius());
+			setCircleColor(Main.getColorBohrer(), Kopf);
 			
 			arbeitsF.getChildren().add(HomePos);
 		rootHBox.getChildren().add(arbeitsF);
@@ -341,9 +363,19 @@ public class GUI extends Application{
 		Scene scene = new Scene(rootHBox);
 		primaryStage.setScene(scene);
 
+		primaryStage.setFullScreen(true);
 
-//		primaryStage.setFullScreen(true);
 		primaryStage.show();
+		try {
+			XML.readSettings();
+		}catch(Exception e) {
+			
+		GUI.setTXTOutputConsole("XML-Datei konnte nicht geladen werden\nEs werden die initalen Settings verwendet\n-Bitte lesen Sie die Dokumenation-");	
+		}
+		refreshSpindel();
+		refreshDrehung();
+		setYLabel(1050-Main.getHomePosY());
+		setXLabel(Main.getHomePosX());
 	}
 	public static void main(String[] args) {
 		launch(args);
@@ -357,22 +389,19 @@ public class GUI extends Application{
 	public static void setKuehlung(boolean wert) {
 		Platform.runLater(()->{
 		if(wert) {
-			kuehlmitBtn.setText("Kühlmittel\ndeaktivieren");
 			kuehlmit.setText("aktiviert");
-		}else {
-			kuehlmitBtn.setText("Kühlmittel\naktivieren");
+		}else {			
 			kuehlmit.setText("deaktiviert");
-		}
-		});
-		
+		}});	
 	}
+	
 	/** Diese Methode nimmt die aktuelle Geschwindigkeit 
 	 * 	und aktualisert die GUI 
 	 *  Es wird auch dirket in Meter / min umgerechnet
 	 */
 	public static void setGeschwindigkeit() {
 		Platform.runLater(()->{
-			geschwin.setText(String.valueOf(Main.getAktGeschw()*60/1000));
+			geschwin.setText(String.valueOf((double)(Math.round((Main.getAktGeschw()*60/1000)*100))/100));
 		});
 	}
 	
@@ -395,6 +424,14 @@ public class GUI extends Application{
 		return width;
 	}
 	
+	public static void loadHomePos() {
+		HomePos.setCenterX(Main.getHomePosX());
+		HomePos.setCenterY(Main.getHomePosY());
+		Kopf.setCenterX(Main.getHomePosX());
+		Kopf.setCenterY(Main.getHomePosY());
+		setCircleColor(Main.getColorHomePos(), HomePos);
+		HomePos.toFront();
+	}
 	public static void writeConsole(String arg) {
 		InputConsole.setText(arg);
 	}
@@ -454,5 +491,56 @@ public class GUI extends Application{
 		timelineGrafik = null;
 		timelineKoordinaten = null;
 	}
-	
+	public static void setColorBohrer(String color) {
+		setCircleColor(color, Kopf);
+	}
+	public static void setColorHomePos(String color) {
+		setCircleColor(color, HomePos);
+	}
+	public static void setColorArbeitsflaeche(String color) {
+		arbeitsF.setStyle("-fx-background-color:"+ color);
+	}
+	private static void setCircleColor(String color, Circle cir) {
+		switch (color) {
+		case "grey": 
+			cir.setFill(Color.GREY);
+			break;
+		case "black": 
+			cir.setFill(Color.BLACK);
+			break;
+		case "white": 
+			cir.setFill(Color.WHITE);
+			break;
+		case "red": 
+			cir.setFill(Color.RED);
+			break;
+		case "green": 
+			cir.setFill(Color.GREEN);
+			break;
+		case "yellow": 
+			cir.setFill(Color.YELLOW);
+			break;
+		case "blue": 
+			cir.setFill(Color.BLUE);
+			break;
+		default:
+			OutputConsole.setText(OutputConsole.getText()+"\nFehler beim Einlesen der Settings\nungültige Farbe: "+color);
+		}
+	}
+	public static void refreshSpindel() {
+		Platform.runLater(()->{
+		if(Main.isSpindelAktiv()) {
+			spindelStatus.setText("aktiv");
+		}else {
+			spindelStatus.setText("deaktiviert");
+		}});
+	}
+	public static void refreshDrehung() {
+		Platform.runLater(()->{
+		if(Main.isSpindelRechtslaufAktiv()) {
+			drehRichtung.setText("Rechtsdrehung");
+		}else {
+			drehRichtung.setText("Linksdrehung");
+		}});
+	}
 }
