@@ -29,7 +29,7 @@ public class RegularExpression {
 			try {
 				
 				//Überprüfung, ob ein valider Code eingegeben wurde, sowie gültige Parameter (mit I, J, X, Y, sowie Zahl)
-			if(!Pattern.matches("((M00|m00|M02|m02|M03|m03|M04|m04|M05|m05|M08|m08|M13|m13|M14|m14)|(G00|g00|G01|g01|G02|g02|G03|g03|G28|g28))\\s*[XxYyJjIi0-9  -]*$",code)) {
+			if(!Pattern.matches("((M00|m00|M02|m02|M03|m03|M04|m04|M05|m05|M08|m08|M09|m09|M13|m13|M14|m14)|(G00|g00|G01|g01|G02|g02|G03|g03|G28|g28))\\s*[XxYyJjIi0-9  -]*$",code)) {
 				throw new IOException();
 				
 			}
