@@ -14,7 +14,7 @@ public class  Main {
 	private static double werkzeugDurchmesser = 15;
 	private static boolean spindelAktiv = false;
 	private static boolean kuehlungAktiv;
-	private static boolean spindelRechtslaufAktiv;
+	private static boolean spindelRechtslaufAktiv = true;
 	public static Thread codeRun = new Thread(new CodeVerarbeitung());
 	private static String colorHomePos = "green"; 
 	private static String colorBohrer = "red";
@@ -23,6 +23,7 @@ public class  Main {
 
 	public static void main(String[]args) {
 		GUI.main(args);
+	
 	}
 	
 	public static double getRadius() {

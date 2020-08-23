@@ -17,7 +17,7 @@ public class MCodes extends Codes {
 	
 	//Repräsentation von Code M02
 	public static void beendeProgramm() {
-		
+		GUI.closeCNC();
 	}
 	
 	//Repräsentation von Code M03 und M04 --> Mitgegeben wird die Richtung (Linksdrehung: 0, Rechtsdrehung: 1)
@@ -25,18 +25,21 @@ public class MCodes extends Codes {
 		Main.setSpindelAktiv(true);
 		Main.setSpindelRechtslaufAktiv(richtung);
 		System.out.println("M03");
+		CodeVerarbeitung.setBoolWeiter(true);
 	}
 	
 	//Repräsentation von Code M05
 	public static void schalteSpindelAus() {
 		Main.setSpindelAktiv(false);
 		System.out.println("M05");
+		CodeVerarbeitung.setBoolWeiter(true);
 	}
 	
 	//Repräsentation von Code M08/M09 --> Mitgegeben wird gewünschter Status (An/Aus)
 	public static void schalteKuelmittel(boolean onoff) {
 		Main.setKuehlungAktiv(onoff);
 		System.out.println("M08/09");
+		CodeVerarbeitung.setBoolWeiter(true);
 	}
 	
 }

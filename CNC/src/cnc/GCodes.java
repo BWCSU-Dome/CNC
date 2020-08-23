@@ -17,6 +17,7 @@ public class GCodes extends Codes {
 	static double aktuellePosY;
 	private static int alreadyCheckedGCodes = 0;
 	private static boolean erfolgreich = false;
+	private static boolean eilgang = false;
 
 	
 	static public boolean checkFahrenEilgang(double... param) {
@@ -52,15 +53,25 @@ public class GCodes extends Codes {
 	//Repräsentation von Code G00.
 	static public void fahrenEilgang(boolean simulation, double... param) {
 		
+		eilgang = true;
+		System.out.println(Main.getAktGeschw());
 		double x = param[0];
 		double y = param[1];
 		
 		if(!simulation) {
-			//LineAnimation.LineFahrt(x, y);
+			LineAnimation.lineJustKreis(x,y);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			eilgang = false;
 		} else {
 			aenderungKoorX = x;
 			aenderungKoorY = y;
 		}
+
 		
 }
 		
@@ -204,8 +215,8 @@ public class GCodes extends Codes {
 	
 	//Repräsentation von Code G28.
 	static public void fahrenZuHome() {
-		
-		fahrenEilgang(false, Main.getHomePosX(), Main.getHomePosY());		//Rufe die fahrenEilgang-Methode auf mit den Koordinaten des Homepunkts.
+		System.out.println("G28 " + Main.getHomePosY());
+		fahrenEilgang(false, Main.getHomePosX(), 1050-Main.getHomePosY());		//Rufe die fahrenEilgang-Methode auf mit den Koordinaten des Homepunkts.
 																	//Check von Machbarkeit erfolgt in der Methode zum Fahren im Eilgang
 	}
 	
@@ -312,6 +323,10 @@ public class GCodes extends Codes {
 	
 	static public void resetAlreadyCheckedCodes() {
 		alreadyCheckedGCodes = 0;
+	}
+	
+	public static boolean getEilgang() {
+		return eilgang;
 	}
 	
 }

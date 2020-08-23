@@ -202,8 +202,6 @@ public class Codes {
 				addStringToOutput("Fehlerhafter Code: " + stringEingang);	//Sonst Textausgabe in GUI und das Zurückrollen der vorher geprüften Codes anstarten
 				abbrechenEnqueueing();
 			}
-			
-			
 	}
 	
 	/**
@@ -212,7 +210,6 @@ public class Codes {
 	 */
 	
 	protected static void simuliereBefehl(int befehlNr) {
-		
 		double[] parameter = new double[4];
 		
 		befehlEingangDo = befehlEingangEnqueue;
@@ -236,7 +233,6 @@ public class Codes {
 				doGCodes(true, befehl, parameter);		
 				break;
 			}
-			
 	}
 	
 	

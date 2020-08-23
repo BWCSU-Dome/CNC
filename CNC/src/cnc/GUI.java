@@ -36,7 +36,7 @@ import javafx.stage.Stage;
 
 public class GUI extends Application{
 
-	private Stage primaryStage;
+	private static Stage primaryStage;
 	private Font font = new Font("Arial",17);
 	private Font fontBold = new Font("Arial BOLD" ,17);
 	public static Pane arbeitsF;
@@ -246,6 +246,20 @@ public class GUI extends Application{
 							notStopBtn.setFont(new Font("Arial BOLD" ,22));
 							notStopBtn.setPrefSize(btn_width, btn_height);
 							
+							notStopBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+								@Override
+								public void handle(ActionEvent arg0) {
+									Main.setKuehlungAktiv(false);
+									Main.setSpindelAktiv(false);
+									CodeVerarbeitung.emptyQueue();
+									timelineGrafik.pause();
+									timelineKoordinaten.pause();
+									clearTimelines();
+									OutputConsole.setText("--FRÄSE ERFOLGREICH ANGEHALTEN--"
+														 + "\nBitte Programm neustarten");
+								}
+							});
+							
 							//Diese Aktionen dienen dazu, dass der Button seine Farbe beim Betreten/Verlassen der Maus ändert
 							notStopBtn.setOnMouseEntered((EventHandler<Event>) new EventHandler<>() {
 								
@@ -285,14 +299,14 @@ public class GUI extends Application{
 	
 						btnVBox.getChildren().add(codeXMLBtn);
 						
-						settingsXMLBtn = new Button("XML Settings\nhochladen");
+						settingsXMLBtn = new Button("XML Settings\naktualisieren");
 						settingsXMLBtn.setPrefSize(btn_width, btn_height);
 						settingsXMLBtn.setFont(fontBold);
 						settingsXMLBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 							@Override
 							public void handle(ActionEvent arg0) {
 								
-								setKuehlung(false);
+							
 							
 //								try {
 //									XML.readSettings();							
@@ -542,5 +556,10 @@ public class GUI extends Application{
 		}else {
 			drehRichtung.setText("Linksdrehung");
 		}});
+	}
+	public static void closeCNC() {
+		Platform.runLater(()->{
+		primaryStage.close();
+		});
 	}
 }
