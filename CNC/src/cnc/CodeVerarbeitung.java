@@ -69,8 +69,6 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 				}
 			}
 			
-//			Codes.exportCode(queue.get(0));
-			
 			String doneBefehl="";
 
 //			Wenn ein Parameter leer war (-10001) dann umformen in leer

@@ -24,21 +24,18 @@ public class MCodes extends Codes {
 	public static void schalteSpindelAn(boolean richtung) {
 		Main.setSpindelAktiv(true);
 		Main.setSpindelRechtslaufAktiv(richtung);
-		System.out.println("M03");
 		CodeVerarbeitung.setBoolWeiter(true);
 	}
 	
 	//Repräsentation von Code M05
 	public static void schalteSpindelAus() {
 		Main.setSpindelAktiv(false);
-		System.out.println("M05");
 		CodeVerarbeitung.setBoolWeiter(true);
 	}
 	
 	//Repräsentation von Code M08/M09 --> Mitgegeben wird gewünschter Status (An/Aus)
 	public static void schalteKuelmittel(boolean onoff) {
 		Main.setKuehlungAktiv(onoff);
-		System.out.println("M08/09");
 		CodeVerarbeitung.setBoolWeiter(true);
 	}
 	
