@@ -1,7 +1,5 @@
 package cnc;
 
-import java.io.File;
-
 public class  Main {
 	private static double posX = 0;
 	private static double posY = 0;
