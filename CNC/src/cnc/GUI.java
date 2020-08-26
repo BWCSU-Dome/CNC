@@ -2,6 +2,7 @@ package cnc;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 import javafx.animation.Animation.Status;
 import javafx.animation.Timeline;
@@ -370,7 +371,7 @@ public class GUI extends Application{
 		rootHBox.getChildren().add(arbeitsF);
 		
 		//Dieser Teil dient dazu, dass ein kleines Icon angezeigt wird.
-		FileInputStream fip = new FileInputStream("files/ressources/CnC_klein.png");
+		InputStream fip = this.getClass().getResourceAsStream("/ressources/CnC_klein.png");
 		Image zahnrad= new Image(fip);
 		primaryStage.getIcons().add(zahnrad);
 		

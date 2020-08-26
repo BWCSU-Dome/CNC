@@ -54,7 +54,6 @@ public class GCodes extends Codes {
 	static public void fahrenEilgang(boolean simulation, double... param) {
 		
 		eilgang = true;
-		System.out.println(Main.getAktGeschw());
 		double x = param[0];
 		double y = param[1];
 		
@@ -133,7 +132,6 @@ public class GCodes extends Codes {
 			pruefeMissingEingabeparameter(false, x, y, i, j);
 			
 		} catch(MissingParameterException m) {
-			System.out.println("Es fehlen Parameter. Für einen Kreisbogen werden x, y, i und j benötigt.");
 			return false;
 		}
 		
@@ -176,7 +174,6 @@ public class GCodes extends Codes {
 			pruefeMissingEingabeparameter(false, x, y, i, j);
 			
 		} catch(MissingParameterException m) {
-			System.out.println("Es fehlen Parameter. Für einen Kreisbogen werden x, y, i und j benötigt.");
 			erfolgreich = false;
 			return erfolgreich;
 		}
@@ -215,7 +212,6 @@ public class GCodes extends Codes {
 	
 	//Repräsentation von Code G28.
 	static public void fahrenZuHome() {
-		System.out.println("G28 " + Main.getHomePosY());
 		fahrenEilgang(false, Main.getHomePosX(), 1050-Main.getHomePosY());		//Rufe die fahrenEilgang-Methode auf mit den Koordinaten des Homepunkts.
 																	//Check von Machbarkeit erfolgt in der Methode zum Fahren im Eilgang
 	}
@@ -311,7 +307,6 @@ public class GCodes extends Codes {
 		 double neuePosX = aenderungKoorX;
 		 double neuePosY = aenderungKoorY;
 		 zukuenftigePosNachSchritt.add(neuePosX + " " + neuePosY);
-		 System.out.println("Predicted Pos X:" + neuePosX + " Y:" + neuePosY);
 		 
 	}
 	

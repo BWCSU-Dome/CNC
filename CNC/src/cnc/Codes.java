@@ -133,53 +133,11 @@ public class Codes {
 		}
 			}
 			
-			//fügt gegegebenfalls noch Parameterbezeichnung vor Wert ein -> zu Testzwecken
-//		for(int i=0; i < befehl.length; i++) {
-//			switch(i) {
-//			case 0:
-//				if(befehl[i].startsWith("G") || befehl[i].startsWith("M"))
-//					continue;
-//				
-//				break;
-//				
-//			case 1:
-//				if(befehl[i].startsWith("X"))
-//					continue;
-//				
-//				befehl[i] = "X" + befehl[i];
-//				break;
-//				
-//			case 2:
-//				if(befehl[i].startsWith("Y"))
-//					continue;
-//				
-//				befehl[i] = "Y" + befehl[i];
-//				break;
-//				
-//			case 3:
-//				if(befehl[i].startsWith("I"))
-//					continue;
-//				
-//				befehl[i] = "I" + befehl[i];
-//				break;
-//				
-//			case 4:
-//				if(befehl[i].startsWith("J"))
-//					continue;
-//				
-//				befehl[i] = "J" + befehl[i];
-//				break;
-//				
-//			}
-//		}
 		
 		for(int i=0; i < parameter.length; i++) {
 			parameter[i] = Double.parseDouble(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
 			}
 		
-		for(int i = 0; i < befehl.length; i++) {
-			System.out.println(befehl[i]);				//Testweise Ausgabe des Array-Inhalts
-			}
 		
 		
 	boolean successful = false;
@@ -271,8 +229,6 @@ public class Codes {
 	}
 		
 		if(!simulation)
-		System.out.println(code[0] + " " + code[1] + " " + code[2] + " " + code[3] + " " + code[4] + " " + "ausgeführt");
-		
 		doRunning = false;
 		return;
 
@@ -328,9 +284,6 @@ public class Codes {
 		Main.setSpindelRechtslaufAktiv(false);
 		MCodes.schalteKuelmittel(true);
 			break;
-			
-		default:
-			System.out.println("MCode-Fehler");	//Fehler sollte hier gar nicht mehr auftreten können. Bitte Meldung, falls das der Fall sein sollte.
 		}
 		
 		doRunning = false;
@@ -371,7 +324,6 @@ public class Codes {
 			
 		
 		default:
-		System.out.println("GCode-Fehler");
 		return false;
 	}
 	

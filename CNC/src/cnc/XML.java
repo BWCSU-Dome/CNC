@@ -1,6 +1,17 @@
 package cnc;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -35,7 +46,7 @@ public class XML {
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("files/ressources/CNC-LogDatei.xml"));
+			StreamResult result = new StreamResult(new File(getXMLPath() + " CNC-LogDatei.xml"));
 			transformer.transform(source, result);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,10 +75,10 @@ public class XML {
 		
 		double new_homePosX, new_homePosY, geschwindschnell, geschwindlangsam, geschwindfahrt; 
 		String farbeBohrer, farbeHomePos, farbeArbeitsflaeche;
-		
+
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
-		Document doc = builder.parse(new File("files/ressources/CnCsettings.xml"));
+		Document doc = builder.parse(new File(getXMLPath() + " CnCsettings.xml"));
 		int index = 0;
 
 		NodeList settingsNodelist = doc.getElementsByTagName("CnC-Fraese");
@@ -86,5 +97,21 @@ public class XML {
 							geschwindfahrt, farbeBohrer, farbeHomePos, farbeArbeitsflaeche);
 	}
 	
+	private static String getXMLPath(){
+		String decodedPath=null;
+		String path = XML.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		try {
+			decodedPath = URLDecoder.decode(path, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return decodedPath;
+		
+	}
 	
-}
+	}
+	
+	
+
