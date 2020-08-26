@@ -299,25 +299,6 @@ public class GUI extends Application{
 	
 						btnVBox.getChildren().add(codeXMLBtn);
 						
-						settingsXMLBtn = new Button("XML Settings\naktualisieren");
-						settingsXMLBtn.setPrefSize(btn_width, btn_height);
-						settingsXMLBtn.setFont(fontBold);
-						settingsXMLBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
-							@Override
-							public void handle(ActionEvent arg0) {
-								
-							
-							
-//								try {
-//									XML.readSettings();							
-//								}catch(Exception e) {
-//									e.printStackTrace();
-//								OutputConsole.setText("XML-Datei konnte nicht geladen werden\n");	
-//								}
-							}
-						});
-
-					btnVBox.getChildren().add(settingsXMLBtn);
 						
 						// Dieser Button dient dazu, dass der eingegebne String in einen Code zerlegt wird.
 						Button addCodeBtn = new Button("Code\nhinzufügen");
