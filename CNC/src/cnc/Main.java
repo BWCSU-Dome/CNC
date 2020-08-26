@@ -206,36 +206,18 @@ public class Main {
 		colorBohrer = farbeBohrer;
 		colorHomePos = farbeHomePos;
 
-		if (0 <= new_homePosX && new_homePosX <= 1050) {
-			setHomePosX(new_homePosX);
-		} else {
-			throw new falscheWerteXMLException("HomePosX");
-		}
-		if (0 <= new_homePosY && new_homePosY <= 1050) {
-			setHomePosY(new_homePosY);
-		} else {
-			throw new falscheWerteXMLException("HomePosY");
-		}
+		setHomePosX(new_homePosX);
+		setHomePosY(new_homePosY);
+		
+	
 		setHomePosY(1050 - new_homePosY);
 		GUI.loadHomePos();
-		
-		if(0<geschwindschnell && geschwindschnell<=5) {
 		setGeschwind_schnell(geschwindschnell);
-		}else {
-			System.out.println(geschwindschnell);
-			System.out.println("WTF");
-			throw new falscheWerteXMLException("Geschwinigkeit-schnell");
-		}
-		if(0<geschwindlangsam && geschwindlangsam <=4) {
 		setGeschwind_langsam(geschwindlangsam);
-		}else {
-			throw new falscheWerteXMLException("Geschwinigkeit-langsam");
-		}
-		if(0<geschwindfahrt && geschwindfahrt <=8) {
+		
+		
 		setGeschwind_fahrt(geschwindfahrt);
-		}else {
-			throw new falscheWerteXMLException("Geschwinigkeit-Fahrt");
-		}
+		
 		setAktGeschwind_langsam();
 		GUI.setColorBohrer(farbeBohrer);
 		GUI.setColorHomePos(farbeHomePos);

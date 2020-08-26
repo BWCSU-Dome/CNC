@@ -400,8 +400,7 @@ public class GUI extends Application{
 		}catch(Exception e) {
 			setTXTOutputConsole("XML-Datei konnte nicht geladen werden\nEs werden die initalen Settings verwendet\n-Bitte lesen Sie die Dokumentation-");
 		}
-			
-		
+
 		refreshSpindel();
 		refreshDrehung();
 		setYLabel(1050-Main.getHomePosY());
@@ -558,8 +557,6 @@ public class GUI extends Application{
 		case "blue": 
 			cir.setFill(Color.BLUE);
 			break;
-		default:
-			OutputConsole.setText("\nFehler beim Einlesen der Settings\nungültige Farbe: "+color);
 		}
 	}
 	public static void refreshSpindel() {
