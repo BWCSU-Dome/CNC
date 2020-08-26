@@ -317,19 +317,38 @@ public class GUI extends Application{
 							
 						btnVBox.getChildren().add(addCodeBtn);
 						
-						Button clearBtn = new Button("Anwendung\nbeenden"); /// Im Moment Fenter schließen
-							clearBtn.setPrefSize(btn_width, btn_height);
-							clearBtn.setFont(fontBold);
-							
-							clearBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
-								@Override
-								public void handle(ActionEvent arg0) {
-									primaryStage.close();
+						Button clearBtn = new Button("Arbeitsfläche\nzurücksetzen"); 
+						clearBtn.setPrefSize(btn_width, btn_height);
+						clearBtn.setFont(fontBold);
+						
+						clearBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent arg0) {
+								if(startBtn.getText()=="Start") {
+								arbeitsF.getChildren().clear();
+								Kopf = new Circle(HomePos.getCenterX(),HomePos.getCenterY(),HomePos.getRadius());
+								setCircleColor(Main.getColorBohrer(), Kopf);
+								arbeitsF.getChildren().addAll(HomePos,Kopf);
 								}
-							});
-							
-						btnVBox.getChildren().add(clearBtn);
-						VBox.setMargin(clearBtn, new Insets(0,0,15,0));
+							}
+						});
+						
+					btnVBox.getChildren().add(clearBtn);
+					
+					Button closeBtn = new Button("Anwendung\nbeenden");
+					closeBtn.setPrefSize(btn_width, btn_height);
+					closeBtn.setFont(fontBold);
+					
+					closeBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent arg0) {
+							primaryStage.close();
+						}
+					});
+					
+				btnVBox.getChildren().add(closeBtn);
+				
+						VBox.setMargin(closeBtn, new Insets(0,0,15,0));
 												
 				ctrlBtnHBox.getChildren().add(btnVBox);
 			
