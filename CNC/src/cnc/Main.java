@@ -1,31 +1,30 @@
 package cnc;
 
-public class  Main {
+public class Main {
 	private static double posX = 0;
 	private static double posY = 0;
 	private static double homePosX = 0;
 	private static double homePosY = 1050;
-	private static double geschwind_schnell = 3000/60; //3000 cm pro 60 sek
-	private static double geschwind_langsam = 2000/60; //2
-	private static double geschwind_fahrt = 4000/60;   //4
+	private static double geschwind_schnell = 3000 / 60; // 3000 cm pro 60 sek
+	private static double geschwind_langsam = 2000 / 60; // 2
+	private static double geschwind_fahrt = 4000 / 60; // 4
 	private static double aktGeschwin = geschwind_langsam;
 	private static double werkzeugDurchmesser = 15;
 	private static boolean spindelAktiv = false;
 	private static boolean kuehlungAktiv;
 	private static boolean spindelRechtslaufAktiv = true;
 	public static Thread codeRun = new Thread(new CodeVerarbeitung());
-	private static String colorHomePos = "green"; 
+	private static String colorHomePos = "green";
 	private static String colorBohrer = "red";
 	private static String colorArbeitsflaeche = "grey";
-	
 
-	public static void main(String[]args) {
+	public static void main(String[] args) {
 		GUI.main(args);
-	
+
 	}
-	
+
 	public static double getRadius() {
-		return werkzeugDurchmesser/2;
+		return werkzeugDurchmesser / 2;
 	}
 
 	public static double getHomePosX() {
@@ -47,32 +46,34 @@ public class  Main {
 	public static double getAktGeschw() {
 		return aktGeschwin;
 	}
+
 	public static void setGeschwind_fahrt(double geschwindfahrt) {
-		geschwind_fahrt = geschwindfahrt;		
-	}
-	
-	public static void setGeschwind_langsam(double geschwindlangsam) {
-		geschwind_langsam = geschwindlangsam;
-		
-	}
-	public static void setGeschwind_schnell(double geschwindschnell) {
-		geschwind_schnell = geschwindschnell;	
+		geschwind_fahrt = geschwindfahrt;
 	}
 
-		public static void setAktGeschwind_langsam() {
-			aktGeschwin = geschwind_langsam;
-			GUI.setGeschwindigkeit();
-		}
-	
-		public static void setAktGeschwind_fahrt() {
-			aktGeschwin = geschwind_fahrt;
-			GUI.setGeschwindigkeit();
-		}
-		
-		public static void setAktGeschwind_schnell() {
-			aktGeschwin = geschwind_schnell;
-			GUI.setGeschwindigkeit();
-		}
+	public static void setGeschwind_langsam(double geschwindlangsam) {
+		geschwind_langsam = geschwindlangsam;
+
+	}
+
+	public static void setGeschwind_schnell(double geschwindschnell) {
+		geschwind_schnell = geschwindschnell;
+	}
+
+	public static void setAktGeschwind_langsam() {
+		aktGeschwin = geschwind_langsam;
+		GUI.setGeschwindigkeit();
+	}
+
+	public static void setAktGeschwind_fahrt() {
+		aktGeschwin = geschwind_fahrt;
+		GUI.setGeschwindigkeit();
+	}
+
+	public static void setAktGeschwind_schnell() {
+		aktGeschwin = geschwind_schnell;
+		GUI.setGeschwindigkeit();
+	}
 
 	public static double getWerkzeugDurchmesser() {
 		return werkzeugDurchmesser;
@@ -87,43 +88,43 @@ public class  Main {
 		GUI.refreshSpindel();
 	}
 
-
 	public static boolean isKuehlungAktiv() {
 		return kuehlungAktiv;
 	}
-	
-	/** Gibt den Wert von KuehlungAktiv als Text
+
+	/**
+	 * Gibt den Wert von KuehlungAktiv als Text
+	 * 
 	 * @return "aktiviert" oder "deaktiviert"
 	 */
 	public static String getKuehlungAktiv() {
-		
-		if(kuehlungAktiv) {
+
+		if (kuehlungAktiv) {
 			return "aktiviert";
-		}else {
+		} else {
 			return "deaktiviert";
 		}
 	}
-	
 
-	/**Diese Methode verändert den Wert der Kühlung in der Main / GUI 
-	 * und setzt die aktuelle Geschwindigkeit auf schnell/langsam;
-	 * @param new_kuehlungAktiv 
+	/**
+	 * Diese Methode verändert den Wert der Kühlung in der Main / GUI und setzt die
+	 * aktuelle Geschwindigkeit auf schnell/langsam;
+	 * 
+	 * @param new_kuehlungAktiv
 	 */
 	public static void setKuehlungAktiv(boolean new_kuehlungAktiv) {
 		kuehlungAktiv = new_kuehlungAktiv;
 		GUI.setKuehlung(kuehlungAktiv);
-		if(new_kuehlungAktiv) {
+		if (new_kuehlungAktiv) {
 			setAktGeschwind_schnell();
 		} else {
 			setAktGeschwind_langsam();
 		}
 	}
 
-
 	public static boolean isSpindelRechtslaufAktiv() {
 		return spindelRechtslaufAktiv;
 	}
-
 
 	public static void setSpindelRechtslaufAktiv(boolean new_spindelRechtslaufAktiv) {
 		spindelRechtslaufAktiv = new_spindelRechtslaufAktiv;
@@ -145,28 +146,26 @@ public class  Main {
 	public static void setPosY(double posY) {
 		Main.posY = posY;
 	}
-	
+
 	public static void launchCodeRun() {
 		codeRun.start();
 	}
-	
+
 	public static void stopCodeRun() {
 
-			try {
-				codeRun.sleep((long) 500000.00);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		try {
+			codeRun.sleep((long) 500000.00);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
-	
+
 	public static void initializeThreadVerarbeitung() {
 		codeRun = new Thread(new CodeVerarbeitung());
 	}
-	
-	
-	
+
 	public static double getGeschwind_schnell() {
 		return geschwind_schnell;
 	}
@@ -199,22 +198,45 @@ public class  Main {
 		return colorArbeitsflaeche;
 	}
 
-	public static void assignSettings(double new_homePosX,double new_homePosY, double geschwindschnell, 
-									  double geschwindlangsam, double geschwindfahrt, String farbeBohrer, 
-									  String farbeHomePos, String farbeArbeitsflaeche) {
-		
+	public static void assignSettings(double new_homePosX, double new_homePosY, double geschwindschnell,
+			double geschwindlangsam, double geschwindfahrt, String farbeBohrer, String farbeHomePos,
+			String farbeArbeitsflaeche) throws falscheWerteXMLException {
+
 		colorArbeitsflaeche = farbeArbeitsflaeche;
 		colorBohrer = farbeBohrer;
 		colorHomePos = farbeHomePos;
 
-		setHomePosX(new_homePosX);
-		setHomePosY(1050-new_homePosY);
+		if (0 <= new_homePosX && new_homePosX <= 1050) {
+			setHomePosX(new_homePosX);
+		} else {
+			throw new falscheWerteXMLException("HomePosX");
+		}
+		if (0 <= new_homePosY && new_homePosY <= 1050) {
+			setHomePosY(new_homePosY);
+		} else {
+			throw new falscheWerteXMLException("HomePosY");
+		}
+		setHomePosY(1050 - new_homePosY);
 		GUI.loadHomePos();
 		
+		if(0<geschwindschnell && geschwindschnell<=5) {
 		setGeschwind_schnell(geschwindschnell);
+		}else {
+			System.out.println(geschwindschnell);
+			System.out.println("WTF");
+			throw new falscheWerteXMLException("Geschwinigkeit-schnell");
+		}
+		if(0<geschwindlangsam && geschwindlangsam <=4) {
 		setGeschwind_langsam(geschwindlangsam);
+		}else {
+			throw new falscheWerteXMLException("Geschwinigkeit-langsam");
+		}
+		if(0<geschwindfahrt && geschwindfahrt <=8) {
 		setGeschwind_fahrt(geschwindfahrt);
-		  setAktGeschwind_langsam();
+		}else {
+			throw new falscheWerteXMLException("Geschwinigkeit-Fahrt");
+		}
+		setAktGeschwind_langsam();
 		GUI.setColorBohrer(farbeBohrer);
 		GUI.setColorHomePos(farbeHomePos);
 		GUI.setColorArbeitsflaeche(farbeArbeitsflaeche);

@@ -25,6 +25,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class XML {
 
@@ -71,7 +72,7 @@ public class XML {
 			return befehlEingabe;
 	}
 	
-	public static void readSettings() throws Exception {
+	public static void readSettings() throws falscheWerteXMLException, ParserConfigurationException, SAXException, IOException  {
 		
 		double new_homePosX, new_homePosY, geschwindschnell, geschwindlangsam, geschwindfahrt; 
 		String farbeBohrer, farbeHomePos, farbeArbeitsflaeche;

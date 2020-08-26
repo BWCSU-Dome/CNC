@@ -2,7 +2,12 @@ package cnc;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import javafx.animation.Animation.Status;
 import javafx.animation.Timeline;
@@ -53,13 +58,14 @@ public class GUI extends Application{
 	public static Button startBtn;
 	private static File choosenFile;
 	private static Circle HomePos;
+	private static Boolean timelineIsFinish;
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
 			primaryStage.setHeight(height);
 			primaryStage.setWidth(width);
 			primaryStage.setTitle("Computerized Numerical Control");
-		
+
 		//Das ist die WurzelGruppe
 		HBox rootHBox = new HBox();
 		
@@ -180,8 +186,8 @@ public class GUI extends Application{
 					 		txtVBox.getChildren().add(InputConLabel);
 							//Anzeige der EingabeConsole
 							InputConsole = new TextArea( 
-	//												"M03\r\n" + 
-	//												"M08\r\n" + 
+													"M03\r\n" + 
+													"M08\r\n" + 
 													"G01 X100 Y200\r\n"  +
 	//												"G02 X700 Y500 I500 J0\r\n" + 
 													"G01 X300 Y10\r\n" +
@@ -224,6 +230,7 @@ public class GUI extends Application{
 											if(timelineGrafik.getCurrentRate() == 0) {
 												timelineGrafik.play();
 												timelineKoordinaten.play();
+												
 											}
 										}
 										break;
@@ -240,6 +247,8 @@ public class GUI extends Application{
 								}
 							});
 							
+							
+						
 						btnVBox.getChildren().add(startBtn);
 
 						Button notStopBtn = new Button("Not - Stop");
@@ -329,6 +338,8 @@ public class GUI extends Application{
 								Kopf = new Circle(HomePos.getCenterX(),HomePos.getCenterY(),HomePos.getRadius());
 								setCircleColor(Main.getColorBohrer(), Kopf);
 								arbeitsF.getChildren().addAll(HomePos,Kopf);
+								timelineGrafik = new Timeline();
+								timelineKoordinaten = new Timeline();
 								}
 							}
 						});
@@ -381,17 +392,23 @@ public class GUI extends Application{
 		primaryStage.setFullScreen(true);
 
 		primaryStage.show();
+
 		try {
 			XML.readSettings();
+		}catch(falscheWerteXMLException e){
+			//do nothing
 		}catch(Exception e) {
-			
-		GUI.setTXTOutputConsole("XML-Datei konnte nicht geladen werden\nEs werden die initalen Settings verwendet\n-Bitte lesen Sie die Dokumentation-");	
+			setTXTOutputConsole("XML-Datei konnte nicht geladen werden\nEs werden die initalen Settings verwendet\n-Bitte lesen Sie die Dokumentation-");
 		}
+			
+		
 		refreshSpindel();
 		refreshDrehung();
 		setYLabel(1050-Main.getHomePosY());
 		setXLabel(Main.getHomePosX());
+		System.out.println("test");
 	}
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -438,7 +455,9 @@ public class GUI extends Application{
 	public static int getWidth() {
 		return width;
 	}
-	
+	public static Double getTimelineRate() {
+		return timelineGrafik.getCurrentRate();
+	}
 	public static void loadHomePos() {
 		HomePos.setCenterX(Main.getHomePosX());
 		HomePos.setCenterY(Main.getHomePosY());
@@ -498,6 +517,7 @@ public class GUI extends Application{
 		timelineKoordinaten = tKoordinaten;
 		timelineGrafik.play();
 		timelineKoordinaten.play();
+		timelineIsFinish = false;
 	}
 	public static void setCodeVerarbeitungStartenTrue() {
 		CodeVerarbeitungStarten = true;
@@ -539,7 +559,7 @@ public class GUI extends Application{
 			cir.setFill(Color.BLUE);
 			break;
 		default:
-			OutputConsole.setText(OutputConsole.getText()+"\nFehler beim Einlesen der Settings\nungültige Farbe: "+color);
+			OutputConsole.setText("\nFehler beim Einlesen der Settings\nungültige Farbe: "+color);
 		}
 	}
 	public static void refreshSpindel() {
@@ -562,5 +582,8 @@ public class GUI extends Application{
 		Platform.runLater(()->{
 		primaryStage.close();
 		});
+	}
+	public static Boolean getTimelineIsFinish() {
+		return timelineIsFinish;
 	}
 }

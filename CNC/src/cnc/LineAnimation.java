@@ -82,7 +82,7 @@ public class LineAnimation extends Animation{
 		
 		GUI.setKopfX(xEnd);
 		GUI.setKopfY(GUI.getHeight() - yEnd);
-		System.out.println(GUI.getHeight() - yEnd);
+
 	
 		});
 	}
