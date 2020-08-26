@@ -78,7 +78,7 @@ public class XML {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
-		Document doc = builder.parse(new File(getXMLPath() + " CnCsettings.xml"));
+		Document doc = builder.parse(new File("files/ressources/CnCsettings.xml"));
 		int index = 0;
 
 		NodeList settingsNodelist = doc.getElementsByTagName("CnC-Fraese");

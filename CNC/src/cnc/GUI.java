@@ -366,7 +366,7 @@ public class GUI extends Application{
 			XML.readSettings();
 		}catch(Exception e) {
 			
-		GUI.setTXTOutputConsole("XML-Datei konnte nicht geladen werden\nEs werden die initalen Settings verwendet\n-Bitte lesen Sie die Dokumenation-");	
+		GUI.setTXTOutputConsole("XML-Datei konnte nicht geladen werden\nEs werden die initalen Settings verwendet\n-Bitte lesen Sie die Dokumentation-");	
 		}
 		refreshSpindel();
 		refreshDrehung();
