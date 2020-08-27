@@ -169,31 +169,31 @@ public class Codes {
 	 * @param befehlNr -> für welchen Befehl die Prüfung erfolgen soll
 	 */
 	
-	protected static void simuliereBefehl(int befehlNr) {
-		double[] parameter = new double[4];
-		
-		befehlEingangDo = befehlEingangEnqueue;
-		
-		System.arraycopy(befehlEingangDo, 0, befehl, 0, befehlEingangDo.length);
-		
-		// Es wird zur reibungslosen Weiterverarbeitung der Parameter ein Double-Array erzeugt
-		parameter = new double[befehl.length-1];
-				
-		
-		for(int i=0; i < parameter.length; i++) {
-			parameter[i] = Double.parseDouble(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
-			}
-			
-			//Unterscheidung, ob M- oder G-Code vorliegt (entschieden an mitgegebenem ersten Buchstaben)
-			switch(befehl[0].charAt(0)) {
-			case 'M':
-				doMCodes(befehl);
-				break;
-			case 'G':
-				doGCodes(true, befehl, parameter);		
-				break;
-			}
-	}
+//	protected static void simuliereBefehl(int befehlNr) {
+//		double[] parameter = new double[4];
+//		
+//		befehlEingangDo = befehlEingangEnqueue;
+//		
+//		System.arraycopy(befehlEingangDo, 0, befehl, 0, befehlEingangDo.length);
+//		
+//		// Es wird zur reibungslosen Weiterverarbeitung der Parameter ein Double-Array erzeugt
+//		parameter = new double[befehl.length-1];
+//				
+//		
+//		for(int i=0; i < parameter.length; i++) {
+//			parameter[i] = Double.parseDouble(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
+//			}
+//			
+//			//Unterscheidung, ob M- oder G-Code vorliegt (entschieden an mitgegebenem ersten Buchstaben)
+//			switch(befehl[0].charAt(0)) {
+//			case 'M':
+//				doMCodes(befehl);
+//				break;
+//			case 'G':
+//				doGCodes(true, befehl, parameter);		
+//				break;
+//			}
+//	}
 	
 	
 	/*
@@ -230,7 +230,7 @@ public class Codes {
 			break;
 	}
 		
-		if(!simulation)
+		
 		doRunning = false;
 		return;
 
@@ -310,7 +310,7 @@ public class Codes {
 		
 			
 		case "G01":
-		return(GCodes.checkFahrenGerade(parameter));
+		return(GCodes.checkFahrenEilgang(parameter));
 			
 			
 		case "G02":

@@ -19,8 +19,8 @@ public class GCodes extends Codes {
 	private static boolean erfolgreich = false;
 	private static boolean eilgang = false;
 
-	
-	static public boolean checkFahrenEilgang(double... param) {
+	//Überprüft die geplante Fahrbewegung des Codes G00
+	static public boolean checkFahrenEilgang(double[] param) {
 		double x = param[0];
 		double y = param[1];
 		
@@ -31,7 +31,6 @@ public class GCodes extends Codes {
 		} catch (MissingParameterException e) {
 
 			//Kein Parameter wurde mitgegeben --> Keine Fahrt möglich
-			
 			erfolgreich = false;
 			return erfolgreich;
 		}
@@ -75,33 +74,33 @@ public class GCodes extends Codes {
 }
 		
 	
-	static public boolean checkFahrenGerade(double[] param) {
-		
-		double x = param[0];
-		double y = param[1];
-		
-		try {
-			
-			pruefeMissingEingabeparameter(true, x, y);
-			
-		}
-			catch (MissingParameterException e) {
-			
-				erfolgreich = false;
-				return erfolgreich;
-			}
-	
-		
-		try {
-			pruefeFahrbewegung(x, y);
-		} catch(OutOfAreaException e) {
-		erfolgreich = false;
-		return erfolgreich;
-		}
-		erfolgreich = true;
-		return erfolgreich;
-		
-	}
+//	static public boolean checkFahrenGerade(double[] param) {
+//		
+//		double x = param[0];
+//		double y = param[1];
+//		
+//		try {
+//			
+//			pruefeMissingEingabeparameter(true, x, y);
+//			
+//		}
+//			catch (MissingParameterException e) {
+//			
+//				erfolgreich = false;
+//				return erfolgreich;
+//			}
+//	
+//		
+//		try {
+//			pruefeFahrbewegung(x, y);
+//		} catch(OutOfAreaException e) {
+//		erfolgreich = false;
+//		return erfolgreich;
+//		}
+//		erfolgreich = true;
+//		return erfolgreich;
+//		
+//	}
 	
 	
 	
@@ -228,13 +227,13 @@ public class GCodes extends Codes {
 		double boundX = GUI.getWidth();
 		double boundY = GUI.getHeight();
 		
-		getZukuenftigePos(Codes.getQueueSize());
+//		getZukuenftigePos(Codes.getQueueSize());
 		
-		double newXKoor = xKoor;
-		double newYKoor = yKoor;
+//		double newXKoor = xKoor;
+//		double newYKoor = yKoor;
 		
 		
-				if(newXKoor > boundX || newXKoor < 0 ||  newYKoor > boundY || newYKoor < 0) {
+				if(xKoor > boundX || xKoor < 0 ||  yKoor > boundY || yKoor < 0) {
 					alreadyCheckedGCodes--;
 					zukuenftigePosNachSchritt.remove(zukuenftigePosNachSchritt.size()-1);
 					erfolgreich = false;
@@ -276,39 +275,39 @@ public class GCodes extends Codes {
 		
 	}
 	
-	
-	static public void getZukuenftigePos(int stelleInArray) {
-		
-		if(Codes.getEnqueuedGCodes() == 0 && stelleInArray == 0) {
-			aktuellePosX = Main.getPosX();
-			aktuellePosY = Main.getPosY();
-			zukuenftigePosNachSchritt.add(String.valueOf(Main.getPosX()) + " " + String.valueOf(Main.getPosY()));
-		}
-		
-		if((Codes.getEnqueuedGCodes() != 0 && stelleInArray == 0) || zukuenftigePosNachSchritt.size() == 0) {
-			
-			while(true) {
-				if(!Codes.IsDoRunning()) {
-					aktuellePosX = Main.getPosX();
-					aktuellePosY = Main.getPosY();
-					zukuenftigePosNachSchritt.add(String.valueOf(Main.getPosX()) + " " + String.valueOf(Main.getPosY()));
-					break;
-				}
-			}
-		}
-		
-		String[] koordinaten = zukuenftigePosNachSchritt.get(alreadyCheckedGCodes).split(" ");
-		alreadyCheckedGCodes++;
-		
-		aktuellePosX = Double.parseDouble(koordinaten[0]);
-		aktuellePosY = Double.parseDouble(koordinaten[1]);
-		
-		 Codes.simuliereBefehl( stelleInArray - 1);
-		 double neuePosX = aenderungKoorX;
-		 double neuePosY = aenderungKoorY;
-		 zukuenftigePosNachSchritt.add(neuePosX + " " + neuePosY);
-		 
-	}
+//	
+//	static public void getZukuenftigePos(int stelleInArray) {
+//		
+//		if(Codes.getEnqueuedGCodes() == 0 && stelleInArray == 0) {
+//			aktuellePosX = Main.getPosX();
+//			aktuellePosY = Main.getPosY();
+//			zukuenftigePosNachSchritt.add(String.valueOf(Main.getPosX()) + " " + String.valueOf(Main.getPosY()));
+//		}
+//		
+//		if((Codes.getEnqueuedGCodes() != 0 && stelleInArray == 0) || zukuenftigePosNachSchritt.size() == 0) {
+//			
+//			while(true) {
+//				if(!Codes.IsDoRunning()) {
+//					aktuellePosX = Main.getPosX();
+//					aktuellePosY = Main.getPosY();
+//					zukuenftigePosNachSchritt.add(String.valueOf(Main.getPosX()) + " " + String.valueOf(Main.getPosY()));
+//					break;
+//				}
+//			}
+//		}
+//		
+//		String[] koordinaten = zukuenftigePosNachSchritt.get(alreadyCheckedGCodes).split(" ");
+//		alreadyCheckedGCodes++;
+//		
+//		aktuellePosX = Double.parseDouble(koordinaten[0]);
+//		aktuellePosY = Double.parseDouble(koordinaten[1]);
+//		
+//		 Codes.simuliereBefehl( stelleInArray - 1);
+//		 double neuePosX = aenderungKoorX;
+//		 double neuePosY = aenderungKoorY;
+//		 zukuenftigePosNachSchritt.add(neuePosX + " " + neuePosY);
+//		 
+//	}
 	
 	static public void clearZukuenftigePosNachSchritt() {
 		
