@@ -170,7 +170,6 @@ public class GUI extends Application{
 					 		OutputConsole = new TextArea("");
 					 		OutputConsole.setFont(new Font("Arial", 17));					 	
 					 		OutputConsole.setEditable(false);
-					 		OutputConsole.setMouseTransparent(true);
 					 		OutputConsole.setPrefSize(txtVBox.getPrefWidth(), 300);
 					 		txtVBox.getChildren().add(OutputConsole);
 					 		
