@@ -308,7 +308,7 @@ public class GUI extends Application{
 							addCodeBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 								@Override
 								public void handle(ActionEvent arg0) {
-									OutputConsole.setText("");							
+									OutputConsole.setText("Codes werden hinzugefügt");							
 									Codes.neubildenQueue(InputConsole.getText().split("\n"));
 									InputConsole.setText("");
 								}
