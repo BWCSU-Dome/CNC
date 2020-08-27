@@ -87,7 +87,6 @@ public class GCodes extends Codes {
 		}
 			catch (MissingParameterException e) {
 			
-				Codes.addStringToOutput("Es kann keine Gerade ohne Parameter gezeichnet werden.");
 				erfolgreich = false;
 				return erfolgreich;
 			}
@@ -255,6 +254,7 @@ public class GCodes extends Codes {
 	static public void pruefeFahrbewegung(boolean isGerade) throws OutOfAreaException {
 		
 			//Hier findet die Überprüfung der Kreispunkte statt
+		
 		
 	}
 	

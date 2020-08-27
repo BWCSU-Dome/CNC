@@ -136,7 +136,9 @@ public class Codes {
 		
 		for(int i=0; i < parameter.length; i++) {
 			parameter[i] = Double.parseDouble(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
-			}
+			if(parameter[i] == 10001)
+				parameter[i] *= -1;
+		}
 		
 		
 		
