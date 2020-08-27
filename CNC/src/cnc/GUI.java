@@ -291,7 +291,7 @@ public class GUI extends Application{
 									Codes.neubildenQueue(InputConsole.getText().split("\n"));
 									
 									}catch(Exception e) {
-									OutputConsole.setText("XML-Datei konnte nicht geladen werden\n-Bitte lesen Sie die Dokumentation");	
+									OutputConsole.setText("*XML-Datei konnte nicht geladen werden*\nBitte lesen Sie die Dokumentation");	
 									}
 								}
 							});
