@@ -39,7 +39,7 @@ public class RegularExpression {
 			
 			} catch(IOException e) {		//Wenn Exception geworfen, wird ein Rollback des gesamten Enqueueing-Prozesses durchgeführt, sowie eine Textausgabe in die GUI vorgenommen
 				Codes.abbrechenEnqueueing();
-				Codes.addStringToOutput("*Syntax falsch: *" + codes[i]);
+				GUI.setTXTOutputConsole("*Syntax falsch: " + codes[i]+"*");
 				return;						//Zurückspringen in Codes.neubildenQueue
 			}
 								
