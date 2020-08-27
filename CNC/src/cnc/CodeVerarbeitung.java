@@ -20,7 +20,12 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 		while(true) {
 			if(queueIsEmpty()) {
 				Codes.addStringToOutput("Warteschlange erfolgreich abgearbeitet"); //Wenn die Queue leer ist (entweder kein Code eingegeben, oder alle ausgeführt) kommt eine kurze Meldung.
+				
+				while(GUI.getTimelineIsFinish()) {
+					System.out.println("nope");
+				}
 				GUI.clearTimelines();
+				GUI.setCodeVerarbeitungStartenTrue();
 				Platform.runLater(()->{
 				GUI.startBtn.setText("Start");
 				});

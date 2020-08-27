@@ -25,6 +25,10 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 public class XML {
 
@@ -71,7 +75,7 @@ public class XML {
 			return befehlEingabe;
 	}
 	
-	public static void readSettings() throws Exception {
+	public static void readSettings() throws falscheWerteXMLException, ParserConfigurationException, SAXException, IOException  {
 		
 		double new_homePosX, new_homePosY, geschwindschnell, geschwindlangsam, geschwindfahrt; 
 		String farbeBohrer, farbeHomePos, farbeArbeitsflaeche;
@@ -92,9 +96,49 @@ public class XML {
 		farbeBohrer = settings.getElementsByTagName("FarbeBohrer").item(0).getTextContent();
 		farbeHomePos = settings.getElementsByTagName("FarbeHomePos").item(0).getTextContent();
 		farbeArbeitsflaeche = settings.getElementsByTagName("FarbeArbeitsflaeche").item(0).getTextContent();
-	
+		if(!(0<=new_homePosX && new_homePosX<= 1400)) {
+			System.out.println(new_homePosX);
+			throw new falscheWerteXMLException("HomePosX");
+		}
+		if(!(0<=new_homePosY && new_homePosY<= 1050)) {
+			throw new falscheWerteXMLException("HomePosY");
+		}
+		if(!(0<geschwindschnell && geschwindschnell<= (5*1000/60))) {
+			throw new falscheWerteXMLException("Geschwindigkeit_schnell");
+		}
+		if(!(0<geschwindlangsam && geschwindlangsam<= (4*1000/60))) {
+			throw new falscheWerteXMLException("Geschwindigkeit_langsam");
+		}
+		if(!(0<geschwindfahrt && geschwindfahrt<= (8*1000/60))) {
+			throw new falscheWerteXMLException("Geschwindigkeit_fahrt");
+		}
+		checkColor(farbeArbeitsflaeche);
+		checkColor(farbeHomePos);
+		checkColor(farbeBohrer);
+		
 		Main.assignSettings(new_homePosX, new_homePosY, geschwindschnell, geschwindlangsam, 
 							geschwindfahrt, farbeBohrer, farbeHomePos, farbeArbeitsflaeche);
+	}
+	
+	private static void checkColor(String color) throws falscheWerteXMLException {
+		switch (color) {
+		case "grey": 
+			break;
+		case "black": 
+			break;
+		case "white": 
+			break;
+		case "red": 
+			break;
+		case "green": 
+			break;
+		case "yellow": 
+			break;
+		case "blue": 
+			break;
+		default:
+			throw new falscheWerteXMLException("ungültige Farbe");
+		}
 	}
 	
 	private static String getXMLPath(){
