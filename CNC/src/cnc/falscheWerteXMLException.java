@@ -6,7 +6,7 @@ public class falscheWerteXMLException extends Exception{
 
 	public falscheWerteXMLException(String fehler)
 	   {
-		   GUI.setTXTOutputConsole("Falsche Werte in der XML-Setting Datei \nFehler: " + fehler);
+		   GUI.setTXTOutputConsole("*Falsche Werte in der XML-Setting Datei*\nFehler: " + fehler);
 	   }
 
 	
