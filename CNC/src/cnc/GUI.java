@@ -182,8 +182,8 @@ public class GUI extends Application{
 							InputConsole = new TextArea( 
 	//												"M03\r\n" + 
 	//												"M08\r\n" + 
-													"G01 X500 Y500\r\n"  
-	//												"G02 X700 Y500 I500 J0\r\n" + 
+													"G01 X300 Y300\r\n"  +
+													"G02 X700 Y300 I200 J0\n" 
 //													"G01 X300 Y10\R\N" +
 //													"G01 X500 Y100\R\N" +
 //													"G01 X50 Y50\R\N" + 	

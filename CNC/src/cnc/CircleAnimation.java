@@ -37,18 +37,9 @@ public class CircleAnimation extends Animation {
 			xtempCenter = GUI.getKopfX() - (-i);
 			ytempCenter = GUI.getKopfY() - (j);
 
-			System.out.println("XtempCenter: " + xtempCenter);
-			System.out.println("YtempCenter: " + ytempCenter);
-			System.out.println("1050 - Ytemp: " + (1050 - ytempCenter));
-
-			Circle test = new Circle();
-			test.setCenterX(xtempCenter);
-			test.setCenterY(ytempCenter);
-			test.setRadius(10);
-			GUI.arbeitsF.getChildren().add(test);
 
 			double startWinkel = berechneWinkelKreis(radius, j, -i);
-			System.out.println("Start" + startWinkel);
+	
 
 			double endWinkel;
 			if(GUI.getKopfY() == yEnde) {
@@ -56,13 +47,13 @@ public class CircleAnimation extends Animation {
 			}else {
 			endWinkel = berechneWinkelKreis(radius,  -1050+yEnde + ytempCenter, xEnde - xtempCenter);
 			}
-			System.out.println("Endwinkel" + endWinkel);
+			
 			double differenz;
 			
 			
 			if (endWinkel > startWinkel) {
 				differenz = 360+startWinkel-endWinkel;
-				System.out.println(differenz+ "diff Ende gröser");
+		
 				for (double a = 0; a <= Math.abs(differenz) ; a += 0.5) {
 				
 				addCir(startWinkel, radius);
@@ -71,7 +62,7 @@ public class CircleAnimation extends Animation {
 				}
 			} else {
 				differenz = startWinkel-endWinkel;
-				System.out.println(differenz+ "diff");
+	
 				for (double a = 0; a <= differenz ; a += 0.5) {
 					
 					addCir(startWinkel, radius);
@@ -84,9 +75,9 @@ public class CircleAnimation extends Animation {
 			}
 			update(radius);
 			
-			System.out.println("update ausgeführt");
+
 			GUI.setPaustransAktiv(false);
-			System.out.println(circles.size());
+
 
 		});
 		
@@ -110,18 +101,9 @@ public class CircleAnimation extends Animation {
 			xtempCenter = GUI.getKopfX() - (-i);
 			ytempCenter = GUI.getKopfY() - (j);
 
-			System.out.println("XtempCenter: " + xtempCenter);
-			System.out.println("YtempCenter: " + ytempCenter);
-			System.out.println("1050 - Ytemp: " + (1050 - ytempCenter));
-
-			Circle test = new Circle();
-			test.setCenterX(xtempCenter);
-			test.setCenterY(ytempCenter);
-			test.setRadius(10);
-			GUI.arbeitsF.getChildren().add(test);
 
 			double startWinkel = berechneWinkelKreis(radius, j, -i);
-			System.out.println("Start" + startWinkel);
+
 
 			double endWinkel;
 			if(GUI.getKopfY() == yEnde) {
@@ -129,13 +111,12 @@ public class CircleAnimation extends Animation {
 			}else {
 			endWinkel = berechneWinkelKreis(radius,  -1050+yEnde + ytempCenter, xEnde - xtempCenter);
 			}
-			System.out.println("Endwinkel" + endWinkel);
+
 			double differenz;
 			
 			
 			if (endWinkel > startWinkel) {
 				differenz = startWinkel-endWinkel;
-				System.out.println(differenz+ "diff end grosser");
 					for (double a = 0; a <= Math.abs(differenz) ; a += 0.5) {
 					
 					addCir(startWinkel, radius);
@@ -144,7 +125,6 @@ public class CircleAnimation extends Animation {
 				}
 			} else {
 				differenz = 360-startWinkel+endWinkel;
-				System.out.println(differenz+ "diff");
 				for (double a = 0; a <= differenz ; a += 0.5) {
 					addCir(startWinkel, radius);
 					startWinkel -= 0.5;
@@ -155,10 +135,7 @@ public class CircleAnimation extends Animation {
 				GUI.getTemp().setVisible(false);
 			}
 			update(radius);
-			
-			System.out.println("update ausgeführt");
 			GUI.setPaustransAktiv(false);
-			System.out.println(circles.size());
 
 		});
 		
@@ -166,7 +143,7 @@ public class CircleAnimation extends Animation {
 	
 
 	public static double berechneWinkelKreis(double radius, double yEntfernung, double xEntfernung)  {
-		System.out.println("yEntfernung"+yEntfernung + "xEntfernung" + xEntfernung);
+
 		if (xEntfernung < 0 && 0 < yEntfernung) { // 2
 			return 180 - Math.toDegrees(Math.asin(yEntfernung / radius));
 		} else if (0 < xEntfernung && yEntfernung < 0) {// 1
@@ -192,7 +169,7 @@ public class CircleAnimation extends Animation {
 
 		xtemp = (xtempCenter + radius * Math.cos(Math.toRadians(winkel)));
 		ytemp = (ytempCenter + radius * Math.sin(Math.toRadians(winkel)));
-		Circle cir = new Circle(xtemp, ytemp, 7.5);
+		Circle cir = new Circle(xtemp, ytemp, 7);
 		cir.setFill(GUI.getKopfFill());
 		cir.setVisible(false);
 		circles.add(cir);
@@ -223,9 +200,9 @@ public class CircleAnimation extends Animation {
 	private static void update(double radius) {
 
 		double umfang = Math.PI*radius*circles.size()/360;
-		System.out.println("Umfang "+ umfang);
+	
 		double dauer = umfang/Main.getAktGeschw();
-		System.out.println("Dauer"+dauer);
+	
 		pauseTrans = new PauseTransition(Duration.seconds(dauer/circles.size()));
 		
 		pauseTrans.setOnFinished(event -> {
@@ -234,11 +211,11 @@ public class CircleAnimation extends Animation {
 				updateCirs();
 				pauseTrans.play();
 			}else {
+				GUI.setTemp(circles.get(stueck-1));
 				circles.clear();
 				stueck = 0;
 				GUI.setKopfX(xEnd);
 				GUI.setKopfY(1050-yEnd);
-				GUI.setTemp(circles.get(stueck-1));
 				CodeVerarbeitung.setBoolWeiter(true);
 				return;
 			}
