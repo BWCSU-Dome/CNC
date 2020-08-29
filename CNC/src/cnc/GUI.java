@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import javafx.animation.Animation.Status;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -42,7 +43,7 @@ public class GUI extends Application{
 	public static Pane arbeitsF;
 	private static int height = 1050;
 	private static int width = 1950;
-	public static Circle Kopf;
+	public static Circle Kopf,temp;
 	private static Button codeXMLBtn, settingsXMLBtn;
 	private static Label  kuehlmit, spindelStatus,geschwin,drehRichtung;
 	public static Label aktuellX,aktuellY;
@@ -52,6 +53,7 @@ public class GUI extends Application{
 	public static Button startBtn;
 	private static File choosenFile;
 	private static Circle HomePos;
+	public static Boolean paustransAktiv ;
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
@@ -180,12 +182,12 @@ public class GUI extends Application{
 							InputConsole = new TextArea( 
 	//												"M03\r\n" + 
 	//												"M08\r\n" + 
-													"G01 X100 Y200\r\n"  +
+													"G01 X500 Y500\r\n"  
 	//												"G02 X700 Y500 I500 J0\r\n" + 
-													"G01 X300 Y10\r\n" +
-													"G01 X500 Y100\r\n" +
-													"G01 X50 Y50\r\n" + 	
-													"G28\r\n" 
+//													"G01 X300 Y10\R\N" +
+//													"G01 X500 Y100\R\N" +
+//													"G01 X50 Y50\R\N" + 	
+//													"G28\R\N" 
 													);
 							InputConsole.setFont(new Font("Arial", 17));
 							InputConsole.setPrefSize(txtVBox.getPrefWidth(), ctrlBtnHBox.getPrefHeight()-OutputConsole.getPrefHeight()-10);
@@ -217,7 +219,12 @@ public class GUI extends Application{
 										if(CodeVerarbeitungStarten) {
 										Main.launchCodeRun(); 
 										}
-										CodeVerarbeitungStarten = false;										
+										CodeVerarbeitungStarten = false;	
+										if(CircleAnimation.PauseTransIsNotNull()) {
+											if(paustransAktiv) {
+												CircleAnimation.playPauseTrans();
+											}
+										}
 										if(timelineGrafik != null && timelineKoordinaten != null) {
 											if(timelineGrafik.getCurrentRate() == 0) {
 												timelineGrafik.play();
@@ -227,12 +234,17 @@ public class GUI extends Application{
 										break;
 									case "Pause":
 										startBtn.setText("Start");
-										if(timelineGrafik != null && timelineKoordinaten != null) {
-											timelineGrafik.pause();
-											timelineKoordinaten.pause();
+										if(paustransAktiv) {
+											CircleAnimation.pausePauseTrans();
+										}else {
+											if(timelineGrafik != null && timelineKoordinaten != null) {
+												timelineGrafik.pause();
+												timelineKoordinaten.pause();
+											}
 										}
+										
 										Main.codeRun.interrupt();
-//										CircleAnimation.kreis(320,401,20,100);
+										
 										break;
 									}						
 								}
@@ -357,7 +369,7 @@ public class GUI extends Application{
 		Scene scene = new Scene(rootHBox);
 		primaryStage.setScene(scene);
 
-		primaryStage.setFullScreen(true);
+//		primaryStage.setFullScreen(true);
 
 		primaryStage.show();
 		try {
@@ -542,4 +554,21 @@ public class GUI extends Application{
 		primaryStage.close();
 		});
 	}
+	
+	public static void setPaustransAktiv(Boolean wert) {
+		paustransAktiv = wert;
+	}
+	public static void refreshKoordinaten() {
+		Platform.runLater(()->{
+		aktuellX.setText(String.valueOf(Math.round(GUI.getKopfX()*100)/100));
+		aktuellY.setText(String.valueOf(Math.round(GUI.getKopfY()*100)/100));
+		});
+	}
+	public static Circle getTemp() {
+		return temp;
+	}
+	public static void setTemp(Circle temp) {
+		GUI.temp = temp;
+	}
+	
 }
