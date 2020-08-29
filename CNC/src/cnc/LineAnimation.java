@@ -75,9 +75,11 @@ public class LineAnimation extends Animation{
 				new KeyValue(GUI.aktuellY.textProperty(), String.valueOf(Math.round(1050-yStart+((-1050+yEnd+yStart)/intervalle)*a)))
 				));
 		}
+		// Diese Transition sorgt dafür, dass die Koordinaten quasiparallel aktualisiert werden. 
 		TranslateTransition trans = new TranslateTransition();
 		trans.setNode(GUI.aktuellX);
 		GUI.setAndPlayTimeline(t, t2);
+		//Dies sorgt dafür das der nächste code verabeitet wird
 		t.setOnFinished(ActionEvent ->{
 			CodeVerarbeitung.setBoolWeiter(true);
 		});

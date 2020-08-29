@@ -91,7 +91,7 @@ public class CircleAnimation extends Animation {
 		});
 		
 	}
-	/**
+	/** Diese Methode erzeugt viele Punkte die in der aktuellen Geschwindigkeit nacheinander sichtbar werden. 
 	 * 
 	 * @param x X-Wert bis zu der Stelle, wo gefräst werden soll.
 	 * @param y Y-Wert bis zu der Stelle, wo gefräst werden soll.

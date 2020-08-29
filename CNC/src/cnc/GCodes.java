@@ -205,7 +205,7 @@ public class GCodes extends Codes {
 		double j = param[3];
 		
 		if(!simulation) {
-			CircleAnimation.kreis(x, y, i, j);  //Hier wird die Methode zur Kreisfahrt gerufen
+			CircleAnimation.kreisGegenUhrzeiger(x, y, i, j);  //Hier wird die Methode zur Kreisfahrt gerufen
 			} else {
 				aenderungKoorX = x;
 				aenderungKoorY = y;
