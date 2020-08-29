@@ -53,7 +53,7 @@ public class GUI extends Application{
 	public static Button startBtn;
 	private static File choosenFile;
 	private static Circle HomePos;
-	public static Boolean paustransAktiv ;
+	public static Boolean paustransAktiv =false;
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
