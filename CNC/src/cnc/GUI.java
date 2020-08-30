@@ -59,11 +59,11 @@ public class GUI extends Application{
 	public static Button startBtn;
 	private static File choosenFile;
 	private static Circle HomePos;
-<<<<<<< HEAD
+
 	private static Boolean timelineIsFinish;
-=======
+
 	public static Boolean paustransAktiv =false;
->>>>>>> branch 'master' of https://github.com/BWCSU-Dome/CNC.git
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
@@ -190,16 +190,7 @@ public class GUI extends Application{
 					 		txtVBox.getChildren().add(InputConLabel);
 							//Anzeige der EingabeConsole
 							InputConsole = new TextArea( 
-<<<<<<< HEAD
-													"M03\r\n" + 
-													"M08\r\n" + 
-													"G01 X100 Y200\r\n"  +
-	//												"G02 X700 Y500 I500 J0\r\n" + 
-													"G01 X300 Y10\r\n" +
-													"G01 X500 Y100\r\n" +
-													"G01 X50 Y50\r\n" + 	
-													"G28\r\n" 
-=======
+
 	//												"M03\r\n" + 
 	//												"M08\r\n" + 
 													"G01 X300 Y300\r\n"  +
@@ -208,7 +199,7 @@ public class GUI extends Application{
 //													"G01 X500 Y100\R\N" +
 //													"G01 X50 Y50\R\N" + 	
 //													"G28\R\N" 
->>>>>>> branch 'master' of https://github.com/BWCSU-Dome/CNC.git
+
 													);
 							InputConsole.setFont(new Font("Arial", 17));
 							InputConsole.setPrefSize(txtVBox.getPrefWidth(), ctrlBtnHBox.getPrefHeight()-OutputConsole.getPrefHeight()-10);
@@ -605,11 +596,11 @@ public class GUI extends Application{
 		primaryStage.close();
 		});
 	}
-<<<<<<< HEAD
+
 	public static Boolean getTimelineIsFinish() {
 		return timelineIsFinish;
 	}
-=======
+
 	
 	public static void setPaustransAktiv(Boolean wert) {
 		paustransAktiv = wert;
@@ -627,5 +618,5 @@ public class GUI extends Application{
 		GUI.temp = temp;
 	}
 	
->>>>>>> branch 'master' of https://github.com/BWCSU-Dome/CNC.git
+
 }

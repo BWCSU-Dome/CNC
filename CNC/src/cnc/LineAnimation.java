@@ -86,11 +86,7 @@ public class LineAnimation extends Animation{
 		
 		GUI.setKopfX(xEnd);
 		GUI.setKopfY(GUI.getHeight() - yEnd);
-<<<<<<< HEAD
 
-=======
->>>>>>> branch 'master' of https://github.com/BWCSU-Dome/CNC.git
-	
 		});
 	}
 	/* Diese Methode animiert den Fall das der BohrerKopf bewegt wird ohne zu Bohren
