@@ -1,19 +1,16 @@
 package cnc;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 
-/** Dient zur Prüfung von eingegebenen Codes. Hier werden sie, sofern die Eingabe syntaktisch korrekt war, weiter auf Möglichkeit der Ausführung geprüft. Falls erfolgreich, landen die Befehle in der Queue.
+/** @author Jonas Heckerodt
+ * Dient zur Prüfung von eingegebenen Codes. Hier werden sie, sofern die Eingabe syntaktisch korrekt war, weiter auf Möglichkeit der Ausführung geprüft. Falls erfolgreich, landen die Befehle in der Queue.
  *  Hier wird auch der Thread zur Code-Ausführung aufgerufen, sowie gegebenenfalls gestoppt.
- * @author Jonas Heckerodt
- * 
  */
 public class Codes {
 	
 	public static ArrayList<String> queue = new ArrayList<String>(); //Die Code-Warteschlange
 	private static String[] befehlEingangEnqueue;
-	private static String[] befehlEingangDo;
 	private static String[] befehl = new String[5];
 	protected static int ausgefuehrteCodes = 0;
 	protected static int enqueuedGCodes = 0;
@@ -21,7 +18,6 @@ public class Codes {
 	private static ArrayList<String> doneCodes = new ArrayList<String>();
 	private static int initialQueueSize = 0;
 	private static boolean enqueueingSuccessful = false;
-	
 	
 	
 	//Startmethode für Ausführungs-Thread (siehe Klasse CodeVerarbeitung)
@@ -47,10 +43,6 @@ public class Codes {
 					enqueueingSuccessful = true;	//Variable, die bestimmt, ob alle bisher verarbeiteten Codes fehlerfrei und somit ausführbereit sind.
 				
 					queue = new ArrayList<String>();	//Neuinitalisierung der Warteschlange
-					
-					GCodes.resetAlreadyCheckedCodes();	
-					
-					GCodes.clearZukuenftigePosNachSchritt(); //Neuinitialisierung des in GCodes befindlichen Arrays, dass die zukünftigen Positionen aufnimmt, um auf dessen Basis weitere zukünftige Positionen berechnet.
 					
 					enqueuedGCodes = 0;
 					
@@ -94,7 +86,6 @@ public class Codes {
 		
 		System.arraycopy(befehlEingangEnqueue, 0, befehl, 0, befehlEingangEnqueue.length);   //Kopieren in Array statischer Länge
 		
-		
 		for(int i = 0; i < befehl.length; i++) {
 			if(befehl[i] == null) {
 				befehl[i] = "-10001";				//Wenn Array-Stelle null, auffüllen mit -10001
@@ -135,12 +126,10 @@ public class Codes {
 			
 		
 		for(int i=0; i < parameter.length; i++) {
-			parameter[i] = Double.parseDouble(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
+			parameter[i] = Double.parseDouble(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, in der sich die Parameter nun befinden, klar ist, um welchen Parameter es sich handelt.
 			if(parameter[i] == 10001)
 				parameter[i] *= -1;
 		}
-		
-		
 		
 	boolean successful = false;
 			//Unterscheidung, ob M- oder G-Code vorliegt (entschieden an mitgegebenem ersten Buchstaben)
@@ -155,7 +144,6 @@ public class Codes {
 				break;
 			}
 			
-		
 			if(successful) {
 				queue.add(befehlToString(befehl));			//Wenn Befehl erfolgreich getestet, Einfügen in Array
 			} else {
@@ -163,37 +151,6 @@ public class Codes {
 				abbrechenEnqueueing();
 			}
 	}
-	
-	/**
-	 * Ruft Methoden auf mit gesetztem Simulationsparameter, sodass die zukünftige Position bestimmt werden kann
-	 * @param befehlNr -> für welchen Befehl die Prüfung erfolgen soll
-	 */
-	
-//	protected static void simuliereBefehl(int befehlNr) {
-//		double[] parameter = new double[4];
-//		
-//		befehlEingangDo = befehlEingangEnqueue;
-//		
-//		System.arraycopy(befehlEingangDo, 0, befehl, 0, befehlEingangDo.length);
-//		
-//		// Es wird zur reibungslosen Weiterverarbeitung der Parameter ein Double-Array erzeugt
-//		parameter = new double[befehl.length-1];
-//				
-//		
-//		for(int i=0; i < parameter.length; i++) {
-//			parameter[i] = Double.parseDouble(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
-//			}
-//			
-//			//Unterscheidung, ob M- oder G-Code vorliegt (entschieden an mitgegebenem ersten Buchstaben)
-//			switch(befehl[0].charAt(0)) {
-//			case 'M':
-//				doMCodes(befehl);
-//				break;
-//			case 'G':
-//				doGCodes(true, befehl, parameter);		
-//				break;
-//			}
-//	}
 	
 	
 	/*
@@ -203,26 +160,26 @@ public class Codes {
 	 * @param parameter -> enthält zugehörige Paramter, um mit diesen die jeweilige Methode auzurufen
 	 */
 	
-	protected static void doGCodes(boolean simulation, String[] code, double[] parameter) {
+	protected static void doGCodes(String[] code, double[] parameter) {
 		
 		doRunning = true;
 		//Aufruf des gewünschten Codes nach eingegebener, gewünschter Funktion
 		switch(code[0]) {
 		
 		case "G00":
-		GCodes.fahrenEilgang(simulation, parameter);
+		GCodes.fahrenEilgang(parameter);
 			break;
 			
 		case "G01":
-		GCodes.fahrenGerade(simulation, parameter);
+		GCodes.fahrenGerade(parameter);
 			break;
 			
 		case "G02":
-		GCodes.fahrenKreisImUhrzeigersinn(simulation, parameter);
+		GCodes.fahrenKreisImUhrzeigersinn(parameter);
 			break;
 		
 		case "G03":
-		GCodes.fahrenKreisGegenUhrzeigersinn(simulation, parameter);
+		GCodes.fahrenKreisGegenUhrzeigersinn(parameter);
 			break;
 			
 		case "G28":
@@ -291,12 +248,8 @@ public class Codes {
 		doRunning = false;
 }
 	
-	public static boolean queueIsEmpty() {
-		return queue.isEmpty();
-	}
-	
 	/**
-	 * 
+	 * Eine Methode, die zu Code zugehörige Prüfmethode aufruft
 	 * @param code -> enthält zu prüfenden Code
 	 * @param parameter -> enthält zugehörige Paramter, um mit diese die jeweilige Methode auzurufen
 	 * @return Gibt zurück, ob Simulation erfolgreich verlaufen, oder nicht (Stichwort: OutOfAreaException, MissingParameterException)
@@ -322,16 +275,15 @@ public class Codes {
 			
 			
 		case "G28":
-		return true;
+		return true; //Hier kann kein Fehler auftreten, da die Home-Koordinaten bereits auf Richtigkeit geprüft wurden
 			
-		
 		default:
 		return false;
 	}
 	
 }
 	/*
-	 * Methode, die lediglich dazu da ist, ein Array (insbesondere das Array "Befehl") in einen String umzuformen
+	 * Methode, die ein Array in einen String umformt
 	 */
 	public static String befehlToString(String[] befehl) {
 		String befehlsString = "";
@@ -347,10 +299,25 @@ public class Codes {
 		return befehlsString;
 	}
 	
+	/*
+	 * Fügt String in GUI-Textausgabe ein
+	 */
+	public static void addStringToOutput(String text) {
+		String temp = GUI.getOutputConsole();
+		
+		GUI.setTXTOutputConsole(temp + "\n" + text);
+	}
+	
+	
+	//Im Folgenden sind nur noch Methoden, die Getter und Setter 
+	
+	public static boolean queueIsEmpty() {
+		return queue.isEmpty();
+	}
+	
 	public static int getQueueSize() {
 		return queue.size();
 	}
-	
 	
 	public static void emptyQueue() {
 		queue = new ArrayList<String>();
@@ -372,36 +339,9 @@ public class Codes {
 		return queue;
 	}
 	
-	public static void correctBefehlEingangEnqueue(String valueToBeAdded, String argArt) {
-		
-		String[] temp = new String[3];
-		
-		System.arraycopy(befehlEingangEnqueue, 0, temp, 0, befehlEingangEnqueue.length);
-		
-		if(argArt == "X") {
-			temp[2] = temp[1];
-			temp[1] = argArt + valueToBeAdded;
-		}
-		if(argArt == "Y") {
-			temp[2] = argArt + valueToBeAdded;
-		}
-		befehlEingangEnqueue = new String[3];
-		
-		System.arraycopy(temp, 0, befehlEingangEnqueue, 0, temp.length);
-	}
-	
 	public static int getInitialQueueSize() {
 		return initialQueueSize;
 	}
-	
-	
-	public static void addStringToOutput(String text) {
-		String temp = GUI.getOutputConsole();
-		
-		GUI.setTXTOutputConsole(temp + "\n" + text);
-		
-	}
-	
 	
 	protected static boolean getLastCodeSuccessful() {
 		return enqueueingSuccessful;

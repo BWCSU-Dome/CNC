@@ -1,121 +1,241 @@
 package cnc;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
-public class CircleAnimation extends Animation{
-	
-    private static ArrayList<Circle> circles = new ArrayList<>();
-    private static Circle tempColor;
-    private static double xtemp, ytemp, xtempCenter, ytempCenter;
-	
-    /**
-     * 
-     * @param x X-Wert bis zu der Stelle, wo gefräst werden soll.
-     * @param y	Y-Wert bis zu der Stelle, wo gefräst werden soll.
-     * @param i	X-Wert bis zum Mittelpunkt
-     * @param j Y-Wert bis zum Mittelpunkt
-     */
+public class CircleAnimation extends Animation {
+
+	private static ArrayList<Circle> circles = new ArrayList<>();
+	private static Circle tempColor;
+	private static double xtemp, ytemp, xtempCenter, ytempCenter;
+	private static PauseTransition pauseTrans;
+	private static double xEnd, yEnd;
+
+	/**
+	 * 
+	 * @param x X-Wert bis zu der Stelle, wo gefräst werden soll.
+	 * @param y Y-Wert bis zu der Stelle, wo gefräst werden soll.
+	 * @param i X-Wert bis zum Mittelpunkt
+	 * @param j Y-Wert bis zum Mittelpunkt
+	 */
 	public static void kreis(double xEnde, double yEnde, double i, double j) {
-		Platform.runLater(()->{
-		
-//		yEnde = 1050 - yEnde;
+		Platform.runLater(() -> {
+			Main.setSpindelAktiv(true);
+			GUI.refreshSpindel();
+			GUI.setPaustransAktiv(true);
+			xEnd = xEnde;
+			yEnd = yEnde;
+			double radius = Math.sqrt(i * i + j * j);
 
-		double radius = Math.sqrt(i*i+j*j);
-		
-		xtempCenter = GUI.getKopfX()-i;
-		ytempCenter = GUI.getKopfY()-j;
-		
-		System.out.println("XtempCenter: " + xtempCenter);
-		System.out.println("YtempCenter: " + ytempCenter);
-		System.out.println("1050 - Ytemp: " + (1050-ytempCenter));
-		
-		Circle test = new Circle();
-		test.setCenterX(xtempCenter);
-		test.setCenterY(ytempCenter);
-		test.setRadius(10);
-		GUI.arbeitsF.getChildren().add(test);
+			xtempCenter = GUI.getKopfX() - (-i);
+			ytempCenter = GUI.getKopfY() - (j);
 
-		
-		//Startwinkel ausrechnen mit Vektorformel
-		double startWinkel = ((i)/Math.sqrt(i*i+j*j));
-		startWinkel = Math.toDegrees(Math.acos(startWinkel));
-		System.out.println("Startwinkel: " + startWinkel);
-		
-		
-		 double vektorEndpunktY = yEnde-(1050+ytempCenter);
-		 double vektorEndpunktX = xEnde-xtempCenter;
-		 
-		 System.out.println("Vektor Ende X: " + vektorEndpunktX);
-		 System.out.println("Vektor Ende Y: " + vektorEndpunktY);
-		
-		 double endWinkel = (vektorEndpunktX/(Math.sqrt(vektorEndpunktX*vektorEndpunktX)+Math.sqrt(vektorEndpunktY*vektorEndpunktY)));
-		 endWinkel = Math.toDegrees(Math.acos(endWinkel))+startWinkel;
-		 System.out.println("Endwinkel: "+endWinkel); 		
-		
-		for(double a = startWinkel ; a <= endWinkel; a += 0.5) {
-			addCir(a,radius);
+
+			double startWinkel = berechneWinkelKreis(radius, j, -i);
+	
+
+			double endWinkel;
+			if(GUI.getKopfY() == yEnde) {
+			endWinkel = berechneWinkelKreis(radius, 0, xEnde - xtempCenter);
+			}else {
+			endWinkel = berechneWinkelKreis(radius,  -1050+yEnde + ytempCenter, xEnde - xtempCenter);
+			}
 			
-			System.out.println(a+ " hinzugefügt");
+			double differenz;
 			
-		}
-		update(endWinkel-startWinkel);
-		System.out.println("update ausgeführt");
+			
+			if (endWinkel > startWinkel) {
+				differenz = 360+startWinkel-endWinkel;
+		
+				for (double a = 0; a <= Math.abs(differenz) ; a += 0.5) {
+				
+				addCir(startWinkel, radius);
+				startWinkel += 0.5;
+				
+				}
+			} else {
+				differenz = startWinkel-endWinkel;
+	
+				for (double a = 0; a <= differenz ; a += 0.5) {
+					
+					addCir(startWinkel, radius);
+					startWinkel += 0.5;
+				
+				}
+			}
+			if(!(GUI.getTemp() == null)) {
+				GUI.getTemp().setVisible(false);
+			}
+			update(radius);
+			
+
+			GUI.setPaustransAktiv(false);
+
+
 		});
+		
+	}
+	/** Diese Methode erzeugt viele Punkte die in der aktuellen Geschwindigkeit nacheinander sichtbar werden. 
+	 * 
+	 * @param x X-Wert bis zu der Stelle, wo gefräst werden soll.
+	 * @param y Y-Wert bis zu der Stelle, wo gefräst werden soll.
+	 * @param i X-Wert bis zum Mittelpunkt
+	 * @param j Y-Wert bis zum Mittelpunkt
+	 */
+	public static void kreisGegenUhrzeiger(double xEnde, double yEnde, double i, double j)  {
+		Platform.runLater(() -> {
+			Main.setSpindelAktiv(true);
+			GUI.refreshSpindel();
+			GUI.setPaustransAktiv(true);
+			xEnd = xEnde;
+			yEnd = yEnde;
+			double radius = Math.sqrt(i * i + j * j);
+
+			xtempCenter = GUI.getKopfX() - (-i);
+			ytempCenter = GUI.getKopfY() - (j);
+
+
+			double startWinkel = berechneWinkelKreis(radius, j, -i);
+
+
+			double endWinkel;
+			if(GUI.getKopfY() == yEnde) {
+			endWinkel = berechneWinkelKreis(radius, 0, xEnde - xtempCenter);
+			}else {
+			endWinkel = berechneWinkelKreis(radius,  -1050+yEnde + ytempCenter, xEnde - xtempCenter);
+			}
+
+			double differenz;
+			
+			
+			if (endWinkel > startWinkel) {
+				differenz = startWinkel-endWinkel;
+					for (double a = 0; a <= Math.abs(differenz) ; a += 0.5) {
+					
+					addCir(startWinkel, radius);
+					startWinkel -= 0.5;
+				
+				}
+			} else {
+				differenz = 360-startWinkel+endWinkel;
+				for (double a = 0; a <= differenz ; a += 0.5) {
+					addCir(startWinkel, radius);
+					startWinkel -= 0.5;
+				
+				}
+			}
+			if(!(GUI.getTemp() == null)) {
+				GUI.getTemp().setVisible(false);
+			}
+			update(radius);
+			GUI.setPaustransAktiv(false);
+
+		});
+		
 	}
 	
-    private static void addCir(double winkel,double radius) {
-    	  
-    	xtemp = (xtempCenter + radius*Math.cos(Math.toRadians(winkel)));
-		ytemp = (ytempCenter + radius*Math.sin(Math.toRadians(winkel)));
-    	Circle cir = new Circle(xtemp,ytemp,7.5);     
-        cir.setFill(Color.RED);
-        cir.setVisible(false);
 
-        circles.add(cir);
-        GUI.arbeitsF.getChildren().add(cir);
-    }
-	
-	private static int stueck = 0 ;
-	private static double intervalle = 360;
-	
-	private static void updateCirs() {
-		
-		if(!(tempColor == null)) {
-			tempColor.setFill(Color.PINK);
+	public static double berechneWinkelKreis(double radius, double yEntfernung, double xEntfernung)  {
+
+		if (xEntfernung < 0 && 0 < yEntfernung) { // 2
+			return 180 - Math.toDegrees(Math.asin(yEntfernung / radius));
+		} else if (0 < xEntfernung && yEntfernung < 0) {// 1
+			return 360 + Math.toDegrees(Math.asin(yEntfernung / radius));
+		} else if (0 < xEntfernung && 0 < yEntfernung) {// 3
+			return Math.toDegrees(Math.asin(yEntfernung / radius));
+		} else if (xEntfernung < 0 && yEntfernung < 0) {// 4
+			return Math.toDegrees(Math.asin(Math.abs(yEntfernung) / radius)) + 180;
+		} else if (xEntfernung == 0 && yEntfernung < 0) {
+			return 270;
+		} else if (xEntfernung == 0 && 0 < yEntfernung) {
+			return 90;
+		} else if (xEntfernung < 0 && yEntfernung == 0) {
+			return 180;
+		} else if (0 < xEntfernung && yEntfernung == 0) {
+			return 0;
+		} else {
+			return 10000;
 		}
+	}
 
+	private static void addCir(double winkel, double radius) {
+
+		xtemp = (xtempCenter + radius * Math.cos(Math.toRadians(winkel)));
+		ytemp = (ytempCenter + radius * Math.sin(Math.toRadians(winkel)));
+		Circle cir = new Circle(xtemp, ytemp, 7);
+		cir.setFill(GUI.getKopfFill());
+		cir.setVisible(false);
+		circles.add(cir);
+		GUI.arbeitsF.getChildren().add(cir);
+	}
+
+	private static int stueck = 0;
+
+	private static void updateCirs() {
+
+		if (!(tempColor == null)) {
+			tempColor.setFill(Color.BLACK);
+		}
+			
 		Circle temp = circles.get(stueck);
 		temp.setVisible(true);
+		GUI.setKopfX(temp.getCenterX());
+		GUI.setKopfY(1050-temp.getCenterY());
+		GUI.refreshKoordinaten();
 		circles.set(stueck, temp);
 		tempColor = temp;
-		stueck++;
 	}
-	
+
 	/**
 	 * 
 	 * @param winkelDifferenz
 	 */
-	private static void update(double winkelDifferenz) {
-		intervalle = winkelDifferenz*2-1; 
-        PauseTransition pause = new PauseTransition(Duration.seconds(0.02));
-        pause.setOnFinished(event ->{
-        	if(stueck < intervalle) {
-        		stueck++;
-        	
-        		updateCirs();
-                pause.play();
-        	}  
-        });
-        pause.play();
-    }
+	private static void update(double radius) {
+
+		double umfang = Math.PI*radius*circles.size()/360;
 	
+		double dauer = umfang/Main.getAktGeschw();
+	
+		pauseTrans = new PauseTransition(Duration.seconds(dauer/circles.size()));
+		
+		pauseTrans.setOnFinished(event -> {
+			if(stueck < circles.size()-1) {
+				stueck++;
+				updateCirs();
+				pauseTrans.play();
+			}else {
+				GUI.setTemp(circles.get(stueck-1));
+				circles.clear();
+				stueck = 0;
+				GUI.setKopfX(xEnd);
+				GUI.setKopfY(1050-yEnd);
+				CodeVerarbeitung.setBoolWeiter(true);
+				return;
+			}
+		});
+		pauseTrans.play();
+	}
+
+	public static void pausePauseTrans() {
+		pauseTrans.pause();
+	}
+
+	public static void playPauseTrans() {
+		pauseTrans.play();
+	}
+	public static Boolean PauseTransIsNotNull() {
+		if(pauseTrans !=null) {
+			return true;
+		}return false;
+	}
+
 //	/** Diese Überprüfung ob die Koordinate auf dem Kreis liegt
 //	 * 
 //	 * @param x Zielkoordinate der Kreisbewegung

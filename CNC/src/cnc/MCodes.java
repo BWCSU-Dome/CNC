@@ -1,9 +1,7 @@
 package cnc;
 
-/**
- * 
- * @author Jonas Heckerodt
- *
+/** @author Jonas Heckerodt
+ * Dient zur Ausführung der gewünschten M-Codes. Ruft die zugehörigen Methoden der Klasse Main auf
  */
 
 public class MCodes extends Codes {
@@ -13,14 +11,19 @@ public class MCodes extends Codes {
 	public static void haltMaschine() {
 		schalteSpindelAus();
 		schalteKuelmittel(false);
+		CodeVerarbeitung.setBoolWeiter(true);
 	}
 	
 	//Repräsentation von Code M02
 	public static void beendeProgramm() {
 		GUI.closeCNC();
+		CodeVerarbeitung.setBoolWeiter(true);
 	}
 	
-	//Repräsentation von Code M03 und M04 --> Mitgegeben wird die Richtung (Linksdrehung: 0, Rechtsdrehung: 1)
+	//
+	/*Repräsentation von Code M03 und M04
+	 * @param richtung Die Drehrichtung der Spindel (Linksdrehung: 0, Rechtsdrehung: 1)
+	 */
 	public static void schalteSpindelAn(boolean richtung) {
 		Main.setSpindelAktiv(true);
 		Main.setSpindelRechtslaufAktiv(richtung);

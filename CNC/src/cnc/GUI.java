@@ -10,6 +10,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import javafx.animation.Animation.Status;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -48,7 +49,7 @@ public class GUI extends Application{
 	public static Pane arbeitsF;
 	private static int height = 1050;
 	private static int width = 1950;
-	public static Circle Kopf;
+	public static Circle Kopf,temp;
 	private static Button codeXMLBtn, settingsXMLBtn;
 	private static Label  kuehlmit, spindelStatus,geschwin,drehRichtung;
 	public static Label aktuellX,aktuellY;
@@ -58,7 +59,11 @@ public class GUI extends Application{
 	public static Button startBtn;
 	private static File choosenFile;
 	private static Circle HomePos;
+<<<<<<< HEAD
 	private static Boolean timelineIsFinish;
+=======
+	public static Boolean paustransAktiv =false;
+>>>>>>> branch 'master' of https://github.com/BWCSU-Dome/CNC.git
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
@@ -177,7 +182,6 @@ public class GUI extends Application{
 					 		OutputConsole = new TextArea("");
 					 		OutputConsole.setFont(new Font("Arial", 17));					 	
 					 		OutputConsole.setEditable(false);
-					 		OutputConsole.setMouseTransparent(true);
 					 		OutputConsole.setPrefSize(txtVBox.getPrefWidth(), 300);
 					 		txtVBox.getChildren().add(OutputConsole);
 					 		
@@ -186,6 +190,7 @@ public class GUI extends Application{
 					 		txtVBox.getChildren().add(InputConLabel);
 							//Anzeige der EingabeConsole
 							InputConsole = new TextArea( 
+<<<<<<< HEAD
 													"M03\r\n" + 
 													"M08\r\n" + 
 													"G01 X100 Y200\r\n"  +
@@ -194,6 +199,16 @@ public class GUI extends Application{
 													"G01 X500 Y100\r\n" +
 													"G01 X50 Y50\r\n" + 	
 													"G28\r\n" 
+=======
+	//												"M03\r\n" + 
+	//												"M08\r\n" + 
+													"G01 X300 Y300\r\n"  +
+													"G02 X700 Y300 I200 J0\n" 
+//													"G01 X300 Y10\R\N" +
+//													"G01 X500 Y100\R\N" +
+//													"G01 X50 Y50\R\N" + 	
+//													"G28\R\N" 
+>>>>>>> branch 'master' of https://github.com/BWCSU-Dome/CNC.git
 													);
 							InputConsole.setFont(new Font("Arial", 17));
 							InputConsole.setPrefSize(txtVBox.getPrefWidth(), ctrlBtnHBox.getPrefHeight()-OutputConsole.getPrefHeight()-10);
@@ -225,7 +240,12 @@ public class GUI extends Application{
 										if(CodeVerarbeitungStarten) {
 										Main.launchCodeRun(); 
 										}
-										CodeVerarbeitungStarten = false;										
+										CodeVerarbeitungStarten = false;	
+										if(CircleAnimation.PauseTransIsNotNull()) {
+											if(paustransAktiv) {
+												CircleAnimation.playPauseTrans();
+											}
+										}
 										if(timelineGrafik != null && timelineKoordinaten != null) {
 											if(timelineGrafik.getCurrentRate() == 0) {
 												timelineGrafik.play();
@@ -236,12 +256,17 @@ public class GUI extends Application{
 										break;
 									case "Pause":
 										startBtn.setText("Start");
-										if(timelineGrafik != null && timelineKoordinaten != null) {
-											timelineGrafik.pause();
-											timelineKoordinaten.pause();
+										if(paustransAktiv) {
+											CircleAnimation.pausePauseTrans();
+										}else {
+											if(timelineGrafik != null && timelineKoordinaten != null) {
+												timelineGrafik.pause();
+												timelineKoordinaten.pause();
+											}
 										}
+										
 										Main.codeRun.interrupt();
-//										CircleAnimation.kreis(320,401,20,100);
+										
 										break;
 									}						
 								}
@@ -302,7 +327,7 @@ public class GUI extends Application{
 									Codes.neubildenQueue(InputConsole.getText().split("\n"));
 									
 									}catch(Exception e) {
-									OutputConsole.setText("XML-Datei konnte nicht geladen werden\n-Bitte lesen Sie die Dokumentation");	
+									OutputConsole.setText("*XML-Datei konnte nicht geladen werden*\nBitte lesen Sie die Dokumentation");	
 									}
 								}
 							});
@@ -318,7 +343,7 @@ public class GUI extends Application{
 							addCodeBtn.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 								@Override
 								public void handle(ActionEvent arg0) {
-									OutputConsole.setText("");							
+									OutputConsole.setText("Codes werden hinzugefügt");							
 									Codes.neubildenQueue(InputConsole.getText().split("\n"));
 									InputConsole.setText("");
 								}
@@ -389,7 +414,7 @@ public class GUI extends Application{
 		Scene scene = new Scene(rootHBox);
 		primaryStage.setScene(scene);
 
-		primaryStage.setFullScreen(true);
+//		primaryStage.setFullScreen(true);
 
 		primaryStage.show();
 
@@ -580,7 +605,27 @@ public class GUI extends Application{
 		primaryStage.close();
 		});
 	}
+<<<<<<< HEAD
 	public static Boolean getTimelineIsFinish() {
 		return timelineIsFinish;
 	}
+=======
+	
+	public static void setPaustransAktiv(Boolean wert) {
+		paustransAktiv = wert;
+	}
+	public static void refreshKoordinaten() {
+		Platform.runLater(()->{
+		aktuellX.setText(String.valueOf(Math.round(GUI.getKopfX()*100)/100));
+		aktuellY.setText(String.valueOf(Math.round(GUI.getKopfY()*100)/100));
+		});
+	}
+	public static Circle getTemp() {
+		return temp;
+	}
+	public static void setTemp(Circle temp) {
+		GUI.temp = temp;
+	}
+	
+>>>>>>> branch 'master' of https://github.com/BWCSU-Dome/CNC.git
 }

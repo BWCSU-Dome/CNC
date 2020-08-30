@@ -1,17 +1,9 @@
 package cnc;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.net.URLDecoder;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -27,8 +19,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 public class XML {
 
@@ -82,7 +72,7 @@ public class XML {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
-		Document doc = builder.parse(new File("files/ressources/CnCsettings.xml"));
+		Document doc = builder.parse(new File(getXMLPath() + " CnCsettings.xml"));
 		int index = 0;
 
 		NodeList settingsNodelist = doc.getElementsByTagName("CnC-Fraese");

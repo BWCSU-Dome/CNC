@@ -35,24 +35,26 @@ public class LineAnimation extends Animation{
 			Main.setAktGeschwind_langsam();
 		}
 		Line line = new Line();
+		 
 		line.setStartX(xStart);
 		line.setStartY(yStart);
 		line.setEndX(xStart);
 		line.setEndY(yStart);
-		line.setStrokeWidth(11);
+		line.setStrokeWidth(12);
 		line.setStroke(Color.BLACK);
 	
 		GUI.arbeitsF.getChildren().add(line);
 		line.toBack();
-		if(!(temp == null)) {
-			temp.setVisible(false);
+		if(!(GUI.getTemp() == null)) {
+			GUI.getTemp().setFill(Color.BLACK);
+			
 		}
 		
 		Circle cir = new Circle(GUI.getKopfX(), GUI.getKopfY(),GUI.getKopfRadius(),GUI.getKopfFill());
 		GUI.KopfsetVisible(false);
 		cir.toBack();
 		GUI.arbeitsF.getChildren().add(cir);
-		temp = cir;
+		GUI.setTemp(cir);
 		
 		// Diese Timeline sorgt dafür, dass die Gerade und der Kopf animiert wird.
 		Timeline t = new Timeline();
@@ -73,19 +75,27 @@ public class LineAnimation extends Animation{
 				new KeyValue(GUI.aktuellY.textProperty(), String.valueOf(Math.round(1050-yStart+((-1050+yEnd+yStart)/intervalle)*a)))
 				));
 		}
+		// Diese Transition sorgt dafür, dass die Koordinaten quasiparallel aktualisiert werden. 
 		TranslateTransition trans = new TranslateTransition();
 		trans.setNode(GUI.aktuellX);
 		GUI.setAndPlayTimeline(t, t2);
+		//Dies sorgt dafür das der nächste code verabeitet wird
 		t.setOnFinished(ActionEvent ->{
 			CodeVerarbeitung.setBoolWeiter(true);
 		});
 		
 		GUI.setKopfX(xEnd);
 		GUI.setKopfY(GUI.getHeight() - yEnd);
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'master' of https://github.com/BWCSU-Dome/CNC.git
 	
 		});
 	}
+	/* Diese Methode animiert den Fall das der BohrerKopf bewegt wird ohne zu Bohren
+	 * Der Kopf fahrt an die übergebenen Koordinaten. 
+	 */
 	public static void lineJustKreis( double xEnd, double yEnd) {
 		Platform.runLater(()->{
 		double xStart = GUI.getKopfX();
@@ -99,15 +109,15 @@ public class LineAnimation extends Animation{
 			Main.setAktGeschwind_langsam();
 		}
 		
-		if(!(temp == null)) {
-			temp.setVisible(false);
+		if(!(GUI.getTemp() == null)) {
+			GUI.getTemp().setVisible(false);
 		}
 		
 		Circle cir = new Circle(GUI.getKopfX(), GUI.getKopfY(),GUI.getKopfRadius(),GUI.getKopfFill());
 		GUI.KopfsetVisible(false);
 		cir.toBack();
 		GUI.arbeitsF.getChildren().add(cir);
-		temp = cir;
+		GUI.setTemp(cir);
 		
 		// Diese Timeline sorgt dafür, dass der Kopf animiert wird.
 		Timeline t = new Timeline();
@@ -125,9 +135,11 @@ public class LineAnimation extends Animation{
 				new KeyValue(GUI.aktuellY.textProperty(), String.valueOf(Math.round(1050-yStart+((-1050+yEnd+yStart)/intervalle)*a)))
 				));
 		}
+		// Diese Transition sorgt dafür, dass die Koordinaten quasiparallel aktualisiert werden. 
 		TranslateTransition trans = new TranslateTransition();
 		trans.setNode(GUI.aktuellX);
 		GUI.setAndPlayTimeline(t, t2);
+		//Das dient dazu, dass der nächste CodeVerarbeitet wird.
 		t.setOnFinished(ActionEvent ->{
 			CodeVerarbeitung.setBoolWeiter(true);
 		});
