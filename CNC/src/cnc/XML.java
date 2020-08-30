@@ -22,7 +22,9 @@ import org.xml.sax.SAXException;
 
 public class XML {
 
-	// OUTPUT
+	/* Diese Methode erstellt eine LogDatei der übergebenen Werte
+	 * 
+	 */
 	public static void save(ArrayList<String> listeBefehle) {
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -46,7 +48,10 @@ public class XML {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/* Diese Methode kann eine Log Datei lesen und erstelt einen String aus dem ganz normal die Codes erstellt werden können
+ 	 * 
+	 */
 	public static String readCodes(File file) throws Exception {
 
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -64,7 +69,10 @@ public class XML {
 			}
 			return befehlEingabe;
 	}
-	
+	/* Diese Methode liest eine XML Datei ein und überprüft die eingebenen Werte, falls diese ungültigt sind wird eine 
+	 * falscheWerteXML Exception geworfen. Wenn andere Fehler auftreten können diese separat behandelt werden. 
+	 * 
+	 */
 	public static void readSettings() throws falscheWerteXMLException, ParserConfigurationException, SAXException, IOException  {
 		
 		double new_homePosX, new_homePosY, geschwindschnell, geschwindlangsam, geschwindfahrt; 
@@ -109,7 +117,9 @@ public class XML {
 		Main.assignSettings(new_homePosX, new_homePosY, geschwindschnell, geschwindlangsam, 
 							geschwindfahrt, farbeBohrer, farbeHomePos, farbeArbeitsflaeche);
 	}
-	
+	/* Diese Methode überprüft, ob die in der SettingsXML Datei eingegebene Farbe, auch tatsächlich definiert ist.  
+	 * 
+	 */
 	private static void checkColor(String color) throws falscheWerteXMLException {
 		switch (color) {
 		case "grey": 
@@ -130,7 +140,9 @@ public class XML {
 			throw new falscheWerteXMLException("ungültige Farbe");
 		}
 	}
-	
+	/* Diese Methode wird genutz um den Pfad der XML Datei zu erhalten.
+	 * 
+	 */
 	private static String getXMLPath(){
 		String decodedPath=null;
 		String path = XML.class.getProtectionDomain().getCodeSource().getLocation().getPath();

@@ -11,7 +11,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
-
+/*
+ * @author Dominik Riepl
+ */
 public class LineAnimation extends Animation{
 
 	/** Die line Methode erzeugt eine Animierte Line, die bei der aktuellen Position des Kopfes startet und bis zu den 
@@ -20,7 +22,6 @@ public class LineAnimation extends Animation{
 	 * @param xEnd X Endposition nach der Animation
 	 * @param yEnd Y Endposition nach der Animation
 	 */
-	
 	public static void line( double xEnd, double yEnd) {
 		Platform.runLater(()->{
 		double xStart = GUI.getKopfX();

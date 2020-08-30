@@ -2,13 +2,16 @@ package cnc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+
+/*
+ * @author Dominik Riepl
+ */
 
 public class CircleAnimation extends Animation {
 
@@ -18,7 +21,9 @@ public class CircleAnimation extends Animation {
 	private static PauseTransition pauseTrans;
 	private static double xEnd, yEnd;
 
-	/**
+	/*
+	 * Diese Methode erzeugt viele Punkte die in der aktuellen Geschwindigkeit
+	 * nacheinander sichtbar werden. Dient zur Darstellung für G-Code G02
 	 * 
 	 * @param x X-Wert bis zu der Stelle, wo gefräst werden soll.
 	 * @param y Y-Wert bis zu der Stelle, wo gefräst werden soll.
@@ -37,59 +42,64 @@ public class CircleAnimation extends Animation {
 			xtempCenter = GUI.getKopfX() - (-i);
 			ytempCenter = GUI.getKopfY() - (j);
 
-
 			double startWinkel = berechneWinkelKreis(radius, j, -i);
-	
 
 			double endWinkel;
-			if(GUI.getKopfY() == yEnde) {
-			endWinkel = berechneWinkelKreis(radius, 0, xEnde - xtempCenter);
-			}else {
-			endWinkel = berechneWinkelKreis(radius,  -1050+yEnde + ytempCenter, xEnde - xtempCenter);
-			}
-			
-			double differenz;
-			
-			
-			if (endWinkel > startWinkel) {
-				differenz = 360+startWinkel-endWinkel;
-		
-				for (double a = 0; a <= Math.abs(differenz) ; a += 0.5) {
-				
-				addCir(startWinkel, radius);
-				startWinkel += 0.5;
-				
-				}
+			if (GUI.getKopfY() == yEnde) {
+				endWinkel = berechneWinkelKreis(radius, 0, xEnde - xtempCenter);
 			} else {
-				differenz = startWinkel-endWinkel;
-	
-				for (double a = 0; a <= differenz ; a += 0.5) {
-					
+				endWinkel = berechneWinkelKreis(radius, -1050 + yEnde + ytempCenter, xEnde - xtempCenter);
+			}
+
+			double differenz;
+
+			if (endWinkel > startWinkel) {
+				differenz = 360 + startWinkel - endWinkel;
+
+				for (double a = 0; a <= Math.abs(differenz); a += 0.5) {
+
 					addCir(startWinkel, radius);
 					startWinkel += 0.5;
+
+				}
 				
+			} else if(startWinkel == endWinkel){
+				for (double a = 0; a <= 360; a += 0.5) {
+
+					addCir(startWinkel, radius);
+					startWinkel += 0.5;
+
+				}
+			}	
+			else {
+				differenz = startWinkel - endWinkel;
+
+				for (double a = 0; a <= differenz; a += 0.5) {
+
+					addCir(startWinkel, radius);
+					startWinkel += 0.5;
+
 				}
 			}
-			if(!(GUI.getTemp() == null)) {
+			if (!(GUI.getTemp() == null)) {
 				GUI.getTemp().setVisible(false);
 			}
 			update(radius);
 			
-
-			GUI.setPaustransAktiv(false);
-
-
 		});
-		
+
 	}
-	/** Diese Methode erzeugt viele Punkte die in der aktuellen Geschwindigkeit nacheinander sichtbar werden. 
+
+	/**
+	 * Diese Methode erzeugt viele Punkte die in der aktuellen Geschwindigkeit
+	 * nacheinander sichtbar werden. Dient zur Darstellung für G-Code G03
 	 * 
 	 * @param x X-Wert bis zu der Stelle, wo gefräst werden soll.
 	 * @param y Y-Wert bis zu der Stelle, wo gefräst werden soll.
 	 * @param i X-Wert bis zum Mittelpunkt
 	 * @param j Y-Wert bis zum Mittelpunkt
 	 */
-	public static void kreisGegenUhrzeiger(double xEnde, double yEnde, double i, double j)  {
+	public static void kreisGegenUhrzeiger(double xEnde, double yEnde, double i, double j) {
 		Platform.runLater(() -> {
 			Main.setSpindelAktiv(true);
 			GUI.refreshSpindel();
@@ -101,48 +111,58 @@ public class CircleAnimation extends Animation {
 			xtempCenter = GUI.getKopfX() - (-i);
 			ytempCenter = GUI.getKopfY() - (j);
 
-
 			double startWinkel = berechneWinkelKreis(radius, j, -i);
 
-
 			double endWinkel;
-			if(GUI.getKopfY() == yEnde) {
-			endWinkel = berechneWinkelKreis(radius, 0, xEnde - xtempCenter);
-			}else {
-			endWinkel = berechneWinkelKreis(radius,  -1050+yEnde + ytempCenter, xEnde - xtempCenter);
+			if (GUI.getKopfY() == yEnde) {
+				endWinkel = berechneWinkelKreis(radius, 0, xEnde - xtempCenter);
+			} else {
+				endWinkel = berechneWinkelKreis(radius, -1050 + yEnde + ytempCenter, xEnde - xtempCenter);
 			}
 
 			double differenz;
 			
-			
+
 			if (endWinkel > startWinkel) {
-				differenz = startWinkel-endWinkel;
-					for (double a = 0; a <= Math.abs(differenz) ; a += 0.5) {
-					
+				differenz = startWinkel - endWinkel;
+				for (double a = 0; a <= Math.abs(differenz); a += 0.5) {
+
 					addCir(startWinkel, radius);
 					startWinkel -= 0.5;
-				
+
 				}
-			} else {
-				differenz = 360-startWinkel+endWinkel;
-				for (double a = 0; a <= differenz ; a += 0.5) {
+			} else if(startWinkel == endWinkel){
+				for (double a = 0; a <= 360; a += 0.5) {
+
 					addCir(startWinkel, radius);
 					startWinkel -= 0.5;
-				
+
 				}
 			}
-			if(!(GUI.getTemp() == null)) {
+			else {
+				differenz = 360 - startWinkel + endWinkel;
+				for (double a = 0; a <= differenz; a += 0.5) {
+					addCir(startWinkel, radius);
+					startWinkel -= 0.5;
+
+				}
+			}
+			if (!(GUI.getTemp() == null)) {
 				GUI.getTemp().setVisible(false);
 			}
 			update(radius);
-			GUI.setPaustransAktiv(false);
+			
 
 		});
-		
-	}
-	
 
-	public static double berechneWinkelKreis(double radius, double yEntfernung, double xEntfernung)  {
+	}
+
+	/*
+	 * Diese Methode berechnet den Winkel eines Vektors auf dem Kreis und wird
+	 * genutzt, um den Start/Endwinkel zu berechnen
+	 * 
+	 */
+	public static double berechneWinkelKreis(double radius, double yEntfernung, double xEntfernung) {
 
 		if (xEntfernung < 0 && 0 < yEntfernung) { // 2
 			return 180 - Math.toDegrees(Math.asin(yEntfernung / radius));
@@ -165,6 +185,11 @@ public class CircleAnimation extends Animation {
 		}
 	}
 
+	/*
+	 * Diese Methode fügt der Arbeitsfläche einen Kreis hinzu in abhänigkeit des
+	 * aktuellen Winkels zum Mittelpunkt der Kreisbewegung
+	 * 
+	 */
 	private static void addCir(double winkel, double radius) {
 
 		xtemp = (xtempCenter + radius * Math.cos(Math.toRadians(winkel)));
@@ -178,44 +203,52 @@ public class CircleAnimation extends Animation {
 
 	private static int stueck = 0;
 
+	/*
+	 * Diese Methode setzt abhängig von stueck die bei jedem aufruf den vorherigen
+	 * Kreis auf die Color "black" und fügt macht den aktuellen Kreis sichtbar
+	 */
 	private static void updateCirs() {
 
 		if (!(tempColor == null)) {
 			tempColor.setFill(Color.BLACK);
 		}
-			
+
 		Circle temp = circles.get(stueck);
 		temp.setVisible(true);
 		GUI.setKopfX(temp.getCenterX());
-		GUI.setKopfY(1050-temp.getCenterY());
+		GUI.setKopfY(1050 - temp.getCenterY());
 		GUI.refreshKoordinaten();
 		circles.set(stueck, temp);
 		tempColor = temp;
 	}
 
 	/**
+	 * Diese Methode startet die Animation von der Kreisbewegung die Kreise mit
+	 * zeitlich angepassten Pausen sichtbar werden
 	 * 
-	 * @param winkelDifferenz
+	 * @param Radius
 	 */
 	private static void update(double radius) {
 
-		double umfang = Math.PI*radius*circles.size()/360;
-	
-		double dauer = umfang/Main.getAktGeschw();
-	
-		pauseTrans = new PauseTransition(Duration.seconds(dauer/circles.size()));
-		
+		double umfang = Math.PI * radius * circles.size() / 360;
+
+		double dauer = umfang / Main.getAktGeschw();
+
+		pauseTrans = new PauseTransition(Duration.seconds(dauer / circles.size()));
+
 		pauseTrans.setOnFinished(event -> {
-			if(stueck < circles.size()-1) {
+			if (stueck < circles.size() - 1) {
 				stueck++;
 				updateCirs();
 				pauseTrans.play();
-			}else {
-				GUI.setTemp(circles.get(stueck-1));
+			} else {
+				GUI.setTemp(circles.get(stueck));
 				circles.clear();
 				stueck = 0;
 				GUI.setKopfX(xEnd);
-				GUI.setKopfY(1050-yEnd);
+				GUI.setKopfY(1050 - yEnd);
+				GUI.setPaustransAktiv(false);
+				pauseTrans = null;
 				CodeVerarbeitung.setBoolWeiter(true);
 				return;
 			}
@@ -223,44 +256,74 @@ public class CircleAnimation extends Animation {
 		pauseTrans.play();
 	}
 
+	/*
+	 * Diese Methode dient dazu die Kreisbewegung pausieren zu können
+	 * 
+	 */
 	public static void pausePauseTrans() {
 		pauseTrans.pause();
 	}
 
+	/*
+	 * Diese Methode dient dazu die Kreisbewegung pausieren zu können
+	 * 
+	 */
 	public static void playPauseTrans() {
 		pauseTrans.play();
 	}
+
+	/*
+	 * Diese Methode wird von der GUI genutzt um zu Überprüfen, ob die PauseTrans
+	 * aktualisiert ist. bzw. ob sie gestartet oder beendet werden kann.
+	 * 
+	 */
 	public static Boolean PauseTransIsNotNull() {
-		if(pauseTrans !=null) {
+		if (pauseTrans != null) {
 			return true;
-		}return false;
+		}
+		return false;
 	}
 
-//	/** Diese Überprüfung ob die Koordinate auf dem Kreis liegt
-//	 * 
-//	 * @param x Zielkoordinate der Kreisbewegung
-//	 * @param y Zielkoordinate der Kreisbewegung
-//	 * @param CenterX Mittelpunkt des Kreises
-//	 * @param CenterY Mittelpunkt des Kreises
-//	 * @return
-//	 */
-//	public static boolean checkKreisBogen(double x, double y, double CenterX, double CenterY, double radius) {
-//		System.out.println(CenterX);
-//		boolean wert;
-//		for(double a = 90; a <= 270; a+= 0.5) {
-//			xtemp = (CenterX + radius*Math.cos(Math.toRadians(a)));
-//			ytemp = (CenterY + radius*Math.sin(Math.toRadians(a)));
-//			xtemp = Math.round(xtemp);
-//			ytemp = Math.round(ytemp);
-//			
-//			if(xtemp == x && ytemp == y) {
-//				
-//				wert = true;
-//				return wert;
-//			}
-//		}
-//		return false;
-//		
-//		
-//	}
+	/** Diese Überprüfung ob die Koordinate auf dem Kreis liegt
+	 * @param x Zielkoordinate der Kreisbewegung
+	 * @param y Zielkoordinate der Kreisbewegung
+	 * @throws IOException 
+	 * @throws OutOfAreaException 
+	 */
+	public static void checkKreisBogen(double xEnde, double yEnde, double aktuelX, double aktuelY, double i, double j) throws IOException, OutOfAreaException {
+		
+		double radius = Math.sqrt(i * i + j * j);
+
+		double xtempCen = aktuelX - (-i);
+		double ytempCen = aktuelY - (j);
+
+		double startWinkel = berechneWinkelKreis(radius, j, -i);
+		System.out.println(startWinkel+ "start");
+		
+		System.out.println(xtempCen + "xtem");
+		System.out.println(ytempCen + "ytem");
+		double endWinkel;
+		if (aktuelY == yEnde) {
+			endWinkel = berechneWinkelKreis(radius, 0, xEnde - xtempCen);
+		} else {
+			endWinkel = berechneWinkelKreis(radius, -1050 + yEnde + ytempCen, xEnde - xtempCen);
+		}
+		System.out.println(endWinkel);
+		
+		if(startWinkel != 0 && startWinkel != 90 && startWinkel != 180 && startWinkel != 270) {
+			throw new IOException();
+		}
+		if(endWinkel != 0 && endWinkel != 90 && endWinkel != 180 && endWinkel != 270) {
+			throw new IOException();
+		}
+		
+		if(0 > xtempCen-radius || 1400 < xtempCen+radius) {
+			throw new OutOfAreaException();
+		}
+		if(0 > ytempCen-radius || GUI.getHeight() < xtempCen+radius) {
+			throw new OutOfAreaException();
+		}
+
+		
+	}
 }

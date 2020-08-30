@@ -1,5 +1,7 @@
 package cnc;
 
+import java.io.IOException;
+
 /**
  * 
  * @author Jonas Heckerodt
@@ -24,6 +26,7 @@ public class GCodes extends Codes {
 			
 			pruefeMissingEingabeparameter(true, x, y);
 			
+			
 		} catch (MissingParameterException e) {
 
 			//Kein Parameter wurde mitgegeben --> Keine Fahrt möglich
@@ -34,6 +37,8 @@ public class GCodes extends Codes {
 	
 		try {
 			pruefeFahrbewegung(x, y);
+			aktuellePosX = x;
+			aktuellePosY = y;
 		} catch(OutOfAreaException e) {
 		erfolgreich = false;
 		return erfolgreich;
@@ -90,10 +95,16 @@ public class GCodes extends Codes {
 		}
 		
 		try {
-			pruefeFahrbewegung(false);
+			pruefeFahrbewegung(x,y,aktuellePosX,aktuellePosY,i,j);
+			aktuellePosX = x;
+			aktuellePosY = y;
 		} catch(OutOfAreaException e) {
 		erfolgreich = false;
 		return erfolgreich;
+		}catch (IOException e) {
+			GUI.setTXTOutputConsole("Der Kreis-Code entsprach nicht den\nStandards- Winkel überprüfen");
+			erfolgreich = false;
+			return erfolgreich;
 		}
 		erfolgreich = true;
 		return erfolgreich;
@@ -129,11 +140,16 @@ public class GCodes extends Codes {
 		}
 		
 		try {
-			pruefeFahrbewegung(false);
+			pruefeFahrbewegung(x,y,aktuellePosX,aktuellePosY,i,j);
+			aktuellePosX = x;
+			aktuellePosY = y;
 		} catch(OutOfAreaException e) {
-		e.printStackTrace();
 		erfolgreich = false;
 		return erfolgreich;
+		}catch (IOException e) {
+			GUI.setTXTOutputConsole("Der Kreis-Code entspricht nicht den\nStandards Bitte den Winkel überprüfen");
+			erfolgreich = false;
+			return erfolgreich;
 		}
 		erfolgreich = true;
 		return erfolgreich;
@@ -151,7 +167,7 @@ public class GCodes extends Codes {
 		double i = param[2];
 		double j = param[3];
 		
-			CircleAnimation.kreis(x, y, i, j);  //Hier wird die Methode zur Kreisfahrt gerufen
+			CircleAnimation.kreisGegenUhrzeiger(x, y, i, j);  //Hier wird die Methode zur Kreisfahrt gerufen
 
 		
 	}
@@ -190,9 +206,9 @@ public class GCodes extends Codes {
 	/*
 	 * Prüft, ob Fahrbewegungen innerhalb der vorgesehenen Arbeitsfläche stattfinden. Diese Methode richtet sich ausschließlich an Kreisfahrtbewegungen.
 	 */
-	static public void pruefeFahrbewegung(boolean isGerade) throws OutOfAreaException {
+	static public void pruefeFahrbewegung(double xEnde, double yEnde, double xAktuell, double yAktuell, double i, double j) throws OutOfAreaException, IOException {
 		
-			//Hier findet die Überprüfung der Kreispunkte statt
+			CircleAnimation.checkKreisBogen(xEnde, yEnde, xAktuell, yAktuell, i, j);
 		
 		
 	}
