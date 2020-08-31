@@ -23,14 +23,14 @@ public class CircleAnimation extends Animation {
 
 	/*
 	 * Diese Methode erzeugt viele Punkte die in der aktuellen Geschwindigkeit
-	 * nacheinander sichtbar werden. Dient zur Darstellung für G-Code G03
+	 * nacheinander sichtbar werden. Dient zur Darstellung für G-Code G02
 	 * 
 	 * @param x X-Wert bis zu der Stelle, wo gefräst werden soll.
 	 * @param y Y-Wert bis zu der Stelle, wo gefräst werden soll.
 	 * @param i X-Wert bis zum Mittelpunkt
 	 * @param j Y-Wert bis zum Mittelpunkt
 	 */
-	public static void kreisGegenUhrzeiger(double xEnde, double yEnde, double i, double j) {
+	public static void kreis(double xEnde, double yEnde, double i, double j) {
 		Platform.runLater(() -> {
 			Main.setSpindelAktiv(true);
 			GUI.refreshSpindel();
@@ -92,14 +92,14 @@ public class CircleAnimation extends Animation {
 
 	/**
 	 * Diese Methode erzeugt viele Punkte die in der aktuellen Geschwindigkeit
-	 * nacheinander sichtbar werden. Dient zur Darstellung für G-Code G02
+	 * nacheinander sichtbar werden. Dient zur Darstellung für G-Code G03
 	 * 
 	 * @param x X-Wert bis zu der Stelle, wo gefräst werden soll.
 	 * @param y Y-Wert bis zu der Stelle, wo gefräst werden soll.
 	 * @param i X-Wert bis zum Mittelpunkt
 	 * @param j Y-Wert bis zum Mittelpunkt
 	 */
-	public static void kreis(double xEnde, double yEnde, double i, double j) {
+	public static void kreisGegenUhrzeiger(double xEnde, double yEnde, double i, double j) {
 		Platform.runLater(() -> {
 			Main.setSpindelAktiv(true);
 			GUI.refreshSpindel();
@@ -112,14 +112,14 @@ public class CircleAnimation extends Animation {
 			ytempCenter = GUI.getKopfY() - (j);
 
 			double startWinkel = berechneWinkelKreis(radius, j, -i);
-
+			System.out.println(startWinkel + "start windl");
 			double endWinkel;
 			if (GUI.getKopfY() == yEnde) {
 				endWinkel = berechneWinkelKreis(radius, 0, xEnde - xtempCenter);
 			} else {
 				endWinkel = berechneWinkelKreis(radius, -1050 + yEnde + ytempCenter, xEnde - xtempCenter);
 			}
-
+			System.out.println(endWinkel + " ene");
 			double differenz;
 			
 
@@ -132,8 +132,9 @@ public class CircleAnimation extends Animation {
 
 				}
 			} else if(startWinkel == endWinkel){
+				System.out.println("start = ende");
 				for (double a = 0; a <= 360; a += 0.5) {
-
+					
 					addCir(startWinkel, radius);
 					startWinkel -= 0.5;
 
@@ -238,7 +239,7 @@ public class CircleAnimation extends Animation {
 
 		pauseTrans.setOnFinished(event -> {
 			if (stueck < circles.size() - 1) {
-				stueck++;
+ 				stueck++;
 				updateCirs();
 				pauseTrans.play();
 			} else {
@@ -285,7 +286,8 @@ public class CircleAnimation extends Animation {
 		return false;
 	}
 
-	/** Diese Überprüfung ob die Koordinate auf dem Kreis liegt
+	/** Diese Überprüfung ob die Koordinate auf dem Kreis liegt im UhrzeigerSinn
+	 *  Die Winkel werden dabei mit Modulo umgerechnet 
 	 * @param x Zielkoordinate der Kreisbewegung
 	 * @param y Zielkoordinate der Kreisbewegung
 	 * @throws IOException 
@@ -317,17 +319,39 @@ public class CircleAnimation extends Animation {
 		if(endWinkel != 0 && endWinkel != 90 && endWinkel != 180 && endWinkel != 270) {
 			throw new IOException();
 		}
-//		if(startWinkel)
+		double differenz;
 		
-		
-		
-		if(0 > xtempCen-radius || 1400 < xtempCen+radius) {
-			throw new OutOfAreaException();
+		if (endWinkel > startWinkel) {
+			differenz = startWinkel - endWinkel;
+		}else {
+			differenz = 360 - startWinkel + endWinkel;
 		}
-		if(0 > ytempCen-radius || GUI.getHeight() < xtempCen+radius) {
-			throw new OutOfAreaException();
+		for(int a = 0 ; a <= differenz ; a+=90) {
+			int b = (int)(startWinkel/90)%4;
+			switch (b) {
+				case 0:
+					if(1400 < xtempCen+radius) {
+						throw new OutOfAreaException();
+					}
+					break;
+				case 1:
+					if(1400 < xtempCen+radius) {
+						throw new OutOfAreaException();
+					}
+					break;
+				case 2:
+					if(xtempCen-radius < 0) {
+						throw new OutOfAreaException();
+					}
+					break;
+				case 3:
+					if(ytempCen-radius < 0) {
+						throw new OutOfAreaException();
+					}
+					break;
+			}
+			startWinkel +=90;
 		}
 
-		
 	}
 }
