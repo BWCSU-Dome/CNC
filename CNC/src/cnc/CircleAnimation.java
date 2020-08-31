@@ -119,7 +119,7 @@ public class CircleAnimation extends Animation {
 			} else {
 				endWinkel = berechneWinkelKreis(radius, -1050 + yEnde + ytempCenter, xEnde - xtempCenter);
 			}
-			System.out.println(endWinkel + " ene");
+		
 			double differenz;
 			
 
@@ -132,7 +132,7 @@ public class CircleAnimation extends Animation {
 
 				}
 			} else if(startWinkel == endWinkel){
-				System.out.println("start = ende");
+				
 				for (double a = 0; a <= 360; a += 0.5) {
 					
 					addCir(startWinkel, radius);
@@ -301,17 +301,13 @@ public class CircleAnimation extends Animation {
 		double ytempCen = aktuelY - (j);
 
 		double startWinkel = berechneWinkelKreis(radius, j, -i);
-		System.out.println(startWinkel+ "start");
-		
-		System.out.println(xtempCen + "xtem");
-		System.out.println(ytempCen + "ytem");
+
 		double endWinkel;
 		if (aktuelY == yEnde) {
 			endWinkel = berechneWinkelKreis(radius, 0, xEnde - xtempCen);
 		} else {
 			endWinkel = berechneWinkelKreis(radius, -1050 + yEnde + ytempCen, xEnde - xtempCen);
 		}
-		System.out.println(endWinkel);
 		
 		if(startWinkel != 0 && startWinkel != 90 && startWinkel != 180 && startWinkel != 270) {
 			throw new IOException();
@@ -371,18 +367,15 @@ public class CircleAnimation extends Animation {
 
 		double xtempCen = aktuelX - (-i);
 		double ytempCen = aktuelY - (j);
-		System.out.println(xtempCen + "xtemp");
-		System.out.println(ytempCen + "ytemp");
 
 		double startWinkel = berechneWinkelKreis(radius, j, -i);
-		System.out.println(startWinkel+ "startWinkel");
+
 		double endWinkel;
 		if (aktuelY == yEnde) {
 			endWinkel = berechneWinkelKreis(radius, 0, xEnde - xtempCenter);
 		} else {
 			endWinkel = berechneWinkelKreis(radius, -1050 + yEnde + ytempCenter, xEnde - xtempCenter);
 		}
-		System.out.println(endWinkel + "endwinkel");
 		
 		if(startWinkel != 0 && startWinkel != 90 && startWinkel != 180 && startWinkel != 270) {
 			throw new IOException();
