@@ -112,7 +112,7 @@ public class CircleAnimation extends Animation {
 			ytempCenter = GUI.getKopfY() - (j);
 
 			double startWinkel = berechneWinkelKreis(radius, j, -i);
-			System.out.println(startWinkel + "start windl");
+			
 			double endWinkel;
 			if (GUI.getKopfY() == yEnde) {
 				endWinkel = berechneWinkelKreis(radius, 0, xEnde - xtempCenter);
@@ -293,7 +293,7 @@ public class CircleAnimation extends Animation {
 	 * @throws IOException 
 	 * @throws OutOfAreaException 
 	 */
-	public static void checkKreisBogen(double xEnde, double yEnde, double aktuelX, double aktuelY, double i, double j) throws IOException, OutOfAreaException {
+	public static void checkKreisBogenUhrzeiger(double xEnde, double yEnde, double aktuelX, double aktuelY, double i, double j) throws IOException, OutOfAreaException {
 		
 		double radius = Math.sqrt(i * i + j * j);
 
@@ -319,7 +319,87 @@ public class CircleAnimation extends Animation {
 		if(endWinkel != 0 && endWinkel != 90 && endWinkel != 180 && endWinkel != 270) {
 			throw new IOException();
 		}
+		
 		double differenz;
+		if (endWinkel > startWinkel) {
+			differenz = 360 + startWinkel - endWinkel;
+		} else if(startWinkel == endWinkel){
+			differenz = 360;
+		}	
+		else {
+			differenz = startWinkel - endWinkel;
+		}
+		
+		for(int a = 0 ; a <= differenz ; a+=90) {
+			int b = (int)(startWinkel/90)%4;
+			switch (b) {
+				case 0:
+					if(1400 < xtempCen+radius) {
+						throw new OutOfAreaException();
+					}
+					break;
+				case 1:
+					if(1400 < xtempCen+radius) {
+						throw new OutOfAreaException();
+					}
+					break;
+				case 2:
+					if(xtempCen-radius < 0) {
+						throw new OutOfAreaException();
+					}
+					break;
+				case 3:
+					if(ytempCen-radius < 0) {
+						throw new OutOfAreaException();
+					}
+					break;
+			}
+			startWinkel +=90;
+		}
+
+	}
+	/** Diese Überprüfung ob die Koordinate auf dem Kreis liegt im UhrzeigerSinn
+	 *  Die Winkel werden dabei mit Modulo umgerechnet 
+	 * @param x Zielkoordinate der Kreisbewegung
+	 * @param y Zielkoordinate der Kreisbewegung
+	 * @throws IOException 
+	 * @throws OutOfAreaException 
+	 */
+	public static void checkKreisBogenGegenUhrzeiger(double xEnde, double yEnde, double aktuelX, double aktuelY, double i, double j) throws IOException, OutOfAreaException {
+		
+		double radius = Math.sqrt(i * i + j * j);
+
+		double xtempCen = aktuelX - (-i);
+		double ytempCen = aktuelY - (j);
+
+		double startWinkel = berechneWinkelKreis(radius, j, -i);
+		
+		double endWinkel;
+		if (GUI.getKopfY() == yEnde) {
+			endWinkel = berechneWinkelKreis(radius, 0, xEnde - xtempCenter);
+		} else {
+			endWinkel = berechneWinkelKreis(radius, -1050 + yEnde + ytempCenter, xEnde - xtempCenter);
+		}
+		
+		
+		if(startWinkel != 0 && startWinkel != 90 && startWinkel != 180 && startWinkel != 270) {
+			throw new IOException();
+		}
+		if(endWinkel != 0 && endWinkel != 90 && endWinkel != 180 && endWinkel != 270) {
+			throw new IOException();
+		}
+		
+		double differenz;
+
+		if (endWinkel > startWinkel) {
+			differenz = startWinkel - endWinkel;
+			
+		} else if(startWinkel == endWinkel){
+			differenz = 360;
+		}
+		else {
+			differenz = 360 - startWinkel + endWinkel;
+		}
 		
 		if (endWinkel > startWinkel) {
 			differenz = startWinkel - endWinkel;

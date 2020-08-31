@@ -95,7 +95,7 @@ public class GCodes extends Codes {
 		}
 		
 		try {
-			pruefeFahrbewegung(x,y,aktuellePosX,aktuellePosY,i,j);
+			CircleAnimation.checkKreisBogenUhrzeiger(x,y,aktuellePosX,aktuellePosY,i,j);
 			aktuellePosX = x;
 			aktuellePosY = y;
 		} catch(OutOfAreaException e) {
@@ -140,7 +140,7 @@ public class GCodes extends Codes {
 		}
 		
 		try {
-			pruefeFahrbewegung(x,y,aktuellePosX,aktuellePosY,i,j);
+			CircleAnimation.checkKreisBogenGegenUhrzeiger(x,y,aktuellePosX,aktuellePosY,i,j);
 			aktuellePosX = x;
 			aktuellePosY = y;
 		} catch(OutOfAreaException e) {
@@ -202,18 +202,7 @@ public class GCodes extends Codes {
 		
 	}
 	
-	
-	/*
-	 * Prüft, ob Fahrbewegungen innerhalb der vorgesehenen Arbeitsfläche stattfinden. Diese Methode richtet sich ausschließlich an Kreisfahrtbewegungen.
-	 */
-	static public void pruefeFahrbewegung(double xEnde, double yEnde, double xAktuell, double yAktuell, double i, double j) throws OutOfAreaException, IOException {
-		
-			CircleAnimation.checkKreisBogen(xEnde, yEnde, xAktuell, yAktuell, i, j);
-		
-		
-	}
-	
-	
+
 	/**Prüft, ob eine hinreichende Zahl an Eingabedaten vorhanden sind. Gibt auch aus, welche Koordinaten fehlen, um ggf trotzdem die Fahrbewegung durchzuführen.
 	 * 
 	 * @param isGerade zeigt an, ob es sich bei der zu überprüfenden Fahrbewegung um eine Gerade handelt
