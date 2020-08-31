@@ -250,6 +250,7 @@ public class CircleAnimation extends Animation {
 				GUI.setPaustransAktiv(false);
 				pauseTrans = null;
 				CodeVerarbeitung.setBoolWeiter(true);
+				CodeVerarbeitung.setEndetrue();
 				return;
 			}
 		});

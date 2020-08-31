@@ -83,6 +83,7 @@ public class LineAnimation extends Animation{
 		//Dies sorgt dafür das der nächste code verabeitet wird
 		t.setOnFinished(ActionEvent ->{
 			CodeVerarbeitung.setBoolWeiter(true);
+			CodeVerarbeitung.setEndetrue();
 		});
 		
 		GUI.setKopfX(xEnd);
@@ -139,6 +140,7 @@ public class LineAnimation extends Animation{
 		//Das dient dazu, dass der nächste CodeVerarbeitet wird.
 		t.setOnFinished(ActionEvent ->{
 			CodeVerarbeitung.setBoolWeiter(true);
+			CodeVerarbeitung.setEndetrue();
 		});
 		
 		GUI.setKopfX(xEnd);
