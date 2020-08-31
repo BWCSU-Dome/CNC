@@ -105,6 +105,9 @@ public class Main {
 			return "deaktiviert";
 		}
 	}
+	public static Boolean getKuehlungAktivBool() {
+		return kuehlungAktiv;
+	}
 
 	/**
 	 * Diese Methode verändert den Wert der Kühlung in der Main / GUI und setzt die

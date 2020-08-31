@@ -145,6 +145,11 @@ public class LineAnimation extends Animation{
 		
 		GUI.setKopfX(xEnd);
 		GUI.setKopfY(GUI.getHeight() - yEnd);
+		if(Main.getKuehlungAktivBool()) {
+			Main.setAktGeschwind_schnell();
+		}else {
+			Main.setAktGeschwind_langsam();
+		}
 	
 		});
 	}
