@@ -23,14 +23,14 @@ public class CircleAnimation extends Animation {
 
 	/*
 	 * Diese Methode erzeugt viele Punkte die in der aktuellen Geschwindigkeit
-	 * nacheinander sichtbar werden. Dient zur Darstellung für G-Code G02
+	 * nacheinander sichtbar werden. Dient zur Darstellung für G-Code G03
 	 * 
 	 * @param x X-Wert bis zu der Stelle, wo gefräst werden soll.
 	 * @param y Y-Wert bis zu der Stelle, wo gefräst werden soll.
 	 * @param i X-Wert bis zum Mittelpunkt
 	 * @param j Y-Wert bis zum Mittelpunkt
 	 */
-	public static void kreis(double xEnde, double yEnde, double i, double j) {
+	public static void kreisGegenUhrzeiger(double xEnde, double yEnde, double i, double j) {
 		Platform.runLater(() -> {
 			Main.setSpindelAktiv(true);
 			GUI.refreshSpindel();
@@ -92,14 +92,14 @@ public class CircleAnimation extends Animation {
 
 	/**
 	 * Diese Methode erzeugt viele Punkte die in der aktuellen Geschwindigkeit
-	 * nacheinander sichtbar werden. Dient zur Darstellung für G-Code G03
+	 * nacheinander sichtbar werden. Dient zur Darstellung für G-Code G02
 	 * 
 	 * @param x X-Wert bis zu der Stelle, wo gefräst werden soll.
 	 * @param y Y-Wert bis zu der Stelle, wo gefräst werden soll.
 	 * @param i X-Wert bis zum Mittelpunkt
 	 * @param j Y-Wert bis zum Mittelpunkt
 	 */
-	public static void kreisGegenUhrzeiger(double xEnde, double yEnde, double i, double j) {
+	public static void kreis(double xEnde, double yEnde, double i, double j) {
 		Platform.runLater(() -> {
 			Main.setSpindelAktiv(true);
 			GUI.refreshSpindel();
@@ -317,6 +317,9 @@ public class CircleAnimation extends Animation {
 		if(endWinkel != 0 && endWinkel != 90 && endWinkel != 180 && endWinkel != 270) {
 			throw new IOException();
 		}
+//		if(startWinkel)
+		
+		
 		
 		if(0 > xtempCen-radius || 1400 < xtempCen+radius) {
 			throw new OutOfAreaException();

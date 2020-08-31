@@ -12,14 +12,14 @@ public class MCodes extends Codes {
 		schalteSpindelAus();
 		schalteKuelmittel(false);
 		CodeVerarbeitung.setBoolWeiter(true);
-		CodeVerarbeitung.setEndetrue();
+		CodeVerarbeitung.setEndeMCodetrue();
 	}
 	
 	//Repräsentation von Code M02
 	public static void beendeProgramm() {
 		GUI.closeCNC();
 		CodeVerarbeitung.setBoolWeiter(true);
-		CodeVerarbeitung.setEndetrue();
+		CodeVerarbeitung.setEndeMCodetrue();
 	}
 	
 	//
@@ -30,21 +30,21 @@ public class MCodes extends Codes {
 		Main.setSpindelAktiv(true);
 		Main.setSpindelRechtslaufAktiv(richtung);
 		CodeVerarbeitung.setBoolWeiter(true);
-		CodeVerarbeitung.setEndetrue();
+		CodeVerarbeitung.setEndeMCodetrue();
 	}
 	
 	//Repräsentation von Code M05
 	public static void schalteSpindelAus() {
 		Main.setSpindelAktiv(false);
 		CodeVerarbeitung.setBoolWeiter(true);
-		CodeVerarbeitung.setEndetrue();
+		CodeVerarbeitung.setEndeMCodetrue();
 	}
 	
 	//Repräsentation von Code M08/M09 --> Mitgegeben wird gewünschter Status (An/Aus)
 	public static void schalteKuelmittel(boolean onoff) {
 		Main.setKuehlungAktiv(onoff);
 		CodeVerarbeitung.setBoolWeiter(true);
-		CodeVerarbeitung.setEndetrue();
+		CodeVerarbeitung.setEndeMCodetrue();
 	}
 	
 }
