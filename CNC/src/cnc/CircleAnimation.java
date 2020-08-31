@@ -371,16 +371,18 @@ public class CircleAnimation extends Animation {
 
 		double xtempCen = aktuelX - (-i);
 		double ytempCen = aktuelY - (j);
+		System.out.println(xtempCen + "xtemp");
+		System.out.println(ytempCen + "ytemp");
 
 		double startWinkel = berechneWinkelKreis(radius, j, -i);
-		
+		System.out.println(startWinkel+ "startWinkel");
 		double endWinkel;
-		if (GUI.getKopfY() == yEnde) {
+		if (aktuelY == yEnde) {
 			endWinkel = berechneWinkelKreis(radius, 0, xEnde - xtempCenter);
 		} else {
 			endWinkel = berechneWinkelKreis(radius, -1050 + yEnde + ytempCenter, xEnde - xtempCenter);
 		}
-		
+		System.out.println(endWinkel + "endwinkel");
 		
 		if(startWinkel != 0 && startWinkel != 90 && startWinkel != 180 && startWinkel != 270) {
 			throw new IOException();
