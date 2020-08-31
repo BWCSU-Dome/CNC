@@ -13,16 +13,28 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 	private static String[] befehlEingangDo;
 	private static String[] befehl = new String[5];
 	private static double[] parameter = new double[4];
-	private static boolean weiter;
+	private static boolean weiter =true;
+	private static boolean ende =false ; 
+	private static boolean endeMcode = false;
 	
 	public void run() {
 			
 		while(true) {
+			
+//			if(!queueIsEmpty()&&queue.size() != 1) {
+			ende = false;
+//			}
 			if(queueIsEmpty()) {
-				Codes.addStringToOutput("Warteschlange erfolgreich abgearbeitet"); //Wenn die Queue leer ist (entweder kein Code eingegeben, oder alle ausgeführt) kommt eine kurze Meldung.
-				while(GUI.getTimelineIsFinish()) {
-					System.out.println("nope");
+				while(!ende && !endeMcode) {		//Warteschleife: So lang fortgeführt, bis der letzte Code fertig ausgeführt ist
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						
+						System.out.println("Der Thread CodeVerarbeitung wurde unterbrochen");
+					}
 				}
+				Codes.addStringToOutput("Warteschlange erfolgreich abgearbeitet"); //Wenn die Queue leer ist (entweder kein Code eingegeben, oder alle ausgeführt) kommt eine kurze Meldung.
+				
 				GUI.clearTimelines();
 				GUI.setCodeVerarbeitungStartenTrue();
 				Platform.runLater(()->{
@@ -30,16 +42,17 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 				});
 				break;
 				}
-			
+			endeMcode = false;
 			befehlEingangDo = queue.get(0).split(" ");
 			
 			System.arraycopy(befehlEingangDo, 0, befehl, 0, befehlEingangDo.length);
 			
 			// Es wird zur reibungslosen Weiterverarbeitung der Parameter ein Double-Array erzeugt
 			parameter = new double[befehl.length-1];
-			
+			weiter = false;
+		
 			for(int i=0; i < parameter.length; i++) {
-				weiter = false;
+				
 				parameter[i] = Double.parseDouble(befehl[i+1].substring(1));		//Die Buchstaben der Argumente werden hier weggeschnitten, da dank der festen Reihenfolge, die das Array nun hat, anhand der Position klar ist, um welches Argument es sich handelt.
 				}
 				
@@ -55,7 +68,7 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 				}
 			
 			Codes.incAusgefuehrteCodes();
-				
+			
 			while(!weiter) {		//Warteschleife: So lang fortgeführt, bis aktueller Code fertig ausgeführt
 				try {
 					Thread.sleep(50);
@@ -68,6 +81,7 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 					break;
 				}
 			}
+			
 			
 			String doneBefehl="";
 
@@ -96,6 +110,13 @@ public class CodeVerarbeitung extends Codes implements Runnable {
 
 	public static void setBoolWeiter(Boolean wert) {
 		weiter = wert;
+		
+	}
+	public static void setEndetrue() {
+		ende = true;
+	}
+	public static void setEndeMCodetrue() {
+		endeMcode = true;
 	}
 	
 }
