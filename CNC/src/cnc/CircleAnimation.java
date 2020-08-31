@@ -163,7 +163,7 @@ public class CircleAnimation extends Animation {
 	 * genutzt, um den Start/Endwinkel zu berechnen
 	 * 
 	 */
-	public static double berechneWinkelKreis(double radius, double yEntfernung, double xEntfernung) {
+	private static double berechneWinkelKreis(double radius, double yEntfernung, double xEntfernung) {
 
 		if (xEntfernung < 0 && 0 < yEntfernung) { // 2
 			return 180 - Math.toDegrees(Math.asin(yEntfernung / radius));
@@ -354,7 +354,7 @@ public class CircleAnimation extends Animation {
 		}
 
 	}
-	/** Diese Überprüfung ob die Koordinate auf dem Kreis liegt im UhrzeigerSinn
+	/** Diese Überprüfung ob die Koordinate auf dem Kreis liegt im gegen den UhrzeigerSinn
 	 *  Die Winkel werden dabei mit Modulo umgerechnet 
 	 * @param x Zielkoordinate der Kreisbewegung
 	 * @param y Zielkoordinate der Kreisbewegung
